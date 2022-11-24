@@ -184,6 +184,7 @@ export class EmployeeStatusComponent implements OnInit, OnDestroy {
   onSave() {
     this.employeeStatus = new EmployeeStatus();
     this.employeeStatus.code = this.addCode;
+    this.employeeStatus.organization = this.currentOrganization;
 
     this.subscriptions.add(this.employeeStatusService.set(this.employeeStatus).subscribe(
       (data) => {

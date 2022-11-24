@@ -12,10 +12,10 @@
       <label class="font-weight-bold"> Department </label>
       <p-autoComplete [(ngModel)]="searchDepartment" [suggestions]="departmentList"
                       (completeMethod)="filterDepartment($event)" field="code" [dropdown]="true"
-                      placeholder="{{'Select a service' | translate}}">
-        <ng-template let-service pTemplate="item">
+                      placeholder="{{'Select a department' | translate}}">
+        <ng-template let-department pTemplate="item">
           <div class="country-item">
-            <div>{{service.code}}</div>
+            <div>{{department.code}}</div>
           </div>
         </ng-template>
       </p-autoComplete>
@@ -81,10 +81,10 @@
       <label class="font-weight-bold"> Department </label>
       <p-autoComplete [(ngModel)]="addDepartment" [suggestions]="departmentList"
                       (completeMethod)="filterDepartment($event)" field="code" [dropdown]="true"
-                      placeholder="{{'Select a service' | translate}}">
-        <ng-template let-service pTemplate="item">
+                      placeholder="{{'Select a department' | translate}}">
+        <ng-template let-department pTemplate="item">
           <div class="country-item">
-            <div>{{service.code}}</div>
+            <div>{{department.code}}</div>
           </div>
         </ng-template>
       </p-autoComplete>
@@ -112,10 +112,10 @@
       <label class="font-weight-bold"> Department </label>
       <p-autoComplete [(ngModel)]="updateDepartment" [suggestions]="departmentList"
                       (completeMethod)="filterDepartment($event)" field="code" [dropdown]="true"
-                      placeholder="{{'Select a service' | translate}}">
-        <ng-template let-service pTemplate="item">
+                      placeholder="{{'Select a department' | translate}}">
+        <ng-template let-department pTemplate="item">
           <div class="country-item">
-            <div>{{service.code}}</div>
+            <div>{{department.code}}</div>
           </div>
         </ng-template>
       </p-autoComplete>
