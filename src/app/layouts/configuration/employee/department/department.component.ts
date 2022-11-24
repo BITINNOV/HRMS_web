@@ -298,13 +298,12 @@ export class DepartmentComponent implements OnInit, OnDestroy {
   }
 
   filterDirectorate(event) {
-    // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const code = event.query;
 
     for (let i = 0; i < this.directorateList.length; i++) {
       const directorate = this.directorateList[i];
-      if (directorate.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
+      if (directorate.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
         filtered.push(directorate);
       }
     }

@@ -3,16 +3,15 @@ import {DatePipe} from '@angular/common';
 import {Advance} from '../../../shared/models/payroll/advance';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem} from 'primeng/api';
-import {FiscalYear} from '../../../shared/models/configuration/payroll/fiscal-year';
 import {Organization} from '../../../shared/models/configuration/organization';
 import {Employee} from '../../../shared/models/employee/employee';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {AuthenticationService} from '../../../shared/services/api/authentication.service';
-import {FiscalYearService} from '../../../shared/services/api/configuration/payroll/fiscal-year.service';
 import {GlobalService} from '../../../shared/services/api/global.service';
 import {AdvanceService} from '../../../shared/services/api/payroll/advance.service';
+import {EmployeeService} from '../../../shared/services/api/employee/employee.service';
 
 @Component({
   selector: 'app-advance',
@@ -41,7 +40,7 @@ export class AdvanceComponent implements OnInit, OnDestroy {
   selectedColumns: Array<any> = [];
 
   // Drop Down
-  fiscalYearList: Array<FiscalYear> = [];
+  employeeList: Array<Employee> = [];
 
   // Dialog
   dialogDisplayAdd = false;
@@ -72,7 +71,7 @@ export class AdvanceComponent implements OnInit, OnDestroy {
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
               private authenticationService: AuthenticationService,
-              private fiscalYearService: FiscalYearService,
+              private employeeService: EmployeeService,
               private globalService: GlobalService,
               private advanceService: AdvanceService,
               private confirmationService: ConfirmationService,
@@ -123,9 +122,9 @@ export class AdvanceComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.fiscalYearService.findAll().subscribe(
+    this.subscriptions.add(this.employeeService.findAll().subscribe(
       (data) => {
-        this.fiscalYearList = data;
+        this.employeeList = data;
       },
       (error) => {
         this.spinner.hide();
@@ -345,14 +344,15 @@ export class AdvanceComponent implements OnInit, OnDestroy {
     const filtered: any[] = [];
     const query = event.query;
 
-    for (let i = 0; i < this.fiscalYearList.length; i++) {
-      const employee = this.fiscalYearList[i];
-      if (employee.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
+    for (let i = 0; i < this.employeeList.length; i++) {
+      const employee: Employee = this.employeeList[i];
+      // tslint:disable-next-line:max-line-length
+      if ((employee.firstName.toLowerCase().indexOf(query.toLowerCase()) === 0) || (employee.lastName.toLowerCase().indexOf(query.toLowerCase()) === 0)) {
         filtered.push(employee);
       }
     }
 
-    this.fiscalYearList = filtered;
+    this.employeeList = filtered;
   }
 
   ngOnDestroy() {

@@ -383,22 +383,22 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     if (this.editMode === 1) { // ADD
       this.dialogDisplayAdd = true;
     } else if (this.editMode === 2) { // UPDATE
-      this.addEmployeeStatus = this.selectedEmployees[0].employeeStatus;
-      this.addRegistrationNumber = this.selectedEmployees[0].registrationNumber;
-      this.addPosition = this.selectedEmployees[0].position;
-      this.addFirstName = this.selectedEmployees[0].firstName;
-      this.addLastName = this.selectedEmployees[0].lastName;
-      this.addCin = this.selectedEmployees[0].cin;
-      this.addEmail = this.selectedEmployees[0].email;
-      this.addPhoneNumber = this.selectedEmployees[0].phoneNumber;
-      this.addAddress = this.selectedEmployees[0].address;
-      this.addBirthDate = this.selectedEmployees[0].birthDate;
-      this.addRib = this.selectedEmployees[0].rib;
-      this.addCnssNumber = this.selectedEmployees[0].cnssNumber;
-      this.addKidsNumber = this.selectedEmployees[0].kidsNumber;
-      this.addFamilySituation = this.selectedEmployees[0].familySituation;
-      this.addGender = this.selectedEmployees[0].gender;
-      this.addManager = this.selectedEmployees[0].manager;
+      this.updateEmployeeStatus = this.selectedEmployees[0].employeeStatus;
+      this.updateRegistrationNumber = this.selectedEmployees[0].registrationNumber;
+      this.updatePosition = this.selectedEmployees[0].position;
+      this.updateFirstName = this.selectedEmployees[0].firstName;
+      this.updateLastName = this.selectedEmployees[0].lastName;
+      this.updateCin = this.selectedEmployees[0].cin;
+      this.updateEmail = this.selectedEmployees[0].email;
+      this.updatePhoneNumber = this.selectedEmployees[0].phoneNumber;
+      this.updateAddress = this.selectedEmployees[0].address;
+      this.updateBirthDate = this.selectedEmployees[0].birthDate;
+      this.updateRib = this.selectedEmployees[0].rib;
+      this.updateCnssNumber = this.selectedEmployees[0].cnssNumber;
+      this.updateKidsNumber = this.selectedEmployees[0].kidsNumber;
+      this.updateFamilySituation = this.selectedEmployees[0].familySituation;
+      this.updateGender = this.selectedEmployees[0].gender;
+      this.updateManager = this.selectedEmployees[0].manager;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
