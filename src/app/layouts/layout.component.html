@@ -1,0 +1,17 @@
+<!-- START HEADER-->
+<app-header></app-header>
+<!-- END HEADER-->
+
+<!-- START SIDEBAR-->
+<div>
+  <app-sidebar  style="background-color: #222d32 !important "></app-sidebar>
+  <!-- END SIDEBAR-->
+</div>
+
+<!-- START PAGE CONTENT-->
+<div class="content-wrapper">
+  <router-outlet></router-outlet>
+  <footer class="page-footer" app-footer></footer>
+</div>
+<!-- END PAGE CONTENT-->
+<p-toast position="top-right" [baseZIndex]="5000"></p-toast>

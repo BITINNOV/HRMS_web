@@ -1,0 +1,24 @@
+<div class="container-fluid cadr ">
+  <div class="content">
+    <div class="ems">
+      <img src="./assets/img/Menu/hrms_logo.png"><br>
+      <p class="link">{{'HRMS' | translate}}</p>
+    </div>
+    <div id="login-form">
+      <h2 class="login-title">{{'Authentification' | translate}}</h2>
+      <div class="form-group">
+        <div class="input-group-icon right">
+          <div class="input-icon"><i class="fa fa-envelope font-20"></i></div>
+          <p-dropdown [(ngModel)]="selectedOrganization" [options]="organizationList"
+                      [showClear]="true" optionLabel="code"
+                      placeholder="{{'Select an organization' | translate}}"></p-dropdown>
+        </div>
+      </div>
+      <div class="form-group">
+        <button (click)="onSubmit()" class="btn btn-info btn-block" type="button"> {{'Continue' | translate}} </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ngx-spinner></ngx-spinner>

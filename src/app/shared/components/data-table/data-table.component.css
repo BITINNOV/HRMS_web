@@ -1,0 +1,11 @@
+:host ::ng-deep .ui-splitbutton {
+  margin-right: .25em;
+
+}
+
+:host ::ng-deep .ui-splitbutton.ui-buttonset .ui-menu {
+
+  width: 200px;
+}
+
+

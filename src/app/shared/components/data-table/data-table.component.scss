@@ -1,0 +1,26 @@
+:host ::ng-deep .ui-splitbutton {
+  margin-right: .25em;
+
+}
+
+:host ::ng-deep .ui-splitbutton.ui-buttonset .ui-menu {
+
+  width: 200px;
+}
+
+
+:host ::ng-deep .tdcolor {
+
+
+  &-red {
+    background-color: #E43725 !important;
+    color: white;
+  }
+
+
+}
+
+
+
+
+

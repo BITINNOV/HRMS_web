@@ -1,0 +1,172 @@
+<p-breadcrumb [home]="home" [model]="items"></p-breadcrumb>
+
+<p-panel header="{{ 'Filter' | translate }}">
+
+  <div class="row">
+    <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Code </label>
+      <input [(ngModel)]="searchCode" pInputText type="text"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Total Value </label>
+      <input [(ngModel)]="searchTotalValue" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Retained </label>
+      <input [(ngModel)]="searchRetained" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Loan Date </label>
+      <p-calendar inputId="basic" [(ngModel)]="searchLoanDate" [showIcon]="true" inputId="icon"></p-calendar>
+    </div>
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Interest Rate </label>
+      <input [(ngModel)]="searchInterestRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Employee </label>
+      <p-autoComplete [(ngModel)]="searchEmployee" [suggestions]="fiscalYearList"
+                      (completeMethod)="filterEmployee($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select an employee' | translate}}">
+        <ng-template let-employee pTemplate="item">
+          <div class="country-item">
+            <div>{{employee.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
+    </div>
+
+  </div>
+
+
+  <br/>
+
+  <div class=" text-center">
+    <button (click)="reset()" class="btn btn-primary m-1" type="button">Réinitialiser</button>
+    <button (click)="search()" class="btn btn-success m-1" type="button">Rechercher</button>
+  </div>
+
+
+  <app-data-table
+    (exportBtnExcelGlobal)="onExportExcel($event)"
+    (exportBtnExcelVue)="onExportExcel($event)"
+    (exportBtnPdf)="onExportPdf($event)"
+    (lazyLoadData)="loadDataLazy($event)"
+    (objectEdited)="onObjectEdited($event)"
+    [className]="className"
+    [collectionSize]="collectionSize"
+    [cols]="cols"
+    [listName]="listTitle"
+    [objectList]="loanList"
+    [size]="size">
+  </app-data-table>
+
+</p-panel>
+
+<ngx-spinner
+  bdColor="rgba(255,255,255,0)"
+  color="#00d2ff"
+  size="large"
+  type="ball-spin-fade-rotating"
+></ngx-spinner>
+
+<p-confirmDialog
+  [acceptLabel]="'Oui'"
+  [rejectLabel]="'Non'"
+  header="Confirmation"
+  icon="pi pi-exclamation-triangle"
+></p-confirmDialog>
+
+<p-toast
+  [baseZIndex]="5000"
+  position="top-right">
+</p-toast>
+
+<!-- BEGIN Add Dialog -->
+<p-dialog [(visible)]="dialogDisplayAdd" [draggable]="true" [modal]="true" [resizable]="true"
+          [style]="{width: '70vw'}" header="{{ 'ADD' | translate }}">
+  <br/>
+  <div class="row">
+    <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Code </label>
+      <input [(ngModel)]="addCode" pInputText type="text"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Total Value </label>
+      <input [(ngModel)]="addTotalValue" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Retained </label>
+      <input [(ngModel)]="addRetained" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Loan Date </label>
+      <p-calendar inputId="basic" [(ngModel)]="addLoanDate" [showIcon]="true" inputId="icon"></p-calendar>
+    </div>
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Interest Rate </label>
+      <input [(ngModel)]="addInterestRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Fiscal Year </label>
+      <p-autoComplete [(ngModel)]="addEmployee" [suggestions]="fiscalYearList" (completeMethod)="filterEmployee($event)"
+                      field="code" [dropdown]="true" placeholder="{{'Select an employee' | translate}}">
+        <ng-template let-employee pTemplate="item">
+          <div class="country-item">
+            <div>{{employee.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> Fermer</button>
+    <button (click)="onSave()" class="btn btn-success m-1" type="button"> Ajouter</button>
+  </ng-template>
+</p-dialog>
+<!-- END Add Dialog -->
+
+<!-- BEGIN Edit Dialog -->
+<p-dialog [(visible)]="dialogDisplayEdit" [draggable]="true" [modal]="true" [resizable]="true"
+          [style]="{width: '70vw'}" header="{{ 'UPDATE' | translate }}">
+  <br/>
+  <div class="row">
+    <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Code </label>
+      <input [(ngModel)]="updateCode" pInputText type="text"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Total Value </label>
+      <input [(ngModel)]="updateTotalValue" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Retained </label>
+      <input [(ngModel)]="updateRetained" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Loan Date </label>
+      <p-calendar inputId="basic" [(ngModel)]="updateLoanDate" [showIcon]="true" inputId="icon"></p-calendar>
+    </div>
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Interest Rate </label>
+      <input [(ngModel)]="updateInterestRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Employee </label>
+      <p-autoComplete [(ngModel)]="updateEmployee" [suggestions]="fiscalYearList"
+                      (completeMethod)="filterEmployee($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select an employee' | translate}}">
+        <ng-template let-employee pTemplate="item">
+          <div class="country-item">
+            <div>{{employee.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> Fermer</button>
+    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> Modifier</button>
+  </ng-template>
+</p-dialog>
+<!-- END Edit Dialog -->

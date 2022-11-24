@@ -1,0 +1,29 @@
+<div class="container-fluid cadr ">
+  <div class="content">
+    <div class="ems">
+      <img src="./assets/img/Menu/hrms_logo.png"><br>
+      <p class="link">{{'HRMS' | translate}}</p>
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)" id="login-form">
+      <h2 class="login-title">{{'Authentification' | translate}}</h2>
+      <div class="form-group">
+        <div class="input-group-icon right">
+          <div class="input-icon"><i class="fa fa-envelope font-20"></i></div>
+          <input autocomplete="off" class="form-control" name="email" ngModel pInputText placeholder="Email"
+                 type="email">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group-icon right">
+          <div class="input-icon"><i class="fa fa-lock font-20"></i></div>
+          <input class="form-control" name="password" ngModel pInputText placeholder="Password" type="password">
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-info btn-block" type="submit">{{'Login' | translate}}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ngx-spinner></ngx-spinner>

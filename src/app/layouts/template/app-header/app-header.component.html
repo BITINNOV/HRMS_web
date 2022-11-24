@@ -1,0 +1,54 @@
+<div class="header" style="height:50px;">
+
+  <div class="page-brand" style="background-color: #4CA3D3 !important;">
+    <a class="link" routerLink="/">
+      <span class="brand">
+        <i class="sidebar-item-icon">
+          <img height="50px" src="./assets/img/Menu/hrms_logo.png" style="margin-right: 6px; font-size: 10px;">
+        </i>
+      </span>
+      <span class="brand-mini">
+        <i class="sidebar-item-icon ">
+          <img height="35px" src="./assets/img/Menu/hrms_logo.png">
+        </i>
+      </span>
+    </a>
+  </div>
+
+  <div class="flexbox flex-1 text-white" style="background-color: #4CA3D3; color: white;">
+    <!-- START TOP-LEFT TOOLBAR-->
+    <ul class="nav navbar-toolbar">
+      <li>
+        <a class="nav-link sidebar-toggler js-sidebar-toggler text-white" style="float: left; margin-left: -50%;">
+          <i class="fa fa-bars" style="font-size: 2.5rem; float: left;"></i>
+        </a>
+      </li>
+
+    </ul>
+    <!-- END TOP-LEFT TOOLBAR-->
+    <!-- START TOP-RIGHT TOOLBAR-->
+    <ul class="nav navbar-toolbar text-white">
+      <li style="display: table; height: 50px; overflow: hidden; text-align: center;">
+        <a class="nav-link text-white" style="display: table-cell; vertical-align: middle; horiz-align: center;">
+          <i class="fa fa-user-circle-o" style="font-size: 2.5rem; float: left;"></i>
+          <p style="font-size: 1rem; float: left; margin-left: 10px; margin-top: 5px;" *ngIf="user">  {{user.name}} </p>
+        </a>
+      </li>
+      <li style="display: table; height: 50px; overflow: hidden; text-align: center;">
+        <a class="nav-link text-white" style="display: table-cell; vertical-align: middle; horiz-align: center;">
+          <i class="fa fa-building-o" style="font-size: 2.5rem; float: left;"></i>
+          <p style="font-size: 1rem; float: left; margin-left: 10px; margin-top: 5px;" *ngIf="organization"> {{organization.code}} </p>
+        </a>
+      </li>
+      <li style="display: table; height: 50px; overflow: hidden; text-align: center;">
+        <a (click)="logout()" class="nav-link text-white"
+           style="display: table-cell; vertical-align: middle; horiz-align: center;">
+          <i class="fa fa-sign-out" style="font-size: 3rem; float: left;"></i>
+          <p></p>
+        </a>
+      </li>
+    </ul>
+    <!-- END TOP-RIGHT TOOLBAR-->
+  </div>
+
+</div>

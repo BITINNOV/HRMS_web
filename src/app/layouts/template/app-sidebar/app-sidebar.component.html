@@ -1,0 +1,421 @@
+<nav class="page-sidebar " style="overflow: auto; height: 100vh; padding-bottom: 10%;">
+  <div id="sidebar-collapse" style="background-color: #2c3941 !important;">
+    <ul class="side-menu metismenu fixed" style="background-color: #2c3941 !important;">
+      <!-- Dashboard MenuItem -->
+      <li>
+        <a class="m-a" routerLink="/core/dashboard">
+          <i class="fa fa-home" style="font-size: 2rem; float: left;"></i>
+          <span class="nav-label" style="margin-left: 10px; float: left;">{{'Dashboard' | translate}}</span>
+        </a>
+      </li>
+
+      <!-- Configuration MenuGroup Item -->
+      <li>
+        <a class="text-white">
+          <i class="fa fa-cogs" style="font-size: 2rem; float: left;"></i>
+          <span class="nav-label" style="margin-left: 10px; float: left;">{{'Configuration' | translate}}</span>
+          <i class="fa fa-angle-left arrow"></i>
+        </a>
+        <ul class="nav-2-level collapse">
+          <!-- User MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/configuration/user" style="margin-left: -10%;">
+              {{'Users' | translate}}
+            </a>
+          </li>
+          <!-- Organizations MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/configuration/organization" style="margin-left: -10%;">
+              {{'Organizations' | translate}}
+            </a>
+          </li>
+          <!-- Country MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/configuration/country" style="margin-left: -10%;">
+              {{'Countries' | translate}}
+            </a>
+          </li>
+          <!-- Region MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/configuration/region" style="margin-left: -10%;">
+              {{'Regions' | translate}}
+            </a>
+          </li>
+          <!-- Action MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/configuration/action" style="margin-left: -10%;">
+              {{'Actions' | translate}}
+            </a>
+          </li>
+          <!-- Action Type MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/configuration/actiontype" style="margin-left: -10%;">
+              {{'Action Types' | translate}}
+            </a>
+          </li>
+          <!-- Validation Cycle Statuses MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/configuration/validationcyclestatus" style="margin-left: -10%;">
+              {{'Validation Cycle Statuses' | translate}}
+            </a>
+          </li>
+          <!-- Validation Cycle Line Statuses MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/configuration/validationcyclelinestatus" style="margin-left: -10%;">
+              {{'Validation Cycle Line Statuses' | translate}}
+            </a>
+          </li>
+
+          <!-- Employee Configuration -->
+          <li>
+            <a class="text-white" style="margin-left: -10%;">
+              <i class="fa fa-users" style="font-size: 2rem; float: left;"></i>
+              <span class="nav-label" style="margin-left: 10px; float: left;">{{'Employee' | translate}}</span>
+              <i class="fa fa-angle-left arrow"></i>
+            </a>
+            <ul class="nav-2-level collapse">
+              <!-- Directorates MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/directorate">
+                  {{'Directorates' | translate}}
+                </a>
+              </li>
+              <!-- Department MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/department">
+                  {{'Department' | translate}}
+                </a>
+              </li>
+              <!-- Service MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/service">
+                  {{'Service' | translate}}
+                </a>
+              </li>
+              <!-- Position Type MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/positiontype">
+                  {{'Position Type' | translate}}
+                </a>
+              </li>
+              <!-- Position MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/position">
+                  {{'Position' | translate}}
+                </a>
+              </li>
+              <!-- Request Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/requestStatus">
+                  {{'Request Statuses' | translate}}
+                </a>
+              </li>
+              <!-- Request Types MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/requestType">
+                  {{'Request Types' | translate}}
+                </a>
+              </li>
+              <!-- Employee Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/employeeStatus">
+                  {{'Employee Statuses' | translate}}
+                </a>
+              </li>
+              <!-- Tracking Cycle Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/trackingCycleStatus">
+                  {{'Tracking Cycle Statuses' | translate}}
+                </a>
+              </li>
+              <!-- Tracking Cycle Line Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/trackingCycleLineStatus">
+                  {{'Tracking Cycle Line Statuses' | translate}}
+                </a>
+              </li>
+              <!-- Absence Types MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/absenceType">
+                  {{'Absence Types' | translate}}
+                </a>
+              </li>
+              <!-- Expense Account Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/expenseAccountStatus">
+                  {{'Expense Account Statuses' | translate}}
+                </a>
+              </li>
+              <!-- Document Types MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/documentType">
+                  {{'Document Types' | translate}}
+                </a>
+              </li>
+              <!-- Integration Cycle Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/integrationCycleStatus">
+                  {{'Integration Cycle Statuses' | translate}}
+                </a>
+              </li>
+              <!-- Integration Cycle Line Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/employee/integrationCycleLineStatus">
+                  {{'Integration Cycle Line Statuses' | translate}}
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Hiring Configuration -->
+          <li>
+            <a class="text-white" style="margin-left: -10%;">
+              <i class="fa fa-handshake-o" style="font-size: 2rem; float: left;"></i>
+              <span class="nav-label" style="margin-left: 10px; float: left;">{{'Hiring' | translate}}</span>
+              <i class="fa fa-angle-left arrow"></i>
+            </a>
+            <ul class="nav-2-level collapse">
+              <!-- Hiring Cycles Type MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/hiringcycletype">
+                  {{'Hiring Cycle Type' | translate}}
+                </a>
+              </li>
+              <!-- Publication Line Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/publicationlinestatus">
+                  {{'Publication Line Status' | translate}}
+                </a>
+              </li>
+              <!-- Publication Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/publicationstatus">
+                  {{'Publication Status' | translate}}
+                </a>
+              </li>
+              <!-- Publication Types MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/publicationtype">
+                  {{'Publication Types' | translate}}
+                </a>
+              </li>
+              <!-- Publication Platforms MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/publicationplatform">
+                  {{'Publication Platforms' | translate}}
+                </a>
+              </li>
+              <!-- Need Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/needstatus">
+                  {{'NeedStatuses' | translate}}
+                </a>
+              </li>
+              <!-- Hiring Types MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/hiringtype">
+                  {{'Hiring Types' | translate}}
+                </a>
+              </li>
+              <!-- Hiring Cycles MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/hiringcycle">
+                  {{'Hiring Cycles' | translate}}
+                </a>
+              </li>
+              <!-- Hiring Phases MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/hiringphase">
+                  {{'Hiring Phases' | translate}}
+                </a>
+              </li>
+              <!-- Resume Types MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/resumetype">
+                  {{'Resume Types' | translate}}
+                </a>
+              </li>
+              <!-- Disability Natures MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/disabilitynature">
+                  {{'Disability Natures' | translate}}
+                </a>
+              </li>
+              <!-- Resume Statuses MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/resumestatus">
+                  {{'Resume Statuses' | translate}}
+                </a>
+              </li>
+              <!-- Training Types MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/trainingtype">
+                  {{'Training Types' | translate}}
+                </a>
+              </li>
+              <!-- Training Levels MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/traininglevel">
+                  {{'Training Levels' | translate}}
+                </a>
+              </li>
+              <!-- Establishment Types MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/establishmenttype">
+                  {{'Establishment Types' | translate}}
+                </a>
+              </li>
+              <!-- Skill Areas MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/skillarea">
+                  {{'Skill Areas' | translate}}
+                </a>
+              </li>
+              <!-- Language Levels MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/languagelevel">
+                  {{'Language Levels' | translate}}
+                </a>
+              </li>
+              <!-- Contract Types MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/hiring/contracttype">
+                  {{'Contract Types' | translate}}
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Payroll Configuration -->
+          <li>
+            <a class="text-white" style="margin-left: -10%;">
+              <i class="fa fa-money" style="font-size: 2rem; float: left;"></i>
+              <span class="nav-label" style="margin-left: 10px; float: left;">{{'Payroll' | translate}}</span>
+              <i class="fa fa-angle-left arrow"></i>
+            </a>
+            <ul class="nav-2-level collapse">
+              <!-- Fisca lYear MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/payroll/fiscalyear">
+                  {{'Fiscal Year' | translate}}
+                </a>
+              </li>
+              <!-- Amo MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/payroll/amo">
+                  {{'Amo' | translate}}
+                </a>
+              </li>
+              <!-- Cnss MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/payroll/cnss">
+                  {{'Cnss' | translate}}
+                </a>
+              </li>
+              <!-- Ir MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/payroll/ir">
+                  {{'Ir' | translate}}
+                </a>
+              </li>
+              <!-- Napc -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/payroll/napc">
+                  {{'Napc' | translate}}
+                </a>
+              </li>
+              <!-- Seniority -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/payroll/seniority">
+                  {{'Seniority' | translate}}
+                </a>
+              </li>
+              <!-- Mutual Insurance MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/payroll/mutualinsurance">
+                  {{'Mutual Insurance' | translate}}
+                </a>
+              </li>
+              <!-- Expense Account Status MenuItem -->
+              <li>
+                <a class="m-a" routerLink="/core/configuration/payroll/expenseaccountstatus">
+                  {{'Expense Account Status' | translate}}
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Employee MenuGroup Item -->
+      <li>
+        <a class="text-white">
+          <i class="fa fa-users" style="font-size: 2rem; float: left;"></i>
+          <span class="nav-label" style="margin-left: 10px; float: left;">{{'Employee' | translate}}</span>
+          <i class="fa fa-angle-left arrow"></i>
+        </a>
+        <ul class="nav-2-level collapse">
+          <!-- Employee MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/employee/employee" style="margin-left: -10%;">
+              {{'Employee' | translate}}
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Payroll MenuGroup Item -->
+      <li>
+        <a class="text-white">
+          <i class="fa fa-money" style="font-size: 2rem; float: left;"></i>
+          <span class="nav-label" style="margin-left: 10px; float: left;">{{'Payroll' | translate}}</span>
+          <i class="fa fa-angle-left arrow"></i>
+        </a>
+        <ul class="nav-2-level collapse">
+          <!-- Loan MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/payroll/loan" style="margin-left: -10%;">
+              {{'Loan' | translate}}
+            </a>
+          </li>
+          <!-- Advance MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/payroll/advance" style="margin-left: -10%;">
+              {{'Advance' | translate}}
+            </a>
+          </li>
+          <!-- Fixed Bonus MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/payroll/fixedbonus" style="margin-left: -10%;">
+              {{'Fixed Bonus' | translate}}
+            </a>
+          </li>
+          <!-- Variable Bonus MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/payroll/variablebonus" style="margin-left: -10%;">
+              {{'Variable Bonus' | translate}}
+            </a>
+          </li>
+          <!-- Expense Account MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/payroll/expenseaccount" style="margin-left: -10%;">
+              {{'Expense Account' | translate}}
+            </a>
+          </li>
+          <!-- Payroll Statement MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/payroll/payrollstatement" style="margin-left: -10%;">
+              {{'Payroll Statement' | translate}}
+            </a>
+          </li>
+          <!-- Payroll Book MenuItem -->
+          <li>
+            <a class="m-a" routerLink="/core/payroll/payrollbook" style="margin-left: -10%;">
+              {{'Payroll Book' | translate}}
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
