@@ -160,7 +160,13 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.employeeService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.employeeService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       },
@@ -168,7 +174,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    this.subscriptions.add(this.employeeService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.employeeService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.employeeList = data;
         this.spinner.hide();

@@ -205,7 +205,7 @@ export class ServiceComponent implements OnInit, OnDestroy {
       this.dialogDisplayAdd = true;
     } else if (this.editMode === 2) { // UPDATE
       this.updateCode = this.selectedServices[0].code.toString();
-      this.searchDepartment = this.selectedServices[0].department;
+      this.updateDepartment = this.selectedServices[0].department;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
@@ -300,16 +300,28 @@ export class ServiceComponent implements OnInit, OnDestroy {
   filterDepartment(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const code = event.query;
 
-    for (let i = 0; i < this.departmentList.length; i++) {
-      const department = this.departmentList[i];
-      if (department.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(department);
+    if (code) {
+      for (let i = 0; i < this.departmentList.length; i++) {
+        const department = this.departmentList[i];
+        if (department.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(department);
+        }
       }
+      this.departmentList = filtered;
+    } else {
+      this.subscriptions.add(this.departmentService.findAll().subscribe(
+        (data) => {
+          this.departmentList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.departmentList = filtered;
   }
 
   ngOnDestroy() {

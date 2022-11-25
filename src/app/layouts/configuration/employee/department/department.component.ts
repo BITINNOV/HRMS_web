@@ -205,7 +205,7 @@ export class DepartmentComponent implements OnInit, OnDestroy {
       this.dialogDisplayAdd = true;
     } else if (this.editMode === 2) { // UPDATE
       this.updateCode = this.selectedDepartments[0].code.toString();
-      this.searchDirectorate = this.selectedDepartments[0].directorate;
+      this.updateDirectorate = this.selectedDepartments[0].directorate;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
@@ -301,14 +301,26 @@ export class DepartmentComponent implements OnInit, OnDestroy {
     const filtered: any[] = [];
     const code = event.query;
 
-    for (let i = 0; i < this.directorateList.length; i++) {
-      const directorate = this.directorateList[i];
-      if (directorate.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
-        filtered.push(directorate);
+    if (code) {
+      for (let i = 0; i < this.directorateList.length; i++) {
+        const directorate = this.directorateList[i];
+        if (directorate.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(directorate);
+        }
       }
+      this.directorateList = filtered;
+    } else {
+      this.subscriptions.add(this.directorateService.findAll().subscribe(
+        (data) => {
+          this.directorateList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.directorateList = filtered;
   }
 
   ngOnDestroy() {

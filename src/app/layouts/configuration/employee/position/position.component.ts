@@ -47,6 +47,8 @@ export class PositionComponent implements OnInit, OnDestroy {
   contractTypeList: Array<ContractType> = [];
   positionTypeList: Array<PositionType> = [];
   serviceList: Array<Service> = [];
+  dropDownSearchSentence: string;
+  dropDownSearchValidate: boolean;
 
   // Dialog
   dialogDisplayAdd = false;
@@ -111,7 +113,20 @@ export class PositionComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.positionService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    // Drop Down search
+    this.dropDownSearchValidate = true;
+    this.dropDownSearchSentence = '.';
+    if (this.dropDownSearchValidate) {
+      this.dropDownSearchSentence += 'validate:' + this.dropDownSearchValidate + ',';
+    }
+    this.dropDownSearchSentence += 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.positionService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       },
@@ -119,7 +134,7 @@ export class PositionComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    this.subscriptions.add(this.positionService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.positionService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.positionList = data;
         this.spinner.hide();
@@ -131,7 +146,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       () => this.spinner.hide()
     ));
 
-    this.subscriptions.add(this.contractTypeService.findAll().subscribe(
+    this.subscriptions.add(this.contractTypeService.find(this.dropDownSearchSentence).subscribe(
       (data) => {
         this.contractTypeList = data;
       },
@@ -372,46 +387,82 @@ export class PositionComponent implements OnInit, OnDestroy {
   filterContractType(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const code = event.query;
 
-    for (let i = 0; i < this.contractTypeList.length; i++) {
-      const contractType = this.contractTypeList[i];
-      if (contractType.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(contractType);
+    if (code) {
+      for (let i = 0; i < this.contractTypeList.length; i++) {
+        const contractType = this.contractTypeList[i];
+        if (contractType.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(contractType);
+        }
       }
+      this.contractTypeList = filtered;
+    } else {
+      this.subscriptions.add(this.contractTypeService.findAll().subscribe(
+        (data) => {
+          this.contractTypeList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.contractTypeList = filtered;
   }
 
   filterPositionType(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const code = event.query;
 
-    for (let i = 0; i < this.positionTypeList.length; i++) {
-      const positionType = this.positionTypeList[i];
-      if (positionType.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(positionType);
+    if (code) {
+      for (let i = 0; i < this.positionTypeList.length; i++) {
+        const positionType = this.positionTypeList[i];
+        if (positionType.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(positionType);
+        }
       }
+      this.positionTypeList = filtered;
+    } else {
+      this.subscriptions.add(this.positionTypeService.findAll().subscribe(
+        (data) => {
+          this.positionTypeList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.positionTypeList = filtered;
   }
 
   filterService(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const code = event.query;
 
-    for (let i = 0; i < this.serviceList.length; i++) {
-      const service = this.serviceList[i];
-      if (service.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(service);
+    if (code) {
+      for (let i = 0; i < this.serviceList.length; i++) {
+        const service = this.serviceList[i];
+        if (service.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(service);
+        }
       }
+      this.serviceList = filtered;
+    } else {
+      this.subscriptions.add(this.serviceService.findAll().subscribe(
+        (data) => {
+          this.serviceList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.serviceList = filtered;
   }
 
   ngOnDestroy() {
