@@ -156,7 +156,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.positionTypeService.findAll().subscribe(
+    this.subscriptions.add(this.positionTypeService.find(this.dropDownSearchSentence).subscribe(
       (data) => {
         this.positionTypeList = data;
       },
@@ -398,7 +398,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       }
       this.contractTypeList = filtered;
     } else {
-      this.subscriptions.add(this.contractTypeService.findAll().subscribe(
+      this.subscriptions.add(this.contractTypeService.find(this.dropDownSearchSentence).subscribe(
         (data) => {
           this.contractTypeList = data;
         },
@@ -425,7 +425,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       }
       this.positionTypeList = filtered;
     } else {
-      this.subscriptions.add(this.positionTypeService.findAll().subscribe(
+      this.subscriptions.add(this.positionTypeService.find(this.dropDownSearchSentence).subscribe(
         (data) => {
           this.positionTypeList = data;
         },

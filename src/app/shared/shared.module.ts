@@ -82,10 +82,11 @@ import {PositionTypeService} from './services/api/configuration/employee/positio
 import {PositionService} from './services/api/configuration/employee/position.service';
 import {MutualInsuranceService} from './services/api/configuration/payroll/mutual-insurance.service';
 import {LoanService} from './services/api/payroll/loan.service';
-import {VariableBonus} from './models/payroll/variable-bonus';
 import {VariableBonusService} from './services/api/payroll/variable-bonus.service';
 import {ExpenseAccountService} from './services/api/payroll/expense-account.service';
 import {EmployeeService} from './services/api/employee/employee.service';
+import {PayrollStatementService} from './services/api/payroll/payroll-statement.service';
+import {PayrollBookService} from './services/api/payroll/payroll-book.service';
 
 
 @NgModule({
@@ -215,6 +216,8 @@ export class SharedModule {
         VariableBonusService,
         ExpenseAccountService,
         EmployeeService,
+        PayrollStatementService,
+        PayrollBookService,
       ],
     };
   }

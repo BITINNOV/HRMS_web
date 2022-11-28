@@ -12,6 +12,9 @@ const routes: Routes = [
       {path: 'fixedbonus', loadChildren: () => import('./fixed-bonus/fixed-bonus.module').then(m => m.FixedBonusModule)},
       {path: 'variablebonus', loadChildren: () => import('./variable-bonus/variable-bonus.module').then(m => m.VariableBonusModule)},
       {path: 'expenseaccount', loadChildren: () => import('./expense-account/expense-account.module').then(m => m.ExpenseAccountModule)},
+      // tslint:disable-next-line:max-line-length
+      {path: 'payrollstatement', loadChildren: () => import('./payroll-statement/payroll-statement.module').then(m => m.PayrollStatementModule)},
+      {path: 'payrollbook', loadChildren: () => import('./payroll-book/payroll-book.module').then(m => m.PayrollBookModule)},
     ],
   }];
 

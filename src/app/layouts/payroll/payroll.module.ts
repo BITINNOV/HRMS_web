@@ -8,6 +8,8 @@ import {AdvanceComponent} from './advance/advance.component';
 import {VariableBonusComponent} from './variable-bonus/variable-bonus.component';
 import {FixedBonusComponent} from './fixed-bonus/fixed-bonus.component';
 import {ExpenseAccountComponent} from './expense-account/expense-account.component';
+import {PayrollStatementComponent} from './payroll-statement/payroll-statement.component';
+import {PayrollBookComponent} from './payroll-book/payroll-book.component';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import {ExpenseAccountComponent} from './expense-account/expense-account.compone
     AdvanceComponent,
     VariableBonusComponent,
     FixedBonusComponent,
-    ExpenseAccountComponent
+    ExpenseAccountComponent,
+    PayrollStatementComponent,
+    PayrollBookComponent,
   ],
 
   imports: [

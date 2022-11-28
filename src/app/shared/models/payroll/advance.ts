@@ -1,4 +1,3 @@
-import {Moment} from 'moment';
 import {Employee} from '../employee/employee';
 import {Organization} from '../configuration/organization';
 
