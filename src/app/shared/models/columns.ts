@@ -1,4 +1,5 @@
 import {User} from './configuration/user';
+import {Organization} from './configuration/organization';
 
 export class Columns {
   id: number;
@@ -9,4 +10,5 @@ export class Columns {
   type: String;
   child: String;
   user: User;
+  organization: Organization;
 }

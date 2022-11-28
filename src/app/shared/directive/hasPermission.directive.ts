@@ -42,7 +42,7 @@ export class HasPermissionDirective implements OnInit {
 
   private updateView() {
 
-   //console.log(this.permissions);
+   // console.log(this.permissions);
 
 
     this.viewContainer.clear();

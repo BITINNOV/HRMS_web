@@ -87,6 +87,7 @@ import {ExpenseAccountService} from './services/api/payroll/expense-account.serv
 import {EmployeeService} from './services/api/employee/employee.service';
 import {PayrollStatementService} from './services/api/payroll/payroll-statement.service';
 import {PayrollBookService} from './services/api/payroll/payroll-book.service';
+import {ColumnsService} from './services/api/columns.service';
 
 
 @NgModule({
@@ -218,6 +219,7 @@ export class SharedModule {
         EmployeeService,
         PayrollStatementService,
         PayrollBookService,
+        ColumnsService,
       ],
     };
   }

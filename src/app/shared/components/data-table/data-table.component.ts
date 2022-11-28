@@ -7,6 +7,8 @@ import {User} from '../../models/configuration/user';
 import {MenuItem} from 'primeng/api';
 import {Columns} from '../../models/columns';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Organization} from '../../models/configuration/organization';
+import {ColumnsService} from '../../services/api/columns.service';
 
 @Component({
   selector: 'app-data-table',
@@ -40,15 +42,17 @@ export class DataTableComponent implements OnInit {
   columnsMapped: any[];
   exportBtnItems: MenuItem[];
   selectedObjects: Array<any> = [];
-  user = new User();
+  currentUser = new User();
+  currentOrganization = new Organization();
   updateBtnDisable = false;
   deleteBtnDisable = false;
   items: MenuItem[];
 
   constructor(private spinner: NgxSpinnerService,
               private toastr: ToastrService,
-              private authUser: AuthenticationService,
-              private userservice: UserService) {
+              private authenticationService: AuthenticationService,
+              private userservice: UserService,
+              private columnsService: ColumnsService) {
   }
 
   @Input() _selectedColumns: Array<any> = [];
@@ -85,7 +89,8 @@ export class DataTableComponent implements OnInit {
   }
 
   loadColumns() {
-    this.user = this.authUser.getCurrentUser();
+    this.currentUser = this.authenticationService.getCurrentUser();
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
 
     /* if (this.user.columns != null && this.user.columns !== '') {
        this.columnsAdded = JSON.parse(this.user.columns);
@@ -177,26 +182,54 @@ export class DataTableComponent implements OnInit {
   }
 
   onSaveView() {
-    this.spinner.show();
-
-    this.columnsAdded = this.columnsAdded.filter(
+    // this.spinner.show();
+    /*this.columnsAdded = this.columnsAdded.filter(
       (col) => col.classe !== this.className
-    );
+    );*/
 
     for (let i = 0; i < this.selectedColumns.length; i++) {
+      console.log('for i = ' + i);
       const c = new Columns();
       c.position = i;
+      console.log('position :  ' + i);
       c.field = this.selectedColumns[i].field;
+      console.log('field :  ' + this.selectedColumns[i].field);
       c.header = this.selectedColumns[i].header;
+      console.log('header :  ' + this.selectedColumns[i].header);
       c.classe = this.className;
+      console.log('className :  ' + this.selectedColumns[i].className);
       c.type = this.selectedColumns[i].type;
+      console.log('type :  ' + this.selectedColumns[i].type);
       c.child = this.selectedColumns[i].child;
-      this.columnsAdded.push(c);
+      console.log('child :  ' + this.selectedColumns[i].child);
+
+      c.user = this.currentUser;
+      c.organization = this.currentOrganization;
+      // this.columnsAdded.push(c);
+      this.columnsService.set(c).subscribe(
+        (data) => {
+          this.toastr.success('Elément est Enregistré Avec Succès', 'Création');
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        }
+      );
     }
 
-    this.user = this.authUser.getCurrentUser();
-    /*this.user.columns = JSON.stringify(this.columnsAdded);*/
-    this.authUser.setUser(this.user);
+    /*this.columnsService.saveAll(this.columnsAdded).subscribe(
+      (data) => {
+        this.toastr.success('La vue a été enregistrée avec Succés', 'Edition');
+      },
+      (error) => {
+        this.toastr.error(error.error.message, 'Erreur');
+        this.spinner.hide();
+      },
+      () => this.spinner.hide()
+    );*/
+
+    /*this.user = this.authenticationService.getCurrentUser();
+    this.user.columns = JSON.stringify(this.columnsAdded);
+    this.authenticationService.setUser(this.user);
     this.userservice.set(this.user).subscribe(
       (data) => {
         this.toastr.success('La vue a été enregistrée avec Succés', 'Edition');
@@ -206,6 +239,6 @@ export class DataTableComponent implements OnInit {
         this.spinner.hide();
       },
       () => this.spinner.hide()
-    );
+    );*/
   }
 }
