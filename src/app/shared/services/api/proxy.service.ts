@@ -79,12 +79,12 @@ export class ProxyService {
   }
 
   setAll(controller: string, object: any): Observable<any> {
-    const fullUrl = this.url + controller + '/saveALL?token=' + this.getToken();
+    const fullUrl = this.url + controller + '/saveAll?token=' + this.getToken();
     return this.http.put(fullUrl, object);
   }
 
   addAll(controller: string, object: any): Observable<any> {
-    const fullUrl = this.url + controller + '/saveALL?token=' + this.getToken();
+    const fullUrl = this.url + controller + '/saveAll?token=' + this.getToken();
     return this.http.post(fullUrl, object);
   }
 

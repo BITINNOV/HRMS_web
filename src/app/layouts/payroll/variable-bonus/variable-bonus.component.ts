@@ -108,7 +108,10 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.variableBonusService.size().subscribe(
+    this.searchSentence = '';
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    this.subscriptions.add(this.variableBonusService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       },
@@ -116,7 +119,7 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    this.subscriptions.add(this.variableBonusService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.variableBonusService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.variableBonusList = data;
         this.spinner.hide();

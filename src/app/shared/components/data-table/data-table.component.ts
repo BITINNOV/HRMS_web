@@ -37,10 +37,10 @@ export class DataTableComponent implements OnInit {
   @Output() exportBtnExcelGlobal = new EventEmitter<any[]>();
   @Output() exportBtnExcelVue = new EventEmitter<any[]>();
   @Output() exportBtnPdf = new EventEmitter<any[]>();
-  exportColumns: any[];
-  columnsAdded: any[];
-  columnsMapped: any[];
-  exportBtnItems: MenuItem[];
+  exportColumns: Array<any> = [];
+  columnsAdded: Array<any> = [];
+  columnsMapped: Array<any> = [];
+  exportBtnItems: MenuItem[] = [];
   selectedObjects: Array<any> = [];
   currentUser = new User();
   currentOrganization = new Organization();
@@ -182,41 +182,27 @@ export class DataTableComponent implements OnInit {
   }
 
   onSaveView() {
-    // this.spinner.show();
-    /*this.columnsAdded = this.columnsAdded.filter(
+    this.spinner.show();
+    this.columnsAdded = this.columnsAdded.filter(
       (col) => col.classe !== this.className
-    );*/
+    );
 
     for (let i = 0; i < this.selectedColumns.length; i++) {
-      console.log('for i = ' + i);
       const c = new Columns();
       c.position = i;
-      console.log('position :  ' + i);
       c.field = this.selectedColumns[i].field;
-      console.log('field :  ' + this.selectedColumns[i].field);
       c.header = this.selectedColumns[i].header;
-      console.log('header :  ' + this.selectedColumns[i].header);
       c.classe = this.className;
-      console.log('className :  ' + this.selectedColumns[i].className);
       c.type = this.selectedColumns[i].type;
-      console.log('type :  ' + this.selectedColumns[i].type);
       c.child = this.selectedColumns[i].child;
-      console.log('child :  ' + this.selectedColumns[i].child);
-
       c.user = this.currentUser;
       c.organization = this.currentOrganization;
-      // this.columnsAdded.push(c);
-      this.columnsService.set(c).subscribe(
-        (data) => {
-          this.toastr.success('Elément est Enregistré Avec Succès', 'Création');
-        },
-        (error) => {
-          this.toastr.error(error.message);
-        }
-      );
+      this.columnsAdded.push(c);
     }
 
-    /*this.columnsService.saveAll(this.columnsAdded).subscribe(
+    console.log('this.columnsAdded = ' + this.columnsAdded);
+
+    this.columnsService.setAll(this.columnsAdded).subscribe(
       (data) => {
         this.toastr.success('La vue a été enregistrée avec Succés', 'Edition');
       },
@@ -225,7 +211,7 @@ export class DataTableComponent implements OnInit {
         this.spinner.hide();
       },
       () => this.spinner.hide()
-    );*/
+    );
 
     /*this.user = this.authenticationService.getCurrentUser();
     this.user.columns = JSON.stringify(this.columnsAdded);

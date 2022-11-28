@@ -111,7 +111,10 @@ export class PayrollStatementComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.payrollStatementService.size().subscribe(
+    this.searchSentence = '';
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    this.subscriptions.add(this.payrollStatementService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       },
@@ -119,7 +122,7 @@ export class PayrollStatementComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    this.subscriptions.add(this.payrollStatementService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.payrollStatementService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.payrollStatementList = data;
         this.spinner.hide();

@@ -47,8 +47,9 @@ export class PositionComponent implements OnInit, OnDestroy {
   contractTypeList: Array<ContractType> = [];
   positionTypeList: Array<PositionType> = [];
   serviceList: Array<Service> = [];
-  dropDownSearchSentence: string;
-  dropDownSearchValidate: boolean;
+  dropDownSearchSentence_Service: string;
+  dropDownSearchSentence_ContractTypePositionType: string;
+  dropDownSearchValidate_ContractTypePositionType: boolean;
 
   // Dialog
   dialogDisplayAdd = false;
@@ -118,13 +119,17 @@ export class PositionComponent implements OnInit, OnDestroy {
     // List search sentence
     this.searchSentence = '';
     this.searchSentence = 'organization.code:' + this.currentOrganization.code;
-    // Drop Down search
-    this.dropDownSearchValidate = true;
-    this.dropDownSearchSentence = '.';
-    if (this.dropDownSearchValidate) {
-      this.dropDownSearchSentence += 'validate:' + this.dropDownSearchValidate + ',';
+    // Drop Down search For Contract Type & Position Type
+    this.dropDownSearchValidate_ContractTypePositionType = true;
+    this.dropDownSearchSentence_ContractTypePositionType = '.';
+    if (this.dropDownSearchValidate_ContractTypePositionType) {
+      this.dropDownSearchSentence_ContractTypePositionType += 'validate:' + this.dropDownSearchValidate_ContractTypePositionType + ',';
     }
-    this.dropDownSearchSentence += 'organization.code:' + this.currentOrganization.code;
+    this.dropDownSearchSentence_ContractTypePositionType += 'organization.code:' + this.currentOrganization.code;
+
+    // Drop Down search For Service
+    this.dropDownSearchSentence_Service = '';
+    this.dropDownSearchSentence_Service += 'organization.code:' + this.currentOrganization.code;
 
     this.subscriptions.add(this.positionService.sizeSearch(this.searchSentence).subscribe(
       data => {
@@ -146,7 +151,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       () => this.spinner.hide()
     ));
 
-    this.subscriptions.add(this.contractTypeService.find(this.dropDownSearchSentence).subscribe(
+    this.subscriptions.add(this.contractTypeService.find(this.dropDownSearchSentence_ContractTypePositionType).subscribe(
       (data) => {
         this.contractTypeList = data;
       },
@@ -156,7 +161,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.positionTypeService.find(this.dropDownSearchSentence).subscribe(
+    this.subscriptions.add(this.positionTypeService.find(this.dropDownSearchSentence_ContractTypePositionType).subscribe(
       (data) => {
         this.positionTypeList = data;
       },
@@ -166,7 +171,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.serviceService.findAll().subscribe(
+    this.subscriptions.add(this.serviceService.find(this.dropDownSearchSentence_Service).subscribe(
       (data) => {
         this.serviceList = data;
       },
@@ -398,7 +403,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       }
       this.contractTypeList = filtered;
     } else {
-      this.subscriptions.add(this.contractTypeService.find(this.dropDownSearchSentence).subscribe(
+      this.subscriptions.add(this.contractTypeService.find(this.dropDownSearchSentence_ContractTypePositionType).subscribe(
         (data) => {
           this.contractTypeList = data;
         },
@@ -425,7 +430,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       }
       this.positionTypeList = filtered;
     } else {
-      this.subscriptions.add(this.positionTypeService.find(this.dropDownSearchSentence).subscribe(
+      this.subscriptions.add(this.positionTypeService.find(this.dropDownSearchSentence_ContractTypePositionType).subscribe(
         (data) => {
           this.positionTypeList = data;
         },
@@ -452,7 +457,7 @@ export class PositionComponent implements OnInit, OnDestroy {
       }
       this.serviceList = filtered;
     } else {
-      this.subscriptions.add(this.serviceService.findAll().subscribe(
+      this.subscriptions.add(this.serviceService.find(this.dropDownSearchSentence_Service).subscribe(
         (data) => {
           this.serviceList = data;
         },

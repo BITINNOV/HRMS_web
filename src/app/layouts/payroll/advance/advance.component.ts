@@ -103,7 +103,10 @@ export class AdvanceComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.advanceService.size().subscribe(
+    this.searchSentence = '';
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    this.subscriptions.add(this.advanceService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       },
@@ -111,7 +114,7 @@ export class AdvanceComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    this.subscriptions.add(this.advanceService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.advanceService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.advanceList = data;
         this.spinner.hide();
@@ -198,9 +201,10 @@ export class AdvanceComponent implements OnInit, OnDestroy {
       this.searchSentence += 'fiscalYear.id:' + this.searchEmployee.id + ',';
       index = index + 1;
     }
-    if (index > 0 && index === 1) {
+
+    if (index === 1) {
       this.searchSentence = this.searchSentence.slice(0, -1);
-    } else {
+    } else if (index > 1) {
       this.searchSentence = '.' + this.searchSentence.slice(0, -1);
     }
 
