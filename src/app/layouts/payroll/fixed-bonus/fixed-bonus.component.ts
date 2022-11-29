@@ -5,7 +5,6 @@ import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem} from 'primeng/api';
 import {FiscalYear} from '../../../shared/models/configuration/payroll/fiscal-year';
 import {Organization} from '../../../shared/models/configuration/organization';
-import {Employee} from '../../../shared/models/employee/employee';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -104,7 +103,13 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.fixedBonusService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.fixedBonusService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       },
@@ -112,7 +117,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    this.subscriptions.add(this.fixedBonusService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.fixedBonusService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.fixedBonusList = data;
         this.spinner.hide();

@@ -1,4 +1,4 @@
-import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {PublicationType} from '../../../../shared/models/configuration/hiring/publication-type';
 import {PublicationTypeService} from '../../../../shared/services/api/configuration/hiring/publication-type.service';
+import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
+import {Organization} from '../../../../shared/models/configuration/organization';
 
 
 @Component({
@@ -15,7 +17,7 @@ import {PublicationTypeService} from '../../../../shared/services/api/configurat
   templateUrl: './publication-type.component.html',
   styleUrls: ['./publication-type.component.css']
 })
-export class PublicationTypeComponent implements OnInit {
+export class PublicationTypeComponent implements OnInit, OnDestroy {
 
   pipe = new DatePipe('fr');
   now = Date.now();
@@ -42,6 +44,7 @@ export class PublicationTypeComponent implements OnInit {
   dialogDisplayEdit = false;
 
   // Component Attributes
+  currentOrganization: Organization;
   publicationType: PublicationType;
   ids: Array<number>;
   // Component Attributes // Add
@@ -55,6 +58,7 @@ export class PublicationTypeComponent implements OnInit {
   constructor(private publicationTypeService: PublicationTypeService,
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
+              private authenticationService: AuthenticationService,
               private confirmationService: ConfirmationService,
               private messageService: MessageService,
               private toastr: ToastrService,
@@ -84,12 +88,18 @@ export class PublicationTypeComponent implements OnInit {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.publicationTypeService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.publicationTypeService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       }
     ));
-    this.subscriptions.add(this.publicationTypeService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.publicationTypeService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.publicationTypeList = data;
         this.spinner.hide();

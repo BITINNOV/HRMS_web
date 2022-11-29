@@ -47,7 +47,6 @@ export class NapcComponent implements OnInit, OnDestroy {
   dialogDisplayEdit = false;
 
   // Component Attributes
-  currentOrganization: Organization;
   napc: Napc;
   ids: Array<number>;
   // Component Attributes // Add
@@ -70,7 +69,6 @@ export class NapcComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
-              private authenticationService: AuthenticationService,
               private fiscalYearService: FiscalYearService,
               private globalService: GlobalService,
               private napcService: NapcService,

@@ -4,8 +4,8 @@
       <div class="col-md-4 pull-left">
         <!--Add-->
         <span>
-          <button (click)="onEdit(1)" [hidden]="addBtnVisible" class="btn btn-sm btn-primary mx-1" title="{{'ajouter' | translate}}"
-                  type="button">
+          <button (click)="onEdit(1)" [hidden]="addBtnVisible" class="btn btn-sm btn-primary mx-1"
+                  title="{{'ajouter' | translate}}" type="button">
             <i class="fa fa-plus"></i>
           </button>
         </span>
@@ -19,9 +19,15 @@
         <!--DELETE-->
         <span>
           <button (click)="onEdit(3)" [disabled]="deleteBtnDisable == false" [hidden]="deleteBtnVisible" class="btn btn-sm btn-danger mx-1"
-                  title="{{'delete' | translate}}"
-                  type="button">
+                  title="{{'delete' | translate}}" type="button">
             <i class="fa fa-trash-o"></i>
+          </button>
+        </span>
+        <!-- -->
+        <span>
+          <button (click)="onEdit(4)" [disabled]="generateBtnDisable == false" [hidden]="generateBtnVisible" class="btn btn-sm btn-secondary mx-1"
+                  title="{{'generate' | translate}}" type="button">
+            <i class="fa fa-file"></i>
           </button>
         </span>
       </div>

@@ -2,11 +2,9 @@ import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem} from 'primeng/api';
-import {Organization} from '../../../../shared/models/configuration/organization';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
 import {GlobalService} from '../../../../shared/services/api/global.service';
 import {MutualInsuranceService} from '../../../../shared/services/api/configuration/payroll/mutual-insurance.service';
 import {MutualInsurance} from '../../../../shared/models/configuration/payroll/mutual-insurance';
@@ -47,7 +45,6 @@ export class MutualInsuranceComponent implements OnInit, OnDestroy {
   dialogDisplayEdit = false;
 
   // Component Attributes
-  currentOrganization: Organization;
   mutualInsurance: MutualInsurance;
   ids: Array<number>;
   // Component Attributes // Add
@@ -67,7 +64,6 @@ export class MutualInsuranceComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
-              private authenticationService: AuthenticationService,
               private fiscalYearService: FiscalYearService,
               private globalService: GlobalService,
               private mutualInsuranceService: MutualInsuranceService,

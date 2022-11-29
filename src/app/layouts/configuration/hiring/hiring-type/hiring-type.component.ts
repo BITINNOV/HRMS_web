@@ -1,4 +1,4 @@
-import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {HiringType} from '../../../../shared/models/configuration/hiring/hiring-type';
 import {HiringTypeService} from '../../../../shared/services/api/configuration/hiring/hiring-type.service';
+import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
+import {Organization} from '../../../../shared/models/configuration/organization';
 
 
 @Component({
@@ -15,7 +17,7 @@ import {HiringTypeService} from '../../../../shared/services/api/configuration/h
   templateUrl: './hiring-type.component.html',
   styleUrls: ['./hiring-type.component.css']
 })
-export class HiringTypeComponent implements OnInit {
+export class HiringTypeComponent implements OnInit, OnDestroy {
 
   pipe = new DatePipe('fr');
   now = Date.now();
@@ -42,6 +44,7 @@ export class HiringTypeComponent implements OnInit {
   dialogDisplayEdit = false;
 
   // Component Attributes
+  currentOrganization: Organization;
   hiringType: HiringType;
   ids: Array<number>;
   // Component Attributes // Add
@@ -56,6 +59,7 @@ export class HiringTypeComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
               private confirmationService: ConfirmationService,
+              private authenticationService: AuthenticationService,
               private messageService: MessageService,
               private toastr: ToastrService,
               private router: Router,
@@ -84,12 +88,18 @@ export class HiringTypeComponent implements OnInit {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.hiringTypeService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.hiringTypeService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       }
     ));
-    this.subscriptions.add(this.hiringTypeService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.hiringTypeService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.hiringTypeList = data;
         this.spinner.hide();

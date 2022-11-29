@@ -271,6 +271,17 @@ export class PayrollStatementComponent implements OnInit, OnDestroy {
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
+    } else if (this.editMode === 4) { // GENERATE
+      this.payrollStatement = this.selectedPayrollStatements[0];
+      alert(this.payrollStatement.id);
+      this.subscriptions.add(this.payrollStatementService.generatePayrollStatement(this.payrollStatement).subscribe(
+        (data) => {
+          console.log(data);
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        },
+      ));
     }
   }
 

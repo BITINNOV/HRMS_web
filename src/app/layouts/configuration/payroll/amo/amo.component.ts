@@ -47,7 +47,6 @@ export class AmoComponent implements OnInit, OnDestroy {
   dialogDisplayEdit = false;
 
   // Component Attributes
-  currentOrganization: Organization;
   amo: Amo;
   ids: Array<number>;
   // Component Attributes // Add
@@ -73,7 +72,6 @@ export class AmoComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
-              private authenticationService: AuthenticationService,
               private fiscalYearService: FiscalYearService,
               private globalService: GlobalService,
               private amoService: AmoService,

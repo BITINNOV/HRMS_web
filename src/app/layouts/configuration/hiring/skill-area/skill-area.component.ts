@@ -1,4 +1,4 @@
-import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {SkillArea} from '../../../../shared/models/configuration/hiring/skill-area';
 import {SkillAreaService} from '../../../../shared/services/api/configuration/hiring/skill-area.service';
+import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
+import {Organization} from '../../../../shared/models/configuration/organization';
 
 
 @Component({
@@ -15,7 +17,7 @@ import {SkillAreaService} from '../../../../shared/services/api/configuration/hi
   templateUrl: './skill-area.component.html',
   styleUrls: ['./skill-area.component.css']
 })
-export class SkillAreaComponent implements OnInit {
+export class SkillAreaComponent implements OnInit, OnDestroy {
 
   pipe = new DatePipe('fr');
   now = Date.now();
@@ -42,6 +44,7 @@ export class SkillAreaComponent implements OnInit {
   dialogDisplayEdit = false;
 
   // Component Attributes
+  currentOrganization: Organization;
   skillArea: SkillArea;
   ids: Array<number>;
   // Component Attributes // Add
@@ -56,6 +59,7 @@ export class SkillAreaComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
               private confirmationService: ConfirmationService,
+              private authenticationService: AuthenticationService,
               private messageService: MessageService,
               private toastr: ToastrService,
               private router: Router,
@@ -84,12 +88,18 @@ export class SkillAreaComponent implements OnInit {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.skillAreaService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.skillAreaService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       }
     ));
-    this.subscriptions.add(this.skillAreaService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.skillAreaService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.skillAreaList = data;
         this.spinner.hide();

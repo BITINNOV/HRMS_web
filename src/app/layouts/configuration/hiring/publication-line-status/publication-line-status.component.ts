@@ -1,4 +1,4 @@
-import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {PublicationLineStatus} from '../../../../shared/models/configuration/hiring/publication-line-status';
 import {PublicationLineStatusService} from '../../../../shared/services/api/configuration/hiring/publication-line-status.service';
+import {Organization} from '../../../../shared/models/configuration/organization';
+import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
 
 
 @Component({
@@ -15,7 +17,7 @@ import {PublicationLineStatusService} from '../../../../shared/services/api/conf
   templateUrl: './publication-line-status.component.html',
   styleUrls: ['./publication-line-status.component.css']
 })
-export class PublicationLineStatusComponent implements OnInit {
+export class PublicationLineStatusComponent implements OnInit, OnDestroy {
 
   pipe = new DatePipe('fr');
   now = Date.now();
@@ -42,6 +44,7 @@ export class PublicationLineStatusComponent implements OnInit {
   dialogDisplayEdit = false;
 
   // Component Attributes
+  currentOrganization: Organization;
   publicationLineStatus: PublicationLineStatus;
   ids: Array<number>;
   // Component Attributes // Add
@@ -55,6 +58,7 @@ export class PublicationLineStatusComponent implements OnInit {
   constructor(private publicationLineStatusService: PublicationLineStatusService,
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
+              private authenticationService: AuthenticationService,
               private confirmationService: ConfirmationService,
               private messageService: MessageService,
               private toastr: ToastrService,
@@ -84,12 +88,18 @@ export class PublicationLineStatusComponent implements OnInit {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.publicationLineStatusService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.publicationLineStatusService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       }
     ));
-    this.subscriptions.add(this.publicationLineStatusService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.publicationLineStatusService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.publicationLineStatusList = data;
         this.spinner.hide();

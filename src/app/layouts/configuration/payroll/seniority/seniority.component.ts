@@ -41,13 +41,14 @@ export class SeniorityComponent implements OnInit, OnDestroy {
 
   // Drop Down
   fiscalYearList: Array<FiscalYear> = [];
+  dropDownSearchSentence_FiscalYear: string;
+  currentOrganization: Organization;
 
   // Dialog
   dialogDisplayAdd = false;
   dialogDisplayEdit = false;
 
   // Component Attributes
-  currentOrganization: Organization;
   seniority: Seniority;
   ids: Array<number>;
   // Component Attributes // Add
@@ -103,6 +104,12 @@ export class SeniorityComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.dropDownSearchSentence_FiscalYear = '';
+    this.dropDownSearchSentence_FiscalYear = 'organization.code:' + this.currentOrganization.code;
+
     this.subscriptions.add(this.irService.size().subscribe(
       data => {
         this.collectionSize = data;
@@ -122,7 +129,7 @@ export class SeniorityComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.fiscalYearService.findAll().subscribe(
+    this.subscriptions.add(this.fiscalYearService.find(this.dropDownSearchSentence_FiscalYear).subscribe(
       (data) => {
         this.fiscalYearList = data;
       },

@@ -85,9 +85,12 @@ export class FiscalYearComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.searchSentence = '';
+    // Set Current Organization
     this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
     this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
     this.subscriptions.add(this.fiscalYearService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;

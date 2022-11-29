@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {Md5} from 'ts-md5';
 import {AuthenticationService} from './authentication.service';
 import {REST_URL} from './../../utils/constants';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -121,6 +122,19 @@ export class ProxyService {
   generateCode(controller: string) {
     const fullUrl = this.url + controller + '/nextval?token=' + this.getToken();
     return this.http.get<string>(fullUrl, {responseType: 'text' as 'json'});
+  }
+
+  generatePayrollStatement(controller: string, object: any): Observable<any> {
+    const fullUrl = this.url + controller + '/generatePayrollStatement?token=' + this.getToken();
+    // return this.http.post(fullUrl, object);
+    return this.http.get<any>(fullUrl, {
+      responseType: 'blob' as 'json',
+      observe: 'response'
+    }).pipe(
+      map((res: any) => {
+        return new Blob([res.blob()], {type: 'application/pdf'});
+      })
+    );
   }
 
   getToken(): string {

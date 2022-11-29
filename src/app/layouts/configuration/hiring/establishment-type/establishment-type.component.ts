@@ -1,4 +1,4 @@
-import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {EstablishmentType} from '../../../../shared/models/configuration/hiring/establishment-type';
 import {EstablishmentTypeService} from '../../../../shared/services/api/configuration/hiring/establishment-type.service';
+import {Organization} from '../../../../shared/models/configuration/organization';
+import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
 
 
 @Component({
@@ -15,7 +17,7 @@ import {EstablishmentTypeService} from '../../../../shared/services/api/configur
   templateUrl: './establishment-type.component.html',
   styleUrls: ['./establishment-type.component.css']
 })
-export class EstablishmentTypeComponent implements OnInit {
+export class EstablishmentTypeComponent implements OnInit, OnDestroy {
 
   pipe = new DatePipe('fr');
   now = Date.now();
@@ -42,6 +44,7 @@ export class EstablishmentTypeComponent implements OnInit {
   dialogDisplayEdit = false;
 
   // Component Attributes
+  currentOrganization: Organization;
   establishmentType: EstablishmentType;
   ids: Array<number>;
   // Component Attributes // Add
@@ -55,6 +58,7 @@ export class EstablishmentTypeComponent implements OnInit {
   constructor(private establishmentTypeService: EstablishmentTypeService,
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
+              private authenticationService: AuthenticationService,
               private confirmationService: ConfirmationService,
               private messageService: MessageService,
               private toastr: ToastrService,
@@ -84,12 +88,18 @@ export class EstablishmentTypeComponent implements OnInit {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.establishmentTypeService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.establishmentTypeService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       }
     ));
-    this.subscriptions.add(this.establishmentTypeService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.establishmentTypeService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.establishmentTypeList = data;
         this.spinner.hide();

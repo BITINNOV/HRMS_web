@@ -70,6 +70,10 @@ export class HrService<T> {
     return this.proxy.deleteAllByIds(this.controller, ids);
   }
 
+  generatePayrollStatement(t: T): Observable<any> {
+    return this.proxy.generatePayrollStatement(this.controller, t);
+  }
+
   generateCode(): Observable<string> {
     return this.proxy.generateCode(this.controller);
   }

@@ -32,6 +32,7 @@ export class DataTableComponent implements OnInit {
   @Input() viewBtnVisible = false;
   @Input() updateBtnVisible = false;
   @Input() deleteBtnVisible = false;
+  @Input() generateBtnVisible = false;
   @Output() lazyLoadData = new EventEmitter<any>();
   @Output() objectEdited = new EventEmitter<EmittedOBject>();
   @Output() exportBtnExcelGlobal = new EventEmitter<any[]>();
@@ -46,6 +47,7 @@ export class DataTableComponent implements OnInit {
   currentOrganization = new Organization();
   updateBtnDisable = false;
   deleteBtnDisable = false;
+  generateBtnDisable = false;
   items: MenuItem[];
 
   constructor(private spinner: NgxSpinnerService,
@@ -155,6 +157,9 @@ export class DataTableComponent implements OnInit {
       operationMode: event,
     });
     this.selectedObjects = [];
+    this.updateBtnDisable = false;
+    this.deleteBtnDisable = false;
+    this.generateBtnDisable = false;
   }
 
   loadDataLazy(event) {
@@ -167,17 +172,21 @@ export class DataTableComponent implements OnInit {
     if (this.selectedObjects.length === 1) {
       this.updateBtnDisable = true;
       this.deleteBtnDisable = true;
+      this.generateBtnDisable = true;
     } else {
       this.updateBtnDisable = false;
+      this.generateBtnDisable = false;
     }
   }
 
   onRowUnselect(event) {
     if (this.selectedObjects.length === 1) {
       this.updateBtnDisable = true;
+      this.generateBtnDisable = true;
     } else if (this.selectedObjects.length < 1) {
       this.updateBtnDisable = false;
       this.deleteBtnDisable = false;
+      this.generateBtnDisable = false;
     }
   }
 

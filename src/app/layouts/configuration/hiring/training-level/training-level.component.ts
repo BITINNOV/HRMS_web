@@ -1,4 +1,4 @@
-import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {TrainingLevel} from '../../../../shared/models/configuration/hiring/training-level';
 import {TrainingLevelService} from '../../../../shared/services/api/configuration/hiring/training-level.service';
+import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
+import {Organization} from '../../../../shared/models/configuration/organization';
 
 
 @Component({
@@ -15,7 +17,7 @@ import {TrainingLevelService} from '../../../../shared/services/api/configuratio
   templateUrl: './training-level.component.html',
   styleUrls: ['./training-level.component.css']
 })
-export class TrainingLevelComponent implements OnInit {
+export class TrainingLevelComponent implements OnInit, OnDestroy {
 
   pipe = new DatePipe('fr');
   now = Date.now();
@@ -42,6 +44,7 @@ export class TrainingLevelComponent implements OnInit {
   dialogDisplayEdit = false;
 
   // Component Attributes
+  currentOrganization: Organization;
   trainingLevel: TrainingLevel;
   ids: Array<number>;
   // Component Attributes // Add
@@ -55,6 +58,7 @@ export class TrainingLevelComponent implements OnInit {
   constructor(private trainingLevelService: TrainingLevelService,
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
+              private authenticationService: AuthenticationService,
               private confirmationService: ConfirmationService,
               private messageService: MessageService,
               private toastr: ToastrService,
@@ -84,12 +88,18 @@ export class TrainingLevelComponent implements OnInit {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.trainingLevelService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.trainingLevelService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       }
     ));
-    this.subscriptions.add(this.trainingLevelService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.trainingLevelService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.trainingLevelList = data;
         this.spinner.hide();

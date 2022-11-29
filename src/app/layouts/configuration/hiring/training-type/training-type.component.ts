@@ -1,4 +1,4 @@
-import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {TrainingType} from '../../../../shared/models/configuration/hiring/training-type';
 import {TrainingTypeService} from '../../../../shared/services/api/configuration/hiring/training-type.service';
+import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
+import {Organization} from '../../../../shared/models/configuration/organization';
 
 
 @Component({
@@ -15,7 +17,7 @@ import {TrainingTypeService} from '../../../../shared/services/api/configuration
   templateUrl: './training-type.component.html',
   styleUrls: ['./training-type.component.css']
 })
-export class TrainingTypeComponent implements OnInit {
+export class TrainingTypeComponent implements OnInit, OnDestroy {
 
   pipe = new DatePipe('fr');
   now = Date.now();
@@ -42,6 +44,7 @@ export class TrainingTypeComponent implements OnInit {
   dialogDisplayEdit = false;
 
   // Component Attributes
+  currentOrganization: Organization;
   trainingType: TrainingType;
   ids: Array<number>;
   // Component Attributes // Add
@@ -55,6 +58,7 @@ export class TrainingTypeComponent implements OnInit {
   constructor(private trainingTypeService: TrainingTypeService,
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
+              private authenticationService: AuthenticationService,
               private confirmationService: ConfirmationService,
               private messageService: MessageService,
               private toastr: ToastrService,
@@ -84,12 +88,18 @@ export class TrainingTypeComponent implements OnInit {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.trainingTypeService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.trainingTypeService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       }
     ));
-    this.subscriptions.add(this.trainingTypeService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.trainingTypeService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.trainingTypeList = data;
         this.spinner.hide();

@@ -1,4 +1,4 @@
-import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
@@ -8,6 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {LanguageLevel} from '../../../../shared/models/configuration/hiring/language-level';
 import {LanguageLevelService} from '../../../../shared/services/api/configuration/hiring/language-level.service';
+import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
+import {Organization} from '../../../../shared/models/configuration/organization';
 
 
 @Component({
@@ -15,7 +17,7 @@ import {LanguageLevelService} from '../../../../shared/services/api/configuratio
   templateUrl: './language-level.component.html',
   styleUrls: ['./language-level.component.css']
 })
-export class LanguageLevelComponent implements OnInit {
+export class LanguageLevelComponent implements OnInit, OnDestroy {
 
   pipe = new DatePipe('fr');
   now = Date.now();
@@ -42,6 +44,7 @@ export class LanguageLevelComponent implements OnInit {
   dialogDisplayEdit = false;
 
   // Component Attributes
+  currentOrganization: Organization;
   languageLevel: LanguageLevel;
   ids: Array<number>;
   // Component Attributes // Add
@@ -56,6 +59,7 @@ export class LanguageLevelComponent implements OnInit {
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
               private confirmationService: ConfirmationService,
+              private authenticationService: AuthenticationService,
               private messageService: MessageService,
               private toastr: ToastrService,
               private router: Router,
@@ -84,12 +88,18 @@ export class LanguageLevelComponent implements OnInit {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.languageLevelService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.languageLevelService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       }
     ));
-    this.subscriptions.add(this.languageLevelService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.languageLevelService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.languageLevelList = data;
         this.spinner.hide();
