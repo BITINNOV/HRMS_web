@@ -15,6 +15,7 @@ import {ExpenseAccountStatus} from '../../../shared/models/configuration/employe
 import {Employee} from '../../../shared/models/employee/employee';
 import {ExpenseAccountStatusService} from '../../../shared/services/api/payroll/expense-account-status.service';
 import {ExpenseAccount} from '../../../shared/models/payroll/expense-account';
+import {EmployeeService} from '../../../shared/services/api/employee/employee.service';
 
 @Component({
   selector: 'app-expense-account',
@@ -43,8 +44,10 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
   selectedColumns: Array<any> = [];
 
   // Drop Down
-  fiscalYearList: Array<FiscalYear> = [];
+  employeeList: Array<Employee> = [];
   expenseAccountStatusList: Array<ExpenseAccountStatus> = [];
+  dropDownSearchSentence_Employee: string;
+  dropDownSearchSentence_ExpenseAccountStatus: string;
 
   // Dialog
   dialogDisplayAdd = false;
@@ -78,7 +81,7 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
-              private fiscalYearService: FiscalYearService,
+              private employeeService: EmployeeService,
               private confirmationService: ConfirmationService,
               private authenticationService: AuthenticationService,
               private expenseAccountService: ExpenseAccountService,
@@ -95,9 +98,10 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
     this.className = ExpenseAccount.name;
     this.cols = [
       {field: 'code', header: 'Code', type: 'string'},
+      {field: 'employee', child: 'firstName', header: 'Employee First name', type: 'object'},
+      {field: 'employee', child: 'lastName', header: 'Employee Last name', type: 'object'},
       {field: 'details', header: 'Details', type: 'string'},
       {field: 'comment', header: 'Comment', type: 'string'},
-      {field: 'employee', child: 'code', header: 'Employee', type: 'object'},
       {field: 'expenseAccountStatus', child: 'code', header: 'Expense Account Status', type: 'object'},
     ];
     this.selectedColumns = this.cols;
@@ -112,7 +116,19 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.expenseAccountService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    // Drop Down search For Employee
+    this.dropDownSearchSentence_Employee = '';
+    this.dropDownSearchSentence_Employee += 'organization.code:' + this.currentOrganization.code;
+    // Drop Down search For Expense Account Status
+    this.dropDownSearchSentence_ExpenseAccountStatus = '';
+    this.dropDownSearchSentence_ExpenseAccountStatus += 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.expenseAccountService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       },
@@ -120,7 +136,7 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    this.subscriptions.add(this.expenseAccountService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.expenseAccountService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.expenseAccountList = data;
         this.spinner.hide();
@@ -132,9 +148,9 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
       () => this.spinner.hide()
     ));
 
-    this.subscriptions.add(this.fiscalYearService.findAll().subscribe(
+    this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence_Employee).subscribe(
       (data) => {
-        this.fiscalYearList = data;
+        this.employeeList = data;
       },
       (error) => {
         this.spinner.hide();
@@ -142,7 +158,7 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.expenseAccountStatusService.findAll().subscribe(
+    this.subscriptions.add(this.expenseAccountStatusService.find(this.dropDownSearchSentence_ExpenseAccountStatus).subscribe(
       (data) => {
         this.expenseAccountStatusList = data;
       },
@@ -375,31 +391,56 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
   filterEmployee(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const firstOrLastName = event.query;
 
-    for (let i = 0; i < this.fiscalYearList.length; i++) {
-      const employee = this.fiscalYearList[i];
-      if (employee.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(employee);
+    if (firstOrLastName) {
+      for (let i = 0; i < this.employeeList.length; i++) {
+        const employee = this.employeeList[i];
+        // tslint:disable-next-line:max-line-length
+        if ((employee.firstName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0) || (employee.lastName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0)) {
+          filtered.push(employee);
+        }
       }
+      this.employeeList = filtered;
+    } else {
+      this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence_Employee).subscribe(
+        (data) => {
+          this.employeeList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.fiscalYearList = filtered;
   }
 
   filterExpenseAccountStatus(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const code = event.query;
 
-    for (let i = 0; i < this.expenseAccountStatusList.length; i++) {
-      const expenseAccountStatus = this.expenseAccountStatusList[i];
-      if (expenseAccountStatus.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(expenseAccountStatus);
+    if (code) {
+      for (let i = 0; i < this.expenseAccountStatusList.length; i++) {
+        const expenseAccountStatus = this.expenseAccountStatusList[i];
+        if (expenseAccountStatus.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(expenseAccountStatus);
+        }
       }
+      this.expenseAccountStatusList = filtered;
+    } else {
+      this.subscriptions.add(this.expenseAccountStatusService.find(this.dropDownSearchSentence_ExpenseAccountStatus).subscribe(
+        (data) => {
+          this.expenseAccountStatusList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.expenseAccountStatusList = filtered;
   }
 
   ngOnDestroy() {

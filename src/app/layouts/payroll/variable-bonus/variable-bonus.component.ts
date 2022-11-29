@@ -13,6 +13,7 @@ import {FiscalYearService} from '../../../shared/services/api/configuration/payr
 import {GlobalService} from '../../../shared/services/api/global.service';
 import {VariableBonus} from '../../../shared/models/payroll/variable-bonus';
 import {VariableBonusService} from '../../../shared/services/api/payroll/variable-bonus.service';
+import {EmployeeService} from '../../../shared/services/api/employee/employee.service';
 
 @Component({
   selector: 'app-variable-bonus',
@@ -41,7 +42,8 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
   selectedColumns: Array<any> = [];
 
   // Drop Down
-  fiscalYearList: Array<FiscalYear> = [];
+  employeeList: Array<Employee> = [];
+  dropDownSearchSentence_Employee: string;
 
   // Dialog
   dialogDisplayAdd = false;
@@ -75,7 +77,7 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
               private authenticationService: AuthenticationService,
-              private fiscalYearService: FiscalYearService,
+              private employeeService: EmployeeService,
               private globalService: GlobalService,
               private variableBonusService: VariableBonusService,
               private confirmationService: ConfirmationService,
@@ -91,10 +93,11 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
     this.className = VariableBonus.name;
     this.cols = [
       {field: 'code', header: 'Code', type: 'string'},
+      {field: 'employee', child: 'firstName', header: 'Employee First name', type: 'object'},
+      {field: 'employee', child: 'lastName', header: 'Employee Last name', type: 'object'},
       {field: 'value', header: 'Value', type: 'number'},
       {field: 'taxRates', header: 'Taxe Rates', type: 'number'},
       {field: 'variableBonusDate', header: 'Variable Bonus Date', type: 'date'},
-      {field: 'employee', child: 'firstname', header: 'Employee', type: 'object'},
     ];
     this.selectedColumns = this.cols;
     /*this.selectedColumns = this.Columns;
@@ -108,9 +111,15 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.searchSentence = '';
+    // Set Current Organization
     this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
     this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    // Drop Down search For Employee
+    this.dropDownSearchSentence_Employee = '';
+    this.dropDownSearchSentence_Employee += 'organization.code:' + this.currentOrganization.code;
+
     this.subscriptions.add(this.variableBonusService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
@@ -130,9 +139,9 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.fiscalYearService.findAll().subscribe(
+    this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence_Employee).subscribe(
       (data) => {
-        this.fiscalYearList = data;
+        this.employeeList = data;
       },
       (error) => {
         this.spinner.hide();
@@ -363,16 +372,29 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
   filterEmployee(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const firstOrLastName = event.query;
 
-    for (let i = 0; i < this.fiscalYearList.length; i++) {
-      const employee = this.fiscalYearList[i];
-      if (employee.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(employee);
+    if (firstOrLastName) {
+      for (let i = 0; i < this.employeeList.length; i++) {
+        const employee = this.employeeList[i];
+        // tslint:disable-next-line:max-line-length
+        if ((employee.firstName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0) || (employee.lastName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0)) {
+          filtered.push(employee);
+        }
       }
+      this.employeeList = filtered;
+    } else {
+      this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence_Employee).subscribe(
+        (data) => {
+          this.employeeList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.fiscalYearList = filtered;
   }
 
   ngOnDestroy() {

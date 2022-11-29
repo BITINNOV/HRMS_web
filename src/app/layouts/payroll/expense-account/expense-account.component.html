@@ -16,7 +16,7 @@
       <input [(ngModel)]="searchComment" pInputText type="text"/>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Employee </label>
+      <label class="font-weight-bold"> Expense Account Status </label>
       <p-autoComplete [(ngModel)]="searchExpenseAccountStatus" [suggestions]="expenseAccountStatusList"
                       (completeMethod)="filterExpenseAccountStatus($event)" field="code" [dropdown]="true"
                       placeholder="{{'Select an Expense Account Status' | translate}}">
@@ -28,13 +28,13 @@
       </p-autoComplete>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Expense Account Status </label>
-      <p-autoComplete [(ngModel)]="searchEmployee" [suggestions]="fiscalYearList"
-                      (completeMethod)="filterEmployee($event)" field="code" [dropdown]="true"
+      <label class="font-weight-bold"> Employee </label>
+      <p-autoComplete [(ngModel)]="searchEmployee" [suggestions]="employeeList"
+                      (completeMethod)="filterEmployee($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
         <ng-template let-employee pTemplate="item">
           <div class="country-item">
-            <div>{{employee.code}}</div>
+            <div>{{employee.firstName}} {{employee.lastName}}</div>
           </div>
         </ng-template>
       </p-autoComplete>
@@ -116,12 +116,12 @@
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Employee </label>
-      <p-autoComplete [(ngModel)]="addEmployee" [suggestions]="fiscalYearList"
-                      (completeMethod)="filterEmployee($event)" field="code" [dropdown]="true"
+      <p-autoComplete [(ngModel)]="addEmployee" [suggestions]="employeeList"
+                      (completeMethod)="filterEmployee($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
         <ng-template let-employee pTemplate="item">
           <div class="country-item">
-            <div>{{employee.code}}</div>
+            <div>{{employee.firstName}} {{employee.lastName}}</div>
           </div>
         </ng-template>
       </p-autoComplete>
@@ -165,12 +165,12 @@
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Employee </label>
-      <p-autoComplete [(ngModel)]="updateEmployee" [suggestions]="fiscalYearList"
-                      (completeMethod)="filterEmployee($event)" field="code" [dropdown]="true"
+      <p-autoComplete [(ngModel)]="updateEmployee" [suggestions]="employeeList"
+                      (completeMethod)="filterEmployee($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
         <ng-template let-employee pTemplate="item">
           <div class="country-item">
-            <div>{{employee.code}}</div>
+            <div>{{employee.firstName}} {{employee.lastName}}</div>
           </div>
         </ng-template>
       </p-autoComplete>

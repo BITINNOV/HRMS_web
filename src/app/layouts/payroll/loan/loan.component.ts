@@ -13,6 +13,7 @@ import {GlobalService} from '../../../shared/services/api/global.service';
 import {Loan} from '../../../shared/models/payroll/loan';
 import {LoanService} from '../../../shared/services/api/payroll/loan.service';
 import {Employee} from '../../../shared/models/employee/employee';
+import {EmployeeService} from '../../../shared/services/api/employee/employee.service';
 
 @Component({
   selector: 'app-loan',
@@ -41,7 +42,8 @@ export class LoanComponent implements OnInit, OnDestroy {
   selectedColumns: Array<any> = [];
 
   // Drop Down
-  fiscalYearList: Array<FiscalYear> = [];
+  employeeList: Array<Employee> = [];
+  dropDownSearchSentence_Employee: string;
 
   // Dialog
   dialogDisplayAdd = false;
@@ -78,7 +80,7 @@ export class LoanComponent implements OnInit, OnDestroy {
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
               private authenticationService: AuthenticationService,
-              private fiscalYearService: FiscalYearService,
+              private employeeService: EmployeeService,
               private globalService: GlobalService,
               private loanService: LoanService,
               private confirmationService: ConfirmationService,
@@ -94,11 +96,12 @@ export class LoanComponent implements OnInit, OnDestroy {
     this.className = Loan.name;
     this.cols = [
       {field: 'code', header: 'Code', type: 'string'},
+      {field: 'employee', child: 'firstName', header: 'Employee First name', type: 'object'},
+      {field: 'employee', child: 'lastName', header: 'Employee Last name', type: 'object'},
       {field: 'totalValue', header: ' Total Value', type: 'number'},
       {field: 'retained', header: 'Retained', type: 'number'},
       {field: 'loanDate', header: 'Loan Date', type: 'date'},
       {field: 'interestRate', header: 'Interest Rate', type: 'number'},
-      {field: 'employee', child: 'firstname', header: 'Employee', type: 'object'},
     ];
     this.selectedColumns = this.cols;
     /*this.selectedColumns = this.Columns;
@@ -112,7 +115,17 @@ export class LoanComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.subscriptions.add(this.loanService.size().subscribe(
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    // Drop Down search For Employee
+    this.dropDownSearchSentence_Employee = '';
+    this.dropDownSearchSentence_Employee += 'organization.code:' + this.currentOrganization.code;
+
+    this.spinner.show();
+    this.subscriptions.add(this.loanService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
       },
@@ -120,7 +133,7 @@ export class LoanComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    this.subscriptions.add(this.loanService.findAllPagination(this.page, this.size).subscribe(
+    this.subscriptions.add(this.loanService.findPagination(this.page, this.size, this.searchSentence).subscribe(
       data => {
         this.loanList = data;
         this.spinner.hide();
@@ -131,9 +144,9 @@ export class LoanComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.fiscalYearService.findAll().subscribe(
+    this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence_Employee).subscribe(
       (data) => {
-        this.fiscalYearList = data;
+        this.employeeList = data;
       },
       (error) => {
         this.spinner.hide();
@@ -377,16 +390,29 @@ export class LoanComponent implements OnInit, OnDestroy {
   filterEmployee(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const firstOrLastName = event.query;
 
-    for (let i = 0; i < this.fiscalYearList.length; i++) {
-      const employee = this.fiscalYearList[i];
-      if (employee.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(employee);
+    if (firstOrLastName) {
+      for (let i = 0; i < this.employeeList.length; i++) {
+        const employee = this.employeeList[i];
+        // tslint:disable-next-line:max-line-length
+        if ((employee.firstName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0) || (employee.lastName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0)) {
+          filtered.push(employee);
+        }
       }
+      this.employeeList = filtered;
+    } else {
+      this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence_Employee).subscribe(
+        (data) => {
+          this.employeeList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.fiscalYearList = filtered;
   }
 
   ngOnDestroy() {

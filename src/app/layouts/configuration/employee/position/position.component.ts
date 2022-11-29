@@ -126,7 +126,6 @@ export class PositionComponent implements OnInit, OnDestroy {
       this.dropDownSearchSentence_ContractTypePositionType += 'validate:' + this.dropDownSearchValidate_ContractTypePositionType + ',';
     }
     this.dropDownSearchSentence_ContractTypePositionType += 'organization.code:' + this.currentOrganization.code;
-
     // Drop Down search For Service
     this.dropDownSearchSentence_Service = '';
     this.dropDownSearchSentence_Service += 'organization.code:' + this.currentOrganization.code;

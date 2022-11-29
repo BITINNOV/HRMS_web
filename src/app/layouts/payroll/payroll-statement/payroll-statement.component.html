@@ -6,11 +6,11 @@
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Employee </label>
       <p-autoComplete [(ngModel)]="searchEmployee" [suggestions]="employeeList"
-                      (completeMethod)="filterEmployee($event)" field="code" [dropdown]="true"
+                      (completeMethod)="filterEmployee($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
         <ng-template let-employee pTemplate="item">
           <div class="country-item">
-            <div>{{employee.firstName}}</div>
+            <div>{{employee.firstName}} {{employee.lastName}}</div>
           </div>
         </ng-template>
       </p-autoComplete>
@@ -89,11 +89,11 @@
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Employee </label>
       <p-autoComplete [(ngModel)]="addEmployee" [suggestions]="employeeList"
-                      (completeMethod)="filterEmployee($event)" field="code" [dropdown]="true"
+                      (completeMethod)="filterEmployee($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
         <ng-template let-employee pTemplate="item">
           <div class="country-item">
-            <div>{{employee.firstName}}</div>
+            <div>{{employee.firstName}} {{employee.lastName}}</div>
           </div>
         </ng-template>
       </p-autoComplete>
@@ -134,11 +134,11 @@
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Employee </label>
       <p-autoComplete [(ngModel)]="updateEmployee" [suggestions]="employeeList"
-                      (completeMethod)="filterEmployee($event)" field="code" [dropdown]="true"
+                      (completeMethod)="filterEmployee($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
         <ng-template let-employee pTemplate="item">
           <div class="country-item">
-            <div>{{employee.firstName}}</div>
+            <div>{{employee.firstName}} {{employee.lastName}}</div>
           </div>
         </ng-template>
       </p-autoComplete>

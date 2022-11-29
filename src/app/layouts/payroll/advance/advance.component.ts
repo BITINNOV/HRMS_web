@@ -41,6 +41,7 @@ export class AdvanceComponent implements OnInit, OnDestroy {
 
   // Drop Down
   employeeList: Array<Employee> = [];
+  dropDownSearchSentence_Employee: string;
 
   // Dialog
   dialogDisplayAdd = false;
@@ -86,10 +87,11 @@ export class AdvanceComponent implements OnInit, OnDestroy {
     this.home = {icon: 'pi pi-home'};
     this.className = Advance.name;
     this.cols = [
+      {field: 'employee', child: 'firstName', header: 'Employee First name', type: 'object'},
+      {field: 'employee', child: 'lastName', header: 'Employee Last name', type: 'object'},
       {field: 'code', header: 'Code', type: 'string'},
       {field: 'value', header: ' Value', type: 'number'},
       {field: 'advanceDate', header: 'Advance Date', type: 'date'},
-      {field: 'employee', child: 'firstname', header: 'Employee', type: 'object'},
     ];
     this.selectedColumns = this.cols;
     /*this.selectedColumns = this.Columns;
@@ -103,9 +105,15 @@ export class AdvanceComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.searchSentence = '';
+    // Set Current Organization
     this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
     this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    // Drop Down search For Employee
+    this.dropDownSearchSentence_Employee = '';
+    this.dropDownSearchSentence_Employee += 'organization.code:' + this.currentOrganization.code;
+
     this.subscriptions.add(this.advanceService.sizeSearch(this.searchSentence).subscribe(
       data => {
         this.collectionSize = data;
@@ -125,7 +133,7 @@ export class AdvanceComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.employeeService.findAll().subscribe(
+    this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence_Employee).subscribe(
       (data) => {
         this.employeeList = data;
       },
@@ -346,17 +354,29 @@ export class AdvanceComponent implements OnInit, OnDestroy {
   filterEmployee(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const firstOrLastName = event.query;
 
-    for (let i = 0; i < this.employeeList.length; i++) {
-      const employee: Employee = this.employeeList[i];
-      // tslint:disable-next-line:max-line-length
-      if ((employee.firstName.toLowerCase().indexOf(query.toLowerCase()) === 0) || (employee.lastName.toLowerCase().indexOf(query.toLowerCase()) === 0)) {
-        filtered.push(employee);
+    if (firstOrLastName) {
+      for (let i = 0; i < this.employeeList.length; i++) {
+        const employee = this.employeeList[i];
+        // tslint:disable-next-line:max-line-length
+        if ((employee.firstName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0) || (employee.lastName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0)) {
+          filtered.push(employee);
+        }
       }
+      this.employeeList = filtered;
+    } else {
+      this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence_Employee).subscribe(
+        (data) => {
+          this.employeeList = data;
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
-
-    this.employeeList = filtered;
   }
 
   ngOnDestroy() {
