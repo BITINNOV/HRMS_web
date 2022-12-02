@@ -20,6 +20,9 @@ export class Employee {
   kidsNumber: number;
   familySituation: String;
   gender: String;
+  hiringDate: Date;
+  salaryAmount: number;
+  isActive: boolean;
   manager: Employee;
   organization: Organization;
 }

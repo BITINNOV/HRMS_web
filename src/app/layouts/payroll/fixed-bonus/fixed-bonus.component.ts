@@ -128,7 +128,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.fiscalYearService.findAll().subscribe(
+    this.subscriptions.add(this.fiscalYearService.find(this.searchSentence).subscribe(
       (data) => {
         this.fiscalYearList = data;
       },
@@ -147,7 +147,14 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
   }
 
   onExportExcel(event) {
-    this.subscriptions.add(this.fixedBonusService.findAll().subscribe(
+    this.spinner.show();
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.fixedBonusService.find(this.searchSentence).subscribe(
       data => {
         this.fixedBonusExportList = data;
         if (event != null) {
@@ -166,7 +173,14 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
   }
 
   onExportPdf(event) {
-    this.subscriptions.add(this.fixedBonusService.findAll().subscribe(
+    this.spinner.show();
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.fixedBonusService.find(this.searchSentence).subscribe(
       data => {
         this.fixedBonusExportList = data;
         this.globalService.generatePdf(event, this.fixedBonusExportList, this.className, this.listTitle);

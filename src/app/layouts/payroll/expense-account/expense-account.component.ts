@@ -177,7 +177,14 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
   }
 
   onExportExcel(event) {
-    this.subscriptions.add(this.expenseAccountService.findAll().subscribe(
+    this.spinner.show();
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.expenseAccountService.find(this.searchSentence).subscribe(
       data => {
         this.expenseAccountExportList = data;
         if (event != null) {
@@ -196,7 +203,14 @@ export class ExpenseAccountComponent implements OnInit, OnDestroy {
   }
 
   onExportPdf(event) {
-    this.subscriptions.add(this.expenseAccountService.findAll().subscribe(
+    this.spinner.show();
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.expenseAccountService.find(this.searchSentence).subscribe(
       data => {
         this.expenseAccountExportList = data;
         this.globalService.generatePdf(event, this.expenseAccountExportList, this.className, this.listTitle);

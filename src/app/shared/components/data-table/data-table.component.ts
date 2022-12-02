@@ -9,6 +9,7 @@ import {Columns} from '../../models/columns';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Organization} from '../../models/configuration/organization';
 import {ColumnsService} from '../../services/api/columns.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-data-table',
@@ -39,6 +40,7 @@ export class DataTableComponent implements OnInit {
   @Output() exportBtnExcelVue = new EventEmitter<any[]>();
   @Output() exportBtnPdf = new EventEmitter<any[]>();
   exportColumns: Array<any> = [];
+  columnsToAdd: Array<any> = [];
   columnsAdded: Array<any> = [];
   columnsMapped: Array<any> = [];
   exportBtnItems: MenuItem[] = [];
@@ -49,6 +51,7 @@ export class DataTableComponent implements OnInit {
   deleteBtnDisable = false;
   generateBtnDisable = false;
   items: MenuItem[];
+  subscriptions = new Subscription();
 
   constructor(private spinner: NgxSpinnerService,
               private toastr: ToastrService,
@@ -93,32 +96,44 @@ export class DataTableComponent implements OnInit {
   loadColumns() {
     this.currentUser = this.authenticationService.getCurrentUser();
     this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    let searchSentense_Columns = '.';
+    searchSentense_Columns += 'user.id:' + this.currentUser.id + ',';
+    searchSentense_Columns += 'organization.id:' + this.currentOrganization.id;
 
-    /* if (this.user.columns != null && this.user.columns !== '') {
-       this.columnsAdded = JSON.parse(this.user.columns);
-       this.columnsMapped = this.columnsAdded.filter(
-         (tab) => tab.classe === this.className
-       );
+    this.subscriptions.add(this.columnsService.find(searchSentense_Columns).subscribe(
+      (data) => {
+        this.columnsAdded = data;
 
-       if (this.columnsMapped.length >= 1) {
-         for (let i = 0; i < this.cols.length; i++) {
-           for (let j = 0; j < this.columnsMapped.length; j++) {
-             if (this.cols[i].field === this.columnsMapped[j].field) {
-               this.selectedColumns.push(this.cols[i]);
-             }
-           }
-         }
-       } else {
-         this.selectedColumns = this.cols;
-       }
-     } else {
-       this.selectedColumns = this.cols;
-     }*/
-    this.selectedColumns = this.cols;
-    this.exportColumns = this.selectedColumns.map((col) => ({
-      title: col.header,
-      dataKey: col.field,
-    }));
+        if (this.columnsAdded && this.columnsAdded.length > 0) {
+          this.columnsMapped = this.columnsAdded.filter(
+            (tab) => tab.classe === this.className
+          );
+
+          if (this.columnsMapped.length >= 1) {
+            for (let i = 0; i < this.cols.length; i++) {
+              for (let j = 0; j < this.columnsMapped.length; j++) {
+                if (this.cols[i].field === this.columnsMapped[j].field) {
+                  this.selectedColumns.push(this.cols[i]);
+                }
+              }
+            }
+          } else {
+            this.selectedColumns = this.cols;
+          }
+        } else {
+          this.selectedColumns = this.cols;
+        }
+
+        // this.selectedColumns = this.cols;
+        this.exportColumns = this.selectedColumns.map((col) => ({
+          title: col.header,
+          dataKey: col.field,
+        }));
+      },
+      (error) => {
+        this.toastr.error(error.message);
+      }
+    ));
   }
 
   typeOf(event) {
@@ -191,27 +206,32 @@ export class DataTableComponent implements OnInit {
   }
 
   onSaveView() {
-    this.spinner.show();
-    this.columnsAdded = this.columnsAdded.filter(
-      (col) => col.classe !== this.className
-    );
+    // this.spinner.show();
 
+    /*if (this.columnsAdded.length > 0) {
+      this.columnsAdded = this.columnsAdded.filter(
+        (col) => col.classe !== this.className
+      );
+    }*/
+    this.columnsToAdd = [];
     for (let i = 0; i < this.selectedColumns.length; i++) {
-      const c = new Columns();
-      c.position = i;
-      c.field = this.selectedColumns[i].field;
-      c.header = this.selectedColumns[i].header;
-      c.classe = this.className;
-      c.type = this.selectedColumns[i].type;
-      c.child = this.selectedColumns[i].child;
-      c.user = this.currentUser;
-      c.organization = this.currentOrganization;
-      this.columnsAdded.push(c);
+      const column = new Columns();
+
+      column.position = i;
+      column.field = this.selectedColumns[i].field;
+      column.header = this.selectedColumns[i].header;
+      column.classe = this.className;
+      column.type = this.selectedColumns[i].type;
+      column.child = this.selectedColumns[i].child;
+      column.user = this.currentUser;
+      column.organization = this.currentOrganization;
+
+      this.existColumn(column);
+
+      this.columnsToAdd.push(column);
     }
 
-    console.log('this.columnsAdded = ' + this.columnsAdded);
-
-    this.columnsService.setAll(this.columnsAdded).subscribe(
+    this.columnsService.setAll(this.columnsToAdd).subscribe(
       (data) => {
         this.toastr.success('La vue a été enregistrée avec Succés', 'Edition');
       },
@@ -235,5 +255,21 @@ export class DataTableComponent implements OnInit {
       },
       () => this.spinner.hide()
     );*/
+  }
+
+  existColumn(column: Columns) {
+    for (let i = 0; i < this.columnsAdded.length; i++) {
+      const currentColumn = this.columnsAdded[i];
+
+      if (currentColumn.field === column.field) {
+        if (currentColumn.child && column.child) {
+          if (currentColumn.child === column.child) {
+            column.id = currentColumn.id;
+          }
+        } else {
+          column.id = currentColumn.id;
+        }
+      }
+    }
   }
 }

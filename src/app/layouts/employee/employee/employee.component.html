@@ -85,7 +85,7 @@
     <div class="col-md-3" style="margin-top: 20px;">
       <label class="font-weight-bold"> Manager </label>
       <p-autoComplete [(ngModel)]="searchManager" [suggestions]="employeeManagerList"
-                      (completeMethod)="filterManager($event)" field="code" [dropdown]="true"
+                      (completeMethod)="filterManager($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
         <ng-template let-employeeManager pTemplate="item">
           <div class="country-item">
@@ -93,6 +93,18 @@
           </div>
         </ng-template>
       </p-autoComplete>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Hiring Date </label>
+      <p-calendar inputId="basic" [(ngModel)]="searchHiringDate" [showIcon]="true" inputId="icon"></p-calendar>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Salary </label>
+      <input [(ngModel)]="searchSalaryAmount" pInputText type="text" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Is Active </label> <br/>
+      <p-checkbox [(ngModel)]="searchIsActive" [binary]="true" inputId="binary"></p-checkbox>
     </div>
   </div>
 
@@ -228,7 +240,7 @@
     <div class="col-md-3" style="margin-top: 20px;">
       <label class="font-weight-bold"> Manager </label>
       <p-autoComplete [(ngModel)]="addManager" [suggestions]="employeeManagerList"
-                      (completeMethod)="filterManager($event)" field="code" [dropdown]="true"
+                      (completeMethod)="filterManager($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
         <ng-template let-employeeManager pTemplate="item">
           <div class="country-item">
@@ -236,6 +248,18 @@
           </div>
         </ng-template>
       </p-autoComplete>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Hiring Date </label>
+      <p-calendar inputId="basic" [(ngModel)]="addHiringDate" [showIcon]="true" inputId="icon"></p-calendar>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Salary </label>
+      <input [(ngModel)]="addSalaryAmount" pInputText type="text" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Is Active </label> <br/>
+      <p-checkbox [(ngModel)]="addIsActive" [binary]="true" inputId="binary"></p-checkbox>
     </div>
   </div>
   <ng-template pTemplate="footer">
@@ -332,7 +356,7 @@
     <div class="col-md-3" style="margin-top: 20px;">
       <label class="font-weight-bold"> Manager </label>
       <p-autoComplete [(ngModel)]="updateManager" [suggestions]="employeeManagerList"
-                      (completeMethod)="filterManager($event)" field="code" [dropdown]="true"
+                      (completeMethod)="filterManager($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
         <ng-template let-employeeManager pTemplate="item">
           <div class="country-item">
@@ -340,6 +364,18 @@
           </div>
         </ng-template>
       </p-autoComplete>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Hiring Date </label>
+      <p-calendar inputId="basic" [(ngModel)]="updateHiringDate" [showIcon]="true" inputId="icon"></p-calendar>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Salary </label>
+      <input [(ngModel)]="updateNewSalaryAmount" pInputText type="text" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Is Active </label> <br/>
+      <p-checkbox [(ngModel)]="updateIsActive" [binary]="true" inputId="binary"></p-checkbox>
     </div>
   </div>
   <ng-template pTemplate="footer">

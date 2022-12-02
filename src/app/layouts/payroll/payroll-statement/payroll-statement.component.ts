@@ -117,10 +117,10 @@ export class PayrollStatementComponent implements OnInit, OnDestroy {
     this.currentOrganization = this.authenticationService.getCurrentOrganization();
     // List search sentence
     this.searchSentence = '';
-    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    this.searchSentence = 'organization.id:' + this.currentOrganization.id;
     // Drop Down search For Employee
     this.dropDownSearchSentence_Employee = '';
-    this.dropDownSearchSentence_Employee += 'organization.code:' + this.currentOrganization.code;
+    this.dropDownSearchSentence_Employee += 'organization.id:' + this.currentOrganization.id;
 
     this.subscriptions.add(this.payrollStatementService.sizeSearch(this.searchSentence).subscribe(
       data => {
@@ -272,14 +272,21 @@ export class PayrollStatementComponent implements OnInit, OnDestroy {
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
     } else if (this.editMode === 4) { // GENERATE
+      this.spinner.show();
       this.payrollStatement = this.selectedPayrollStatements[0];
-      alert(this.payrollStatement.id);
       this.subscriptions.add(this.payrollStatementService.generatePayrollStatement(this.payrollStatement).subscribe(
         (data) => {
-          console.log(data);
+          const blob = new Blob([data], {type: 'application/pdf'});
+          const downloadURL = window.URL.createObjectURL(data);
+          const link = document.createElement('a');
+          link.href = downloadURL;
+          link.download = 'PayrollStatement' + this.payrollStatement.employee.registrationNumber + this.payrollStatement.inputDate + '.pdf';
+          link.click();
+          this.spinner.hide();
         },
         (error) => {
           this.toastr.error(error.message);
+          this.spinner.hide();
         },
       ));
     }

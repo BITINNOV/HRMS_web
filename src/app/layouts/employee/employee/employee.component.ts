@@ -14,6 +14,8 @@ import {EmployeeStatus} from '../../../shared//models/configuration/employee/emp
 import {Position} from '../../../shared//models/configuration/employee/position';
 import {EmployeeStatusService} from '../../../shared/services/api/configuration/employee/employee-status.service';
 import {PositionService} from '../../../shared/services/api/configuration/employee/position.service';
+import {Salary} from '../../../shared/models/employee/salary';
+import {SalaryService} from '../../../shared/services/api/employee/salary.service';
 
 @Component({
   selector: 'app-employee',
@@ -45,6 +47,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   employeeStatusList: Array<EmployeeStatus> = [];
   employeeManagerList: Array<Employee> = [];
   employeePositionList: Array<Position> = [];
+  dropDownSearchSentence: string;
 
   // Dialog
   dialogDisplayAdd = false;
@@ -53,6 +56,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   // Component Attributes
   currentOrganization: Organization;
   employee: Employee;
+  oldSalary: Salary;
+  newSalary: Salary;
   ids: Array<number>;
   // Component Attributes // Add
   // addResume: Resume;
@@ -70,6 +75,9 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   addCnssNumber: String;
   addKidsNumber: number;
   addFamilySituation: String;
+  addHiringDate: Date;
+  addSalaryAmount: number;
+  addIsActive: boolean;
   addGender: String;
   addManager: Employee;
   // Component Attributes // Update
@@ -88,6 +96,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   updateCnssNumber: String;
   updateKidsNumber: number;
   updateFamilySituation: String;
+  updateHiringDate: Date;
+  updateOldSalaryAmount: number;
+  updateNewSalaryAmount: number;
+  updateIsActive: boolean;
   updateGender: String;
   updateManager: Employee;
   // Component Attributes // Search
@@ -107,6 +119,9 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   searchCnssNumber: String;
   searchKidsNumber: number;
   searchFamilySituation: String;
+  searchHiringDate: Date;
+  searchSalaryAmount: number;
+  searchIsActive: boolean;
   searchGender: String;
   searchManager: Employee;
 
@@ -118,6 +133,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
               private positionService: PositionService,
               private globalService: GlobalService,
               private employeeService: EmployeeService,
+              private salaryService: SalaryService,
               private confirmationService: ConfirmationService,
               @Inject(LOCALE_ID) private locale: string) {
   }
@@ -132,6 +148,9 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     this.cols = [
       {field: 'firstName', header: 'First Name', type: 'string'},
       {field: 'lastName', header: 'Last Name', type: 'string'},
+      {field: 'isActive', header: 'Active', type: 'boolean'},
+      {field: 'hiringDate', header: 'Hiring Date', type: 'date'},
+      {field: 'salaryAmount', header: ' Salary Amount', type: 'number'},
       {field: 'registrationNumber', header: ' Registration Number', type: 'number'},
       {field: 'position', child: 'code', header: 'Position', type: 'object'},
       {field: 'employeeStatus', child: 'code', header: 'Status', type: 'object'},
@@ -145,7 +164,8 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       {field: 'gender', header: 'Gender', type: 'string'},
       {field: 'familySituation', header: 'Family Situation', type: 'string'},
       {field: 'kidsNumber', header: 'Kids Number', type: 'number'},
-      {field: 'manager', child: 'firstname', header: 'Manager', type: 'object'},
+      {field: 'manager', child: 'firstName', header: 'Manager First name', type: 'object'},
+      {field: 'manager', child: 'lastName', header: 'Manager Last name', type: 'object'},
       // {field: 'resume', child: 'xxxx', header: 'Resume', type: 'object'},
     ];
     this.selectedColumns = this.cols;
@@ -160,11 +180,17 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
+    // Set fields value
+    this.addIsActive = true;
+    this.updateIsActive = true;
     // Set Current Organization
     this.currentOrganization = this.authenticationService.getCurrentOrganization();
     // List search sentence
     this.searchSentence = '';
     this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+    // Drop Down search For Drop Down [Status, Manager and Position]
+    this.dropDownSearchSentence = '';
+    this.dropDownSearchSentence += 'organization.code:' + this.currentOrganization.code;
 
     this.subscriptions.add(this.employeeService.sizeSearch(this.searchSentence).subscribe(
       data => {
@@ -185,38 +211,32 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    // Manager Drop Down
-    this.subscriptions.add(this.employeeStatusService.findAll().subscribe(
+    // Employee status Drop Down
+    this.subscriptions.add(this.employeeStatusService.find(this.dropDownSearchSentence).subscribe(
       (data) => {
         this.employeeStatusList = data;
       },
       (error) => {
-        this.spinner.hide();
         this.toastr.error(error.message);
       },
-      () => this.spinner.hide()
     ));
-    // Employee status Drop Down
-    this.subscriptions.add(this.employeeService.findAll().subscribe(
+    // Manager Drop Down
+    this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence).subscribe(
       (data) => {
         this.employeeManagerList = data;
       },
       (error) => {
-        this.spinner.hide();
         this.toastr.error(error.message);
       },
-      () => this.spinner.hide()
     ));
     // Position Drop Down
-    this.subscriptions.add(this.positionService.findAll().subscribe(
+    this.subscriptions.add(this.positionService.find(this.dropDownSearchSentence).subscribe(
       (data) => {
         this.employeePositionList = data;
       },
       (error) => {
-        this.spinner.hide();
         this.toastr.error(error.message);
       },
-      () => this.spinner.hide()
     ));
   }
 
@@ -341,7 +361,25 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     }
     // Check the Manager
     if (this.searchManager) {
-      this.searchSentence += 'manager:' + this.searchManager + ',';
+      this.searchSentence += 'manager.id:' + this.searchManager.id + ',';
+      index = index + 1;
+    }
+    // Check the Hiring Date
+    if (this.searchHiringDate) {
+      this.searchSentence += 'hiringDate:' + this.searchHiringDate + ',';
+      index = index + 1;
+    }
+    // Check the Is Active
+    if (this.searchIsActive) {
+      this.searchSentence += 'isActive:' + this.searchIsActive + ',';
+      index = index + 1;
+    } else {
+      this.searchSentence += 'isActive:' + false + ',';
+      index = index + 1;
+    }
+    // Check the Salary
+    if (this.searchSalaryAmount) {
+      this.searchSentence += 'salaryAmount:' + this.searchSalaryAmount + ',';
       index = index + 1;
     }
     if (index > 0 && index === 1) {
@@ -376,6 +414,9 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     this.searchCnssNumber = null;
     this.searchKidsNumber = null;
     this.searchFamilySituation = null;
+    this.searchIsActive = null;
+    this.searchSalaryAmount = null;
+    this.searchHiringDate = null;
     this.searchGender = null;
     this.searchManager = null;
 
@@ -403,6 +444,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       this.updateCnssNumber = this.selectedEmployees[0].cnssNumber;
       this.updateKidsNumber = this.selectedEmployees[0].kidsNumber;
       this.updateFamilySituation = this.selectedEmployees[0].familySituation;
+      this.updateHiringDate = this.selectedEmployees[0].hiringDate;
+      this.updateIsActive = this.selectedEmployees[0].isActive;
+      this.updateOldSalaryAmount = this.selectedEmployees[0].salaryAmount;
+      this.updateNewSalaryAmount = this.selectedEmployees[0].salaryAmount;
       this.updateGender = this.selectedEmployees[0].gender;
       this.updateManager = this.selectedEmployees[0].manager;
       this.dialogDisplayEdit = true;
@@ -412,6 +457,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
+    // Creating the new Employee
     this.employee = new Employee();
     this.employee.employeeStatus = this.addEmployeeStatus;
     this.employee.registrationNumber = this.addRegistrationNumber;
@@ -428,35 +474,83 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     this.employee.kidsNumber = this.addKidsNumber;
     this.employee.familySituation = this.addFamilySituation;
     this.employee.gender = this.addGender;
+    this.employee.hiringDate = this.addHiringDate;
+    this.employee.isActive = this.addIsActive;
+    this.employee.salaryAmount = this.addSalaryAmount;
     this.employee.manager = this.addManager;
     this.employee.organization = this.currentOrganization;
 
     this.subscriptions.add(this.employeeService.set(this.employee).subscribe(
-      (data) => {
-        this.toastr.success('Elément est Enregistré Avec Succès', 'Création');
-        this.employee = null;
-        this.addEmployeeStatus = null;
-        this.addRegistrationNumber = null;
-        this.addPosition = null;
-        this.addFirstName = null;
-        this.addLastName = null;
-        this.addCin = null;
-        this.addEmail = null;
-        this.addPhoneNumber = null;
-        this.addAddress = null;
-        this.addBirthDate = null;
-        this.addRib = null;
-        this.addCnssNumber = null;
-        this.addKidsNumber = null;
-        this.addFamilySituation = null;
-        this.addGender = null;
-        this.addManager = null;
-        this.editMode = null;
-        this.selectedEmployees = null;
-        this.loadData();
+      (employeeData) => {
+        this.toastr.success('Employé Enregistré Avec Succès', 'Création');
+        this.employee = employeeData;
+        if (this.employee) {
+          // Creating the new Salary
+          this.newSalary = new Salary();
+          this.newSalary.amount = this.addSalaryAmount;
+          this.newSalary.beginDate = new Date();
+          this.newSalary.employee = this.employee;
+          this.newSalary.isActive = true;
+          this.newSalary.organization = this.currentOrganization;
+
+          this.salaryService.set(this.newSalary).subscribe(
+            (SalaryData) => {
+              this.toastr.success('Elément est supprimer Avec Succès', 'Création');
+              this.employee = null;
+              this.newSalary = null;
+              this.addEmployeeStatus = null;
+              this.addRegistrationNumber = null;
+              this.addPosition = null;
+              this.addFirstName = null;
+              this.addLastName = null;
+              this.addCin = null;
+              this.addEmail = null;
+              this.addPhoneNumber = null;
+              this.addAddress = null;
+              this.addBirthDate = null;
+              this.addRib = null;
+              this.addCnssNumber = null;
+              this.addKidsNumber = null;
+              this.addFamilySituation = null;
+              this.addGender = null;
+              this.addIsActive = true;
+              this.addHiringDate = null;
+              this.addManager = null;
+              this.editMode = null;
+              this.selectedEmployees = null;
+              this.loadData();
+            },
+            (salaryError) => {
+              this.toastr.error(salaryError.message);
+              this.employee = null;
+              this.newSalary = null;
+              this.addEmployeeStatus = null;
+              this.addRegistrationNumber = null;
+              this.addPosition = null;
+              this.addFirstName = null;
+              this.addLastName = null;
+              this.addCin = null;
+              this.addEmail = null;
+              this.addPhoneNumber = null;
+              this.addAddress = null;
+              this.addBirthDate = null;
+              this.addRib = null;
+              this.addCnssNumber = null;
+              this.addKidsNumber = null;
+              this.addFamilySituation = null;
+              this.addGender = null;
+              this.addIsActive = true;
+              this.addHiringDate = null;
+              this.addManager = null;
+              this.editMode = null;
+              this.selectedEmployees = null;
+              this.loadData();
+            }
+          );
+        }
       },
-      (error) => {
-        this.toastr.error(error.message);
+      (employeeError) => {
+        this.toastr.error(employeeError.message);
         this.employee = null;
         this.addEmployeeStatus = null;
         this.addRegistrationNumber = null;
@@ -474,88 +568,232 @@ export class EmployeeComponent implements OnInit, OnDestroy {
         this.addFamilySituation = null;
         this.addGender = null;
         this.addManager = null;
+        this.addIsActive = true;
+        this.addHiringDate = null;
         this.editMode = null;
         this.selectedEmployees = null;
         this.loadData();
       }
     ));
-
   }
 
   onEdit() {
     this.employee = null;
     this.subscriptions.add(this.employeeService.findById(this.selectedEmployees[0].id).subscribe(
-      (data) => {
-        this.employee = data;
-        this.employee.firstName = this.updateFirstName;
-        this.employee.lastName = this.updateLastName;
-        this.employee.registrationNumber = this.updateRegistrationNumber;
-        this.employee.position = this.updatePosition;
-        this.employee.employeeStatus = this.updateEmployeeStatus;
-        this.employee.cin = this.updateCin;
-        this.employee.email = this.updateEmail;
-        this.employee.phoneNumber = this.updatePhoneNumber;
-        this.employee.address = this.updateAddress;
-        this.employee.birthDate = this.updateBirthDate;
-        this.employee.rib = this.updateRib;
-        this.employee.cnssNumber = this.updateCnssNumber;
-        this.employee.gender = this.updateGender;
-        this.employee.familySituation = this.updateFamilySituation;
-        this.employee.kidsNumber = this.updateKidsNumber;
-        this.employee.manager = this.updateManager;
+      (getEmployeeData) => {
+        this.employee = getEmployeeData;
 
         if (null !== this.employee) {
-          this.subscriptions.add(this.employeeService.set(this.employee).subscribe(
-            (data1) => {
-              this.toastr.success('Elément est Enregistré Avec Succès', 'Edition');
-              this.employee = null;
-              this.updateEmployeeStatus = null;
-              this.updateRegistrationNumber = null;
-              this.updatePosition = null;
-              this.updateFirstName = null;
-              this.updateLastName = null;
-              this.updateCin = null;
-              this.updateEmail = null;
-              this.updatePhoneNumber = null;
-              this.updateAddress = null;
-              this.updateBirthDate = null;
-              this.updateRib = null;
-              this.updateCnssNumber = null;
-              this.updateKidsNumber = null;
-              this.updateFamilySituation = null;
-              this.updateGender = null;
-              this.updateManager = null;
-              this.editMode = null;
-              this.selectedEmployees = null;
-              this.dialogDisplayEdit = false;
-              this.loadData();
-            },
-            (error) => {
-              this.toastr.error(error.message);
-              this.employee = null;
-              this.updateEmployeeStatus = null;
-              this.updateRegistrationNumber = null;
-              this.updatePosition = null;
-              this.updateFirstName = null;
-              this.updateLastName = null;
-              this.updateCin = null;
-              this.updateEmail = null;
-              this.updatePhoneNumber = null;
-              this.updateAddress = null;
-              this.updateBirthDate = null;
-              this.updateRib = null;
-              this.updateCnssNumber = null;
-              this.updateKidsNumber = null;
-              this.updateFamilySituation = null;
-              this.updateGender = null;
-              this.updateManager = null;
-              this.editMode = null;
-              this.selectedEmployees = null;
-              this.dialogDisplayEdit = false;
-              this.loadData();
-            }
-          ));
+          if (this.updateOldSalaryAmount !== this.updateNewSalaryAmount) {
+            // Getting the old Salary
+            let oldSalarySearchSentence = '.';
+            oldSalarySearchSentence += 'employee.id:' + this.employee.id + ',';
+            oldSalarySearchSentence += 'isActive:' + true;
+            this.salaryService.find(oldSalarySearchSentence).subscribe(
+              (getOldSalaryData) => {
+                this.oldSalary = getOldSalaryData[0];
+                this.oldSalary.endDate = new Date();
+                this.oldSalary.isActive = false;
+                this.salaryService.set(this.oldSalary).subscribe(
+                  (setOldSalaryData) => {
+                    this.toastr.success('Salaire modifié avec succès', 'Edition');
+                    this.oldSalary = null;
+                    // Creating the new Salary
+                    this.newSalary = new Salary();
+                    this.newSalary.amount = this.updateNewSalaryAmount;
+                    this.newSalary.beginDate = new Date();
+                    this.newSalary.employee = this.employee;
+                    this.newSalary.isActive = true;
+                    this.newSalary.organization = this.currentOrganization;
+                    this.salaryService.set(this.newSalary).subscribe(
+                      (setNewSalaryData) => {
+                        this.toastr.success('Salaire ajouté avec succès', 'Création');
+                        // Updating the selected Employee
+                        this.employee.firstName = this.updateFirstName;
+                        this.employee.lastName = this.updateLastName;
+                        this.employee.registrationNumber = this.updateRegistrationNumber;
+                        this.employee.position = this.updatePosition;
+                        this.employee.employeeStatus = this.updateEmployeeStatus;
+                        this.employee.cin = this.updateCin;
+                        this.employee.email = this.updateEmail;
+                        this.employee.phoneNumber = this.updatePhoneNumber;
+                        this.employee.address = this.updateAddress;
+                        this.employee.birthDate = this.updateBirthDate;
+                        this.employee.rib = this.updateRib;
+                        this.employee.cnssNumber = this.updateCnssNumber;
+                        this.employee.gender = this.updateGender;
+                        this.employee.familySituation = this.updateFamilySituation;
+                        this.employee.kidsNumber = this.updateKidsNumber;
+                        this.employee.hiringDate = this.updateHiringDate;
+                        this.employee.isActive = this.updateIsActive;
+                        this.employee.salaryAmount = this.updateNewSalaryAmount;
+                        this.employee.manager = this.updateManager;
+                        this.employeeService.set(this.employee).subscribe(
+                          (setEmployeeData) => {
+                            this.toastr.success('Elément est Enregistré Avec Succès', 'Edition');
+                            this.employee = null;
+                            this.newSalary = null;
+                            this.updateEmployeeStatus = null;
+                            this.updateRegistrationNumber = null;
+                            this.updatePosition = null;
+                            this.updateFirstName = null;
+                            this.updateLastName = null;
+                            this.updateCin = null;
+                            this.updateEmail = null;
+                            this.updatePhoneNumber = null;
+                            this.updateAddress = null;
+                            this.updateBirthDate = null;
+                            this.updateRib = null;
+                            this.updateCnssNumber = null;
+                            this.updateKidsNumber = null;
+                            this.updateFamilySituation = null;
+                            this.updateGender = null;
+                            this.updateHiringDate = null;
+                            this.updateIsActive = true;
+                            this.updateOldSalaryAmount = null;
+                            this.updateNewSalaryAmount = null;
+                            this.updateManager = null;
+                            this.editMode = null;
+                            this.selectedEmployees = null;
+                            this.dialogDisplayEdit = false;
+                            this.loadData();
+                          },
+                          (setEmployeeError) => {
+                            this.toastr.error(setEmployeeError.message);
+                            this.employee = null;
+                            this.newSalary = null;
+                            this.updateEmployeeStatus = null;
+                            this.updateRegistrationNumber = null;
+                            this.updatePosition = null;
+                            this.updateFirstName = null;
+                            this.updateLastName = null;
+                            this.updateCin = null;
+                            this.updateEmail = null;
+                            this.updatePhoneNumber = null;
+                            this.updateAddress = null;
+                            this.updateBirthDate = null;
+                            this.updateRib = null;
+                            this.updateCnssNumber = null;
+                            this.updateKidsNumber = null;
+                            this.updateFamilySituation = null;
+                            this.updateGender = null;
+                            this.updateHiringDate = null;
+                            this.updateIsActive = true;
+                            this.updateOldSalaryAmount = null;
+                            this.updateNewSalaryAmount = null;
+                            this.updateManager = null;
+                            this.editMode = null;
+                            this.selectedEmployees = null;
+                            this.dialogDisplayEdit = false;
+                            this.loadData();
+                          }
+                        );
+                      },
+                      (setNewSalaryError) => {
+                        this.toastr.error(setNewSalaryError.message);
+                        this.newSalary = null;
+                        this.loadData();
+                      }
+                    );
+                    this.loadData();
+                  },
+                  (setOldSalaryError) => {
+                    this.toastr.error(setOldSalaryError.message);
+                    this.oldSalary = null;
+                    this.loadData();
+                  }
+                );
+              },
+              (getOldSalaryError) => {
+                this.toastr.error(getOldSalaryError.message);
+                this.loadData();
+              }
+            );
+          } else {
+            // Updating the selected Employee
+            this.employee.firstName = this.updateFirstName;
+            this.employee.lastName = this.updateLastName;
+            this.employee.registrationNumber = this.updateRegistrationNumber;
+            this.employee.position = this.updatePosition;
+            this.employee.employeeStatus = this.updateEmployeeStatus;
+            this.employee.cin = this.updateCin;
+            this.employee.email = this.updateEmail;
+            this.employee.phoneNumber = this.updatePhoneNumber;
+            this.employee.address = this.updateAddress;
+            this.employee.birthDate = this.updateBirthDate;
+            this.employee.rib = this.updateRib;
+            this.employee.cnssNumber = this.updateCnssNumber;
+            this.employee.gender = this.updateGender;
+            this.employee.familySituation = this.updateFamilySituation;
+            this.employee.kidsNumber = this.updateKidsNumber;
+            this.employee.hiringDate = this.updateHiringDate;
+            this.employee.isActive = this.updateIsActive;
+            this.employee.salaryAmount = this.updateNewSalaryAmount;
+            this.employee.manager = this.updateManager;
+            this.employeeService.set(this.employee).subscribe(
+              (setEmployeeData) => {
+                this.toastr.success('Elément est Enregistré Avec Succès', 'Edition');
+                this.employee = null;
+                this.updateEmployeeStatus = null;
+                this.updateRegistrationNumber = null;
+                this.updatePosition = null;
+                this.updateFirstName = null;
+                this.updateLastName = null;
+                this.updateCin = null;
+                this.updateEmail = null;
+                this.updatePhoneNumber = null;
+                this.updateAddress = null;
+                this.updateBirthDate = null;
+                this.updateRib = null;
+                this.updateCnssNumber = null;
+                this.updateKidsNumber = null;
+                this.updateFamilySituation = null;
+                this.updateGender = null;
+                this.updateHiringDate = null;
+                this.updateIsActive = true;
+                this.updateOldSalaryAmount = null;
+                this.updateNewSalaryAmount = null;
+                this.updateManager = null;
+                this.editMode = null;
+                this.selectedEmployees = null;
+                this.dialogDisplayEdit = false;
+                this.loadData();
+              },
+              (setEmployeeError) => {
+                this.toastr.error(setEmployeeError.message);
+                this.employee = null;
+                this.updateEmployeeStatus = null;
+                this.updateRegistrationNumber = null;
+                this.updatePosition = null;
+                this.updateFirstName = null;
+                this.updateLastName = null;
+                this.updateCin = null;
+                this.updateEmail = null;
+                this.updatePhoneNumber = null;
+                this.updateAddress = null;
+                this.updateBirthDate = null;
+                this.updateRib = null;
+                this.updateCnssNumber = null;
+                this.updateKidsNumber = null;
+                this.updateFamilySituation = null;
+                this.updateGender = null;
+                this.updateHiringDate = null;
+                this.updateIsActive = true;
+                this.updateOldSalaryAmount = null;
+                this.updateNewSalaryAmount = null;
+                this.updateManager = null;
+                this.editMode = null;
+                this.selectedEmployees = null;
+                this.dialogDisplayEdit = false;
+                this.loadData();
+              }
+            );
+          }
         }
+      },
+      (getEmployeeError) => {
+        this.toastr.error(getEmployeeError.message);
+        this.loadData();
       }
     ));
   }
@@ -584,46 +822,77 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   filterEmployeeStatus(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const code = event.query;
 
-    for (let i = 0; i < this.employeeStatusList.length; i++) {
-      const employeeStatus = this.employeeStatusList[i];
-      if (employeeStatus.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(employeeStatus);
+    if (code) {
+      for (let i = 0; i < this.employeeStatusList.length; i++) {
+        const employeeStatus = this.employeeStatusList[i];
+        if (employeeStatus.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(employeeStatus);
+        }
       }
+      this.employeeStatusList = filtered;
+    } else {
+      this.subscriptions.add(this.employeeStatusService.find(this.dropDownSearchSentence).subscribe(
+        (data) => {
+          this.employeeStatusList = data;
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        },
+      ));
     }
-
-    this.employeeStatusList = filtered;
   }
 
   filterManager(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const firstOrLastName = event.query;
 
-    for (let i = 0; i < this.employeeManagerList.length; i++) {
-      const employeeManager = this.employeeManagerList[i];
-      if (employeeManager.firstName.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(employeeManager);
+    if (firstOrLastName) {
+      for (let i = 0; i < this.employeeManagerList.length; i++) {
+        const employeeManager = this.employeeManagerList[i];
+        // tslint:disable-next-line:max-line-length
+        if ((employeeManager.firstName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0) || (employeeManager.lastName.toLowerCase().indexOf(firstOrLastName.toLowerCase()) === 0)) {
+          filtered.push(employeeManager);
+        }
       }
+      this.employeeManagerList = filtered;
+    } else {
+      this.subscriptions.add(this.employeeService.find(this.dropDownSearchSentence).subscribe(
+        (data) => {
+          this.employeeManagerList = data;
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        },
+      ));
     }
-
-    this.employeeManagerList = filtered;
   }
 
   filterPosition(event) {
     // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
     const filtered: any[] = [];
-    const query = event.query;
+    const code = event.query;
 
-    for (let i = 0; i < this.employeePositionList.length; i++) {
-      const employeePosition = this.employeePositionList[i];
-      if (employeePosition.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(employeePosition);
+    if (code) {
+      for (let i = 0; i < this.employeePositionList.length; i++) {
+        const employeePosition = this.employeePositionList[i];
+        if (employeePosition.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(employeePosition);
+        }
       }
+      this.employeePositionList = filtered;
+    } else {
+      this.subscriptions.add(this.positionService.find(this.dropDownSearchSentence).subscribe(
+        (data) => {
+          this.employeePositionList = data;
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        },
+      ));
     }
-
-    this.employeePositionList = filtered;
   }
 
 

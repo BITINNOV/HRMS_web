@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Md5} from 'ts-md5';
 import {AuthenticationService} from './authentication.service';
 import {REST_URL} from './../../utils/constants';
-import {map} from 'rxjs/operators';
+
+const httpJsonHeaders = {
+  headers: new HttpHeaders({'Content-Type': 'application/json'})
+};
 
 @Injectable({
   providedIn: 'root'
@@ -125,16 +128,12 @@ export class ProxyService {
   }
 
   generatePayrollStatement(controller: string, object: any): Observable<any> {
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+    };
     const fullUrl = this.url + controller + '/generatePayrollStatement?token=' + this.getToken();
     // return this.http.post(fullUrl, object);
-    return this.http.get<any>(fullUrl, {
-      responseType: 'blob' as 'json',
-      observe: 'response'
-    }).pipe(
-      map((res: any) => {
-        return new Blob([res.blob()], {type: 'application/pdf'});
-      })
-    );
+    return this.http.post<any>(fullUrl, object, httpOptions);
   }
 
   getToken(): string {

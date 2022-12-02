@@ -8,6 +8,7 @@ const routes: Routes = [
     component: EmployeeComponent,
     children: [
       {path: 'employee', loadChildren: () => import('./employee/employee.module').then(m => m.EmployeeModule)},
+      {path: 'salary', loadChildren: () => import('./salary/salary.module').then(m => m.SalaryModule)},
     ],
   }];
 

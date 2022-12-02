@@ -158,7 +158,14 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
   }
 
   onExportExcel(event) {
-    this.subscriptions.add(this.variableBonusService.findAll().subscribe(
+    this.spinner.show();
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.variableBonusService.find(this.searchSentence).subscribe(
       data => {
         this.variableBonusExportList = data;
         if (event != null) {
@@ -177,7 +184,14 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
   }
 
   onExportPdf(event) {
-    this.subscriptions.add(this.variableBonusService.findAll().subscribe(
+    this.spinner.show();
+    // Set Current Organization
+    this.currentOrganization = this.authenticationService.getCurrentOrganization();
+    // List search sentence
+    this.searchSentence = '';
+    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+
+    this.subscriptions.add(this.variableBonusService.find(this.searchSentence).subscribe(
       data => {
         this.variableBonusExportList = data;
         this.globalService.generatePdf(event, this.variableBonusExportList, this.className, this.listTitle);
