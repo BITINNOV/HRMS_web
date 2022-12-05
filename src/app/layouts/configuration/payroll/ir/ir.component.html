@@ -13,7 +13,7 @@
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Amount Deduct </label>
-      <input [(ngModel)]="searchAmountDeduct" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+      <p-inputNumber [(ngModel)]="searchAmountDeduct" inputId="locale-user" [minFractionDigits]="2"> </p-inputNumber>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Fiscal Year </label>
@@ -83,7 +83,7 @@
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Amount Deduct </label>
-      <input [(ngModel)]="addAmountDeduct" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+      <p-inputNumber [(ngModel)]="addAmountDeduct" inputId="locale-user" [minFractionDigits]="2"> </p-inputNumber>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Fiscal Year </label>
@@ -114,7 +114,7 @@
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Amount Deduct </label>
-      <input [(ngModel)]="updateAmountDeduct" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+      <p-inputNumber [(ngModel)]="updateAmountDeduct" inputId="locale-user" [minFractionDigits]="2"> </p-inputNumber>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Fiscal Year </label>
