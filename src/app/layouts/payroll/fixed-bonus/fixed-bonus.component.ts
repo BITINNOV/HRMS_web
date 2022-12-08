@@ -218,6 +218,10 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
       this.searchSentence += 'fixedBonusDate:' + this.searchFixedBonusDate + ',';
       index = index + 1;
     }
+    // Check the Organization
+    this.searchSentence += 'organization.code:' + this.currentOrganization.code;
+    index = index + 1;
+
     if (index > 0 && index === 1) {
       this.searchSentence = this.searchSentence.slice(0, -1);
     } else {
