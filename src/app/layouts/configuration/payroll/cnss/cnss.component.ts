@@ -48,12 +48,14 @@ export class CnssComponent implements OnInit, OnDestroy {
   cnss: Cnss;
   ids: Array<number>;
   // Component Attributes // Add
+  addCode: String;
   addSalaryRate: number;
   addEmployerRate: number;
   addCeiling: boolean;
   addCeilingAmount: number;
   addFiscalYear: FiscalYear;
   // Component Attributes // Update
+  updateCode: String;
   updateSalaryRate: number;
   updateEmployerRate: number;
   updateCeiling: boolean;
@@ -61,6 +63,7 @@ export class CnssComponent implements OnInit, OnDestroy {
   updateFiscalYear: FiscalYear;
   // Component Attributes // Search
   searchSentence: string;
+  searchCode: String;
   searchSalaryRate: number;
   searchEmployerRate: number;
   searchCeiling: boolean;
@@ -85,6 +88,7 @@ export class CnssComponent implements OnInit, OnDestroy {
     this.home = {icon: 'pi pi-home'};
     this.className = Cnss.name;
     this.cols = [
+      {field: 'code', header: 'Code', type: 'string'},
       {field: 'salaryRate', header: 'Salary Rate', type: 'number'},
       {field: 'employerRate', header: 'Employer Rate', type: 'number'},
       {field: 'ceiling', header: 'Ceiling', type: 'boolean'},
@@ -178,6 +182,11 @@ export class CnssComponent implements OnInit, OnDestroy {
     this.searchSentence = '';
     let index = 0;
 
+    // Check the Code
+    if (this.searchCode) {
+      this.searchSentence += 'code:' + this.searchCode + ',';
+      index = index + 1;
+    }
     // Check the Salary Rate
     if (this.searchSalaryRate) {
       this.searchSentence += 'salaryRate:' + this.searchSalaryRate + ',';
@@ -222,6 +231,7 @@ export class CnssComponent implements OnInit, OnDestroy {
   reset() {
     this.searchSentence = null;
 
+    this.searchCode = null;
     this.searchSalaryRate = null;
     this.searchEmployerRate = null;
     this.searchCeiling = null;
@@ -238,6 +248,7 @@ export class CnssComponent implements OnInit, OnDestroy {
     if (this.editMode === 1) { // ADD
       this.dialogDisplayAdd = true;
     } else if (this.editMode === 2) { // UPDATE
+      this.updateCode = this.selectedCnsss[0].code;
       this.updateSalaryRate = this.selectedCnsss[0].salaryRate;
       this.updateEmployerRate = this.selectedCnsss[0].employerRate;
       this.updateCeiling = this.selectedCnsss[0].ceiling;
@@ -251,6 +262,7 @@ export class CnssComponent implements OnInit, OnDestroy {
 
   onSave() {
     this.cnss = new Cnss();
+    this.cnss.code = this.addCode;
     this.cnss.salaryRate = this.addSalaryRate;
     this.cnss.employerRate = this.addEmployerRate;
     this.cnss.ceiling = this.addCeiling;
@@ -261,6 +273,7 @@ export class CnssComponent implements OnInit, OnDestroy {
       (data) => {
         this.toastr.success('Elément est Enregistré Avec Succès', 'Création');
         this.cnss = null;
+        this.addCode = null;
         this.addSalaryRate = null;
         this.addEmployerRate = null;
         this.addCeiling = null;
@@ -273,6 +286,7 @@ export class CnssComponent implements OnInit, OnDestroy {
       (error) => {
         this.toastr.error(error.message);
         this.cnss = null;
+        this.addCode = null;
         this.addSalaryRate = null;
         this.addEmployerRate = null;
         this.addCeiling = null;
@@ -291,6 +305,7 @@ export class CnssComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.cnssService.findById(this.selectedCnsss[0].id).subscribe(
       (data) => {
         this.cnss = data;
+        this.cnss.code = this.updateCode;
         this.cnss.salaryRate = this.updateSalaryRate;
         this.cnss.employerRate = this.updateEmployerRate;
         this.cnss.ceiling = this.updateCeiling;
@@ -303,6 +318,7 @@ export class CnssComponent implements OnInit, OnDestroy {
               this.toastr.success('Elément est Enregistré Avec Succès', 'Edition');
               this.cnss = null;
               this.editMode = null;
+              this.updateCode = null;
               this.updateSalaryRate = null;
               this.updateEmployerRate = null;
               this.updateCeiling = null;
@@ -316,6 +332,7 @@ export class CnssComponent implements OnInit, OnDestroy {
               this.toastr.error(error.message);
               this.cnss = null;
               this.editMode = null;
+              this.updateCode = null;
               this.updateSalaryRate = null;
               this.updateEmployerRate = null;
               this.updateCeiling = null;

@@ -4,6 +4,10 @@
 
   <div class="row">
     <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Code </label>
+      <input [(ngModel)]="searchCode" pInputText type="text"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Salary Rate </label>
       <input [(ngModel)]="searchSalaryRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
@@ -11,7 +15,7 @@
       <label class="font-weight-bold"> Employer Rate </label>
       <input [(ngModel)]="searchEmployerRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Ceiling </label> <br/>
       <p-triStateCheckbox [(ngModel)]="searchCeiling"></p-triStateCheckbox>
     </div>
@@ -78,6 +82,10 @@
   <br/>
   <div class="row">
     <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Code </label>
+      <input [(ngModel)]="addCode" pInputText type="text"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Salary Rate </label>
       <input [(ngModel)]="addSalaryRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
@@ -85,7 +93,7 @@
       <label class="font-weight-bold"> Employer Rate </label>
       <input [(ngModel)]="addEmployerRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Ceiling </label> <br/>
       <p-triStateCheckbox [(ngModel)]="addCeiling"></p-triStateCheckbox>
     </div>
@@ -113,6 +121,10 @@
   <br/>
   <div class="row">
     <div class="col-md-4" style="margin-top: 10px;">
+      <label class="font-weight-bold"> Code </label>
+      <input [(ngModel)]="updateCode" pInputText type="text"/>
+    </div>
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Salary Rate </label>
       <input [(ngModel)]="updateSalaryRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
@@ -120,7 +132,7 @@
       <label class="font-weight-bold"> Employer Rate </label>
       <input [(ngModel)]="updateEmployerRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Ceiling </label> <br/>
       <p-triStateCheckbox [(ngModel)]="updateCeiling"></p-triStateCheckbox>
     </div>

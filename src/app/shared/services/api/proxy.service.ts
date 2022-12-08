@@ -136,6 +136,15 @@ export class ProxyService {
     return this.http.post<any>(fullUrl, object, httpOptions);
   }
 
+  generatePayrollBook(controller: string, object: any): Observable<any> {
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+    };
+    const fullUrl = this.url + controller + '/generatePayrollBook?token=' + this.getToken();
+    // return this.http.post(fullUrl, object);
+    return this.http.post<any>(fullUrl, object, httpOptions);
+  }
+
   getToken(): string {
     return this.authService.computeToken();
   }

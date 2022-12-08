@@ -50,17 +50,20 @@ export class IrComponent implements OnInit, OnDestroy {
   // Component Attributes // Add
   addStartTrache: number;
   addEndTranche: number;
+  addRate: number;
   addAmountDeduct: number;
   addFiscalYear: FiscalYear;
   // Component Attributes // Update
   updateStartTrache: number;
   updateEndTranche: number;
+  updateRate: number;
   updateAmountDeduct: number;
   updateFiscalYear: FiscalYear;
   // Component Attributes // Search
   searchSentence: string;
   searchStartTrache: number;
   searchEndTranche: number;
+  searchRate: number;
   searchAmountDeduct: number;
   searchFiscalYear: FiscalYear;
 
@@ -84,6 +87,7 @@ export class IrComponent implements OnInit, OnDestroy {
     this.cols = [
       {field: 'startTrache', header: 'Start Trache', type: 'number'},
       {field: 'endTranche', header: 'End Tranche', type: 'number'},
+      {field: 'rate', header: 'Rate', type: 'number'},
       {field: 'amountDeduct', header: ' Amount Deduct', type: 'number'},
       {field: 'fiscalYear', child: 'code', header: 'FiscalYear', type: 'object'},
     ];
@@ -174,17 +178,22 @@ export class IrComponent implements OnInit, OnDestroy {
     this.searchSentence = '';
     let index = 0;
 
-    // Check the Salary Rate
+    // Check the Start Trache
     if (this.searchStartTrache) {
       this.searchSentence += 'startTrache:' + this.searchStartTrache + ',';
       index = index + 1;
     }
-    // Check the Employer Rate
+    // Check the End Tranche
     if (this.searchEndTranche) {
       this.searchSentence += 'endTranche:' + this.searchEndTranche + ',';
       index = index + 1;
     }
-    // Check the Ceiling
+    // Check the Rate
+    if (this.searchRate) {
+      this.searchSentence += 'rate:' + this.searchRate + ',';
+      index = index + 1;
+    }
+    // Check the Amount Deduct
     if (this.searchAmountDeduct) {
       this.searchSentence += 'amountDeduct:' + this.searchAmountDeduct + ',';
       index = index + 1;
@@ -215,6 +224,7 @@ export class IrComponent implements OnInit, OnDestroy {
 
     this.searchStartTrache = null;
     this.searchEndTranche = null;
+    this.searchRate = null;
     this.searchAmountDeduct = null;
     this.searchFiscalYear = null;
 
@@ -230,6 +240,7 @@ export class IrComponent implements OnInit, OnDestroy {
     } else if (this.editMode === 2) { // UPDATE
       this.updateStartTrache = this.selectedIrs[0].startTrache;
       this.updateEndTranche = this.selectedIrs[0].endTranche;
+      this.updateRate = this.selectedIrs[0].rate;
       this.updateAmountDeduct = this.selectedIrs[0].amountDeduct;
       this.updateFiscalYear = this.selectedIrs[0].fiscalYear;
       this.dialogDisplayEdit = true;
@@ -242,6 +253,7 @@ export class IrComponent implements OnInit, OnDestroy {
     this.ir = new Ir();
     this.ir.startTrache = this.addStartTrache;
     this.ir.endTranche = this.addEndTranche;
+    this.ir.rate = this.addRate;
     this.ir.amountDeduct = this.addAmountDeduct;
     this.ir.fiscalYear = this.addFiscalYear;
 
@@ -251,6 +263,7 @@ export class IrComponent implements OnInit, OnDestroy {
         this.ir = null;
         this.addStartTrache = null;
         this.addEndTranche = null;
+        this.addRate = null;
         this.addAmountDeduct = null;
         this.addFiscalYear = null;
         this.editMode = null;
@@ -262,6 +275,7 @@ export class IrComponent implements OnInit, OnDestroy {
         this.ir = null;
         this.addStartTrache = null;
         this.addEndTranche = null;
+        this.addRate = null;
         this.addAmountDeduct = null;
         this.addFiscalYear = null;
         this.editMode = null;
@@ -279,6 +293,7 @@ export class IrComponent implements OnInit, OnDestroy {
         this.ir = data;
         this.ir.startTrache = this.updateStartTrache;
         this.ir.endTranche = this.updateEndTranche;
+        this.ir.rate = this.updateRate;
         this.ir.amountDeduct = this.updateAmountDeduct;
         this.ir.fiscalYear = this.updateFiscalYear;
 
@@ -290,6 +305,7 @@ export class IrComponent implements OnInit, OnDestroy {
               this.editMode = null;
               this.updateStartTrache = null;
               this.updateEndTranche = null;
+              this.updateRate = null;
               this.updateAmountDeduct = null;
               this.updateFiscalYear = null;
               this.selectedIrs = null;
@@ -302,6 +318,7 @@ export class IrComponent implements OnInit, OnDestroy {
               this.editMode = null;
               this.updateStartTrache = null;
               this.updateEndTranche = null;
+              this.updateRate = null;
               this.updateAmountDeduct = null;
               this.updateFiscalYear = null;
               this.selectedIrs = null;

@@ -74,6 +74,10 @@ export class HrService<T> {
     return this.proxy.generatePayrollStatement(this.controller, t);
   }
 
+  generatePayrollBook(t: T): Observable<any> {
+    return this.proxy.generatePayrollBook(this.controller, t);
+  }
+
   generateCode(): Observable<string> {
     return this.proxy.generateCode(this.controller);
   }
