@@ -8,6 +8,9 @@ import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
 import {Organization} from '../../../shared/models/configuration/organization';
 import {OrganizationService} from '../../../shared/services/api/configuration/organization.service';
+import {Country} from '../../../shared/models/configuration/country';
+import {CountryService} from '../../../shared/services/api/configuration/country.service';
+import {FiscalYear} from '../../../shared/models/configuration/payroll/fiscal-year';
 
 @Component({
   selector: 'app-organization',
@@ -35,6 +38,9 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   items: MenuItem[];
   home: MenuItem;
 
+  // Drop Down
+  countryList: Array<Country> = [];
+
   // Dialog
   dialogDisplayAdd = false;
   dialogDisplayEdit = false;
@@ -51,34 +57,38 @@ export class OrganizationComponent implements OnInit, OnDestroy {
   addResponsabiliteCivile: string;
   addIdentifiantFiscal: string;
   addIdentifiantCommunEntreprise: string;
+  addCountry: Country;
   // Component Attributes // Updtae
-  updateCode: string;
-  updateDescription: string;
-  updateAdress: string;
-  updatePhoneNumber: string;
-  updateFaxNumber: string;
-  updateResponsabiliteCivile: string;
-  updateIdentifiantFiscal: string;
-  updateIdentifiantCommunEntreprise: string;
+  updateCode: String;
+  updateDescription: String;
+  updateAdress: String;
+  updatePhoneNumber: String;
+  updateFaxNumber: String;
+  updateResponsabiliteCivile: String;
+  updateIdentifiantFiscal: String;
+  updateIdentifiantCommunEntreprise: String;
+  updateCountry: Country;
   // Component Attributes // Search
-  searchSentence: string;
-  searchCode: string;
-  searchDescription: string;
-  searchAdress: string;
-  searchPhoneNumber: string;
-  searchFaxNumber: string;
-  searchResponsabiliteCivile: string;
-  searchIdentifiantFiscal: string;
-  searchIdentifiantCommunEntreprise: string;
+  searchSentence: String;
+  searchCode: String;
+  searchDescription: String;
+  searchAdress: String;
+  searchPhoneNumber: String;
+  searchFaxNumber: String;
+  searchResponsabiliteCivile: String;
+  searchIdentifiantFiscal: String;
+  searchIdentifiantCommunEntreprise: String;
+  searchCountry: Country;
 
   constructor(private organizationService: OrganizationService,
+              private countryService: CountryService,
               private spinner: NgxSpinnerService,
               private globalService: GlobalService,
               private confirmationService: ConfirmationService,
               private messageService: MessageService,
               private toastr: ToastrService,
               private router: Router,
-              @Inject(LOCALE_ID) private locale: string) {
+              @Inject(LOCALE_ID) private locale: String) {
   }
 
   ngOnInit() {
@@ -97,6 +107,8 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       {field: 'responsabiliteCivile', header: 'Responsabilite Civile', type: 'string'},
       {field: 'identifiantFiscal', header: 'Identifiant Fiscal', type: 'string'},
       {field: 'identifiantCommunEntreprise', header: 'ICE', type: 'string'},
+      {field: 'identifiantCommunEntreprise', header: 'ICE', type: 'string'},
+      {field: 'country', child: 'code', header: 'Country', type: 'object'},
     ];
     /*this.selectedColumns = this.Columns;
     this.items = [
@@ -112,6 +124,9 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.organizationService.size().subscribe(
       data => {
         this.collectionSize = data;
+      },
+      error => {
+        this.toastr.error(error.message);
       }
     ));
     this.subscriptions.add(this.organizationService.findAllPagination(this.page, this.size).subscribe(
@@ -121,9 +136,17 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       },
       error => {
         this.spinner.hide();
-        this.messageService.add({severity: 'error', summary: 'Erreur', detail: 'Erreur'});
+        this.toastr.error(error.message);
       },
       () => this.spinner.hide()
+    ));
+    this.subscriptions.add(this.countryService.findAll().subscribe(
+      data => {
+        this.countryList = data;
+      },
+      error => {
+        this.toastr.error(error.message);
+      },
     ));
   }
 
@@ -212,6 +235,11 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       this.searchSentence += 'identifiantCommunEntreprise:' + this.searchIdentifiantCommunEntreprise + ',';
       index = index + 1;
     }
+    // Check the Country
+    if (this.searchCountry) {
+      this.searchSentence += 'country.id:' + this.searchCountry.id + ',';
+      index = index + 1;
+    }
 
     if (index > 0 && index === 1) {
       this.searchSentence = this.searchSentence.slice(0, -1);
@@ -219,7 +247,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
       this.searchSentence = '.' + this.searchSentence.slice(0, -1);
     }
 
-    this.organizationService.find(this.searchSentence).subscribe(
+    this.organizationService.find(this.searchSentence.toString()).subscribe(
       (data) => {
         this.organizationList = data;
       },
@@ -238,6 +266,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     this.searchResponsabiliteCivile = null;
     this.searchIdentifiantFiscal = null;
     this.searchIdentifiantCommunEntreprise = null;
+    this.searchCountry = null;
 
     this.loadData();
   }
@@ -249,14 +278,15 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     if (this.editMode === 1) { // ADD
       this.dialogDisplayAdd = true;
     } else if (this.editMode === 2) { // UPDATE
-      this.updateCode = this.selectedOrganizations[0].code.toString();
-      this.updateAdress = this.selectedOrganizations[0].adress.toString();
-      this.updateFaxNumber = this.selectedOrganizations[0].faxNumber.toString();
-      this.updateDescription = this.selectedOrganizations[0].description.toString();
-      this.updatePhoneNumber = this.selectedOrganizations[0].phoneNumber.toString();
-      this.updateIdentifiantFiscal = this.selectedOrganizations[0].identifiantFiscal.toString();
-      this.updateResponsabiliteCivile = this.selectedOrganizations[0].responsabiliteCivile.toString();
-      this.updateIdentifiantCommunEntreprise = this.selectedOrganizations[0].identifiantCommunEntreprise.toString();
+      this.updateCode = this.selectedOrganizations[0].code;
+      this.updateAdress = this.selectedOrganizations[0].adress;
+      this.updateFaxNumber = this.selectedOrganizations[0].faxNumber;
+      this.updateDescription = this.selectedOrganizations[0].description;
+      this.updatePhoneNumber = this.selectedOrganizations[0].phoneNumber;
+      this.updateIdentifiantFiscal = this.selectedOrganizations[0].identifiantFiscal;
+      this.updateResponsabiliteCivile = this.selectedOrganizations[0].responsabiliteCivile;
+      this.updateIdentifiantCommunEntreprise = this.selectedOrganizations[0].identifiantCommunEntreprise;
+      this.updateCountry = this.selectedOrganizations[0].country;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
@@ -273,6 +303,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
     this.organization.identifiantFiscal = this.addIdentifiantFiscal;
     this.organization.responsabiliteCivile = this.addResponsabiliteCivile;
     this.organization.identifiantCommunEntreprise = this.addIdentifiantCommunEntreprise;
+    this.organization.country = this.addCountry;
 
     this.subscriptions.add(this.organizationService.set(this.organization).subscribe(
       (data) => {
@@ -286,6 +317,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.addIdentifiantFiscal = null;
         this.addResponsabiliteCivile = null;
         this.addIdentifiantCommunEntreprise = null;
+        this.addCountry = null;
         this.editMode = null;
         this.selectedOrganizations = null;
         this.loadData();
@@ -301,6 +333,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.addIdentifiantFiscal = null;
         this.addResponsabiliteCivile = null;
         this.addIdentifiantCommunEntreprise = null;
+        this.addCountry = null;
         this.editMode = null;
         this.selectedOrganizations = null;
         this.loadData();
@@ -322,6 +355,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         this.organization.identifiantFiscal = this.updateIdentifiantFiscal;
         this.organization.responsabiliteCivile = this.updateResponsabiliteCivile;
         this.organization.identifiantCommunEntreprise = this.updateIdentifiantCommunEntreprise;
+        this.organization.country = this.updateCountry;
 
         if (null !== this.organization) {
           this.subscriptions.add(this.organizationService.set(this.organization).subscribe(
@@ -336,6 +370,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
               this.updateIdentifiantFiscal = null;
               this.updateResponsabiliteCivile = null;
               this.updateIdentifiantCommunEntreprise = null;
+              this.updateCountry = null;
               this.editMode = null;
               this.selectedOrganizations = null;
               this.dialogDisplayEdit = false;
@@ -352,6 +387,7 @@ export class OrganizationComponent implements OnInit, OnDestroy {
               this.updateIdentifiantFiscal = null;
               this.updateResponsabiliteCivile = null;
               this.updateIdentifiantCommunEntreprise = null;
+              this.updateCountry = null;
               this.editMode = null;
               this.selectedOrganizations = null;
               this.dialogDisplayEdit = false;
@@ -382,6 +418,30 @@ export class OrganizationComponent implements OnInit, OnDestroy {
         ));
       }
     });
+  }
+
+  filterCountry(event) {
+    const filtered: any[] = [];
+    const code = event.query;
+
+    if (code) {
+      for (let i = 0; i < this.countryList.length; i++) {
+        const country = this.countryList[i];
+        if (country.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(country);
+        }
+      }
+      this.countryList = filtered;
+    } else {
+      this.subscriptions.add(this.countryService.findAll().subscribe(
+        (data) => {
+          this.countryList = data;
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        },
+      ));
+    }
   }
 
   ngOnDestroy() {

@@ -12,6 +12,8 @@ import {GlobalService} from '../../../../shared/services/api/global.service';
 import {AmoService} from '../../../../shared/services/api/configuration/payroll/amo.service';
 import {FiscalYear} from '../../../../shared/models/configuration/payroll/fiscal-year';
 import {FiscalYearService} from '../../../../shared/services/api/configuration/payroll/fiscal-year.service';
+import {Country} from '../../../../shared/models/configuration/country';
+import {CountryService} from '../../../../shared/services/api/configuration/country.service';
 
 @Component({
   selector: 'app-amo',
@@ -41,6 +43,7 @@ export class AmoComponent implements OnInit, OnDestroy {
 
   // Drop Down
   fiscalYearList: Array<FiscalYear> = [];
+  countryList: Array<Country> = [];
 
   // Dialog
   dialogDisplayAdd = false;
@@ -56,6 +59,7 @@ export class AmoComponent implements OnInit, OnDestroy {
   addCeiling: boolean;
   addCeilingAmount: number;
   addFiscalYear: FiscalYear;
+  addCountry: Country;
   // Component Attributes // Update
   updateCode: String;
   updateSalaryRate: number;
@@ -63,6 +67,7 @@ export class AmoComponent implements OnInit, OnDestroy {
   updateCeiling: boolean;
   updateCeilingAmount: number;
   updateFiscalYear: FiscalYear;
+  updateCountry: Country;
   // Component Attributes // Search
   searchSentence: string;
   searchCode: String;
@@ -71,11 +76,13 @@ export class AmoComponent implements OnInit, OnDestroy {
   searchCeiling: boolean;
   searchCeilingAmount: number;
   searchFiscalYear: FiscalYear;
+  searchCountry: Country;
 
   constructor(private router: Router,
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
               private fiscalYearService: FiscalYearService,
+              private countryService: CountryService,
               private globalService: GlobalService,
               private amoService: AmoService,
               private confirmationService: ConfirmationService,
@@ -94,8 +101,9 @@ export class AmoComponent implements OnInit, OnDestroy {
       {field: 'salaryRate', header: 'Salary Rate', type: 'number'},
       {field: 'employerRate', header: 'Employer Rate', type: 'number'},
       {field: 'ceiling', header: 'Ceiling', type: 'boolean'},
-      {field: 'ceilingAmount', header: ' Amount', type: 'number'},
+      {field: 'ceilingAmount', header: 'Ceiling Amount', type: 'number'},
       {field: 'fiscalYear', child: 'code', header: 'FiscalYear', type: 'object'},
+      {field: 'country', child: 'code', header: 'Country', type: 'object'},
     ];
     this.selectedColumns = this.cols;
     /*this.selectedColumns = this.Columns;
@@ -133,10 +141,16 @@ export class AmoComponent implements OnInit, OnDestroy {
         this.fiscalYearList = data;
       },
       (error) => {
-        this.spinner.hide();
         this.toastr.error(error.message);
       },
-      () => this.spinner.hide()
+    ));
+    this.subscriptions.add(this.countryService.findAll().subscribe(
+      data => {
+        this.countryList = data;
+      },
+      error => {
+        this.toastr.error(error.message);
+      },
     ));
   }
 
@@ -214,6 +228,12 @@ export class AmoComponent implements OnInit, OnDestroy {
       this.searchSentence += 'fiscalYear.code:' + this.searchFiscalYear.code + ',';
       index = index + 1;
     }
+    // Check the Country
+    if (this.searchCountry) {
+      this.searchSentence += 'country.code:' + this.searchCountry.code + ',';
+      index = index + 1;
+    }
+
     if (index > 0 && index === 1) {
       this.searchSentence = this.searchSentence.slice(0, -1);
     } else {
@@ -239,6 +259,7 @@ export class AmoComponent implements OnInit, OnDestroy {
     this.searchCeiling = null;
     this.searchCeilingAmount = null;
     this.searchFiscalYear = null;
+    this.searchCountry = null;
 
     this.loadData();
   }
@@ -256,6 +277,7 @@ export class AmoComponent implements OnInit, OnDestroy {
       this.updateCeiling = this.selectedAmos[0].ceiling;
       this.updateCeilingAmount = this.selectedAmos[0].ceilingAmount;
       this.updateFiscalYear = this.selectedAmos[0].fiscalYear;
+      this.updateCountry = this.selectedAmos[0].country;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
@@ -270,6 +292,7 @@ export class AmoComponent implements OnInit, OnDestroy {
     this.amo.ceiling = this.addCeiling;
     this.amo.ceilingAmount = this.addCeilingAmount;
     this.amo.fiscalYear = this.addFiscalYear;
+    this.amo.country = this.addCountry;
 
     this.subscriptions.add(this.amoService.set(this.amo).subscribe(
       (data) => {
@@ -281,6 +304,7 @@ export class AmoComponent implements OnInit, OnDestroy {
         this.addCeiling = null;
         this.addCeilingAmount = null;
         this.addFiscalYear = null;
+        this.addCountry = null;
         this.editMode = null;
         this.selectedAmos = null;
         this.loadData();
@@ -294,6 +318,7 @@ export class AmoComponent implements OnInit, OnDestroy {
         this.addCeiling = null;
         this.addCeilingAmount = null;
         this.addFiscalYear = null;
+        this.addCountry = null;
         this.editMode = null;
         this.selectedAmos = null;
         this.loadData();
@@ -313,6 +338,7 @@ export class AmoComponent implements OnInit, OnDestroy {
         this.amo.ceiling = this.updateCeiling;
         this.amo.ceilingAmount = this.updateCeilingAmount;
         this.amo.fiscalYear = this.updateFiscalYear;
+        this.amo.country = this.updateCountry;
 
         if (null !== this.amo) {
           this.subscriptions.add(this.amoService.set(this.amo).subscribe(
@@ -326,6 +352,7 @@ export class AmoComponent implements OnInit, OnDestroy {
               this.updateCeiling = null;
               this.updateCeilingAmount = null;
               this.updateFiscalYear = null;
+              this.updateCountry = null;
               this.selectedAmos = null;
               this.dialogDisplayEdit = false;
               this.loadData();
@@ -340,6 +367,7 @@ export class AmoComponent implements OnInit, OnDestroy {
               this.updateCeiling = null;
               this.updateCeilingAmount = null;
               this.updateFiscalYear = null;
+              this.updateCountry = null;
               this.selectedAmos = null;
               this.dialogDisplayEdit = false;
               this.loadData();
@@ -369,6 +397,30 @@ export class AmoComponent implements OnInit, OnDestroy {
         ));
       }
     });
+  }
+
+  filterCountry(event) {
+    const filtered: any[] = [];
+    const code = event.query;
+
+    if (code) {
+      for (let i = 0; i < this.countryList.length; i++) {
+        const country = this.countryList[i];
+        if (country.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(country);
+        }
+      }
+      this.countryList = filtered;
+    } else {
+      this.subscriptions.add(this.countryService.findAll().subscribe(
+        (data) => {
+          this.countryList = data;
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        },
+      ));
+    }
   }
 
   ngOnDestroy() {

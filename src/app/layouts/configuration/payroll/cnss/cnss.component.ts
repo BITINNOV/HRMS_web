@@ -1,15 +1,19 @@
 import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
+import {Cnss} from '../../../../shared/models/configuration/payroll/cnss';
 import {Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem} from 'primeng/api';
+import {Organization} from '../../../../shared/models/configuration/organization';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {AuthenticationService} from '../../../../shared/services/api/authentication.service';
 import {GlobalService} from '../../../../shared/services/api/global.service';
-import {Cnss} from '../../../../shared/models/configuration/payroll/cnss';
 import {CnssService} from '../../../../shared/services/api/configuration/payroll/cnss.service';
 import {FiscalYear} from '../../../../shared/models/configuration/payroll/fiscal-year';
 import {FiscalYearService} from '../../../../shared/services/api/configuration/payroll/fiscal-year.service';
+import {Country} from '../../../../shared/models/configuration/country';
+import {CountryService} from '../../../../shared/services/api/configuration/country.service';
 
 @Component({
   selector: 'app-cnss',
@@ -39,6 +43,7 @@ export class CnssComponent implements OnInit, OnDestroy {
 
   // Drop Down
   fiscalYearList: Array<FiscalYear> = [];
+  countryList: Array<Country> = [];
 
   // Dialog
   dialogDisplayAdd = false;
@@ -54,6 +59,7 @@ export class CnssComponent implements OnInit, OnDestroy {
   addCeiling: boolean;
   addCeilingAmount: number;
   addFiscalYear: FiscalYear;
+  addCountry: Country;
   // Component Attributes // Update
   updateCode: String;
   updateSalaryRate: number;
@@ -61,6 +67,7 @@ export class CnssComponent implements OnInit, OnDestroy {
   updateCeiling: boolean;
   updateCeilingAmount: number;
   updateFiscalYear: FiscalYear;
+  updateCountry: Country;
   // Component Attributes // Search
   searchSentence: string;
   searchCode: String;
@@ -69,11 +76,13 @@ export class CnssComponent implements OnInit, OnDestroy {
   searchCeiling: boolean;
   searchCeilingAmount: number;
   searchFiscalYear: FiscalYear;
+  searchCountry: Country;
 
   constructor(private router: Router,
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
               private fiscalYearService: FiscalYearService,
+              private countryService: CountryService,
               private globalService: GlobalService,
               private cnssService: CnssService,
               private confirmationService: ConfirmationService,
@@ -92,8 +101,9 @@ export class CnssComponent implements OnInit, OnDestroy {
       {field: 'salaryRate', header: 'Salary Rate', type: 'number'},
       {field: 'employerRate', header: 'Employer Rate', type: 'number'},
       {field: 'ceiling', header: 'Ceiling', type: 'boolean'},
-      {field: 'ceilingAmount', header: ' Cnssunt', type: 'number'},
+      {field: 'ceilingAmount', header: 'Ceiling Amount', type: 'number'},
       {field: 'fiscalYear', child: 'code', header: 'FiscalYear', type: 'object'},
+      {field: 'country', child: 'code', header: 'Country', type: 'object'},
     ];
     this.selectedColumns = this.cols;
     /*this.selectedColumns = this.Columns;
@@ -131,10 +141,16 @@ export class CnssComponent implements OnInit, OnDestroy {
         this.fiscalYearList = data;
       },
       (error) => {
-        this.spinner.hide();
         this.toastr.error(error.message);
       },
-      () => this.spinner.hide()
+    ));
+    this.subscriptions.add(this.countryService.findAll().subscribe(
+      data => {
+        this.countryList = data;
+      },
+      error => {
+        this.toastr.error(error.message);
+      },
     ));
   }
 
@@ -202,7 +218,7 @@ export class CnssComponent implements OnInit, OnDestroy {
       this.searchSentence += 'ceiling:' + this.searchCeiling + ',';
       index = index + 1;
     }
-    // Check the Ceiling Cnssunt
+    // Check the Ceiling Amount
     if (this.searchCeilingAmount) {
       this.searchSentence += 'ceilingAmount:' + this.searchCeilingAmount + ',';
       index = index + 1;
@@ -212,6 +228,12 @@ export class CnssComponent implements OnInit, OnDestroy {
       this.searchSentence += 'fiscalYear.code:' + this.searchFiscalYear.code + ',';
       index = index + 1;
     }
+    // Check the Country
+    if (this.searchCountry) {
+      this.searchSentence += 'country.code:' + this.searchCountry.code + ',';
+      index = index + 1;
+    }
+
     if (index > 0 && index === 1) {
       this.searchSentence = this.searchSentence.slice(0, -1);
     } else {
@@ -237,6 +259,7 @@ export class CnssComponent implements OnInit, OnDestroy {
     this.searchCeiling = null;
     this.searchCeilingAmount = null;
     this.searchFiscalYear = null;
+    this.searchCountry = null;
 
     this.loadData();
   }
@@ -254,6 +277,7 @@ export class CnssComponent implements OnInit, OnDestroy {
       this.updateCeiling = this.selectedCnsss[0].ceiling;
       this.updateCeilingAmount = this.selectedCnsss[0].ceilingAmount;
       this.updateFiscalYear = this.selectedCnsss[0].fiscalYear;
+      this.updateCountry = this.selectedCnsss[0].country;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
@@ -268,6 +292,7 @@ export class CnssComponent implements OnInit, OnDestroy {
     this.cnss.ceiling = this.addCeiling;
     this.cnss.ceilingAmount = this.addCeilingAmount;
     this.cnss.fiscalYear = this.addFiscalYear;
+    this.cnss.country = this.addCountry;
 
     this.subscriptions.add(this.cnssService.set(this.cnss).subscribe(
       (data) => {
@@ -279,6 +304,7 @@ export class CnssComponent implements OnInit, OnDestroy {
         this.addCeiling = null;
         this.addCeilingAmount = null;
         this.addFiscalYear = null;
+        this.addCountry = null;
         this.editMode = null;
         this.selectedCnsss = null;
         this.loadData();
@@ -292,6 +318,7 @@ export class CnssComponent implements OnInit, OnDestroy {
         this.addCeiling = null;
         this.addCeilingAmount = null;
         this.addFiscalYear = null;
+        this.addCountry = null;
         this.editMode = null;
         this.selectedCnsss = null;
         this.loadData();
@@ -311,6 +338,7 @@ export class CnssComponent implements OnInit, OnDestroy {
         this.cnss.ceiling = this.updateCeiling;
         this.cnss.ceilingAmount = this.updateCeilingAmount;
         this.cnss.fiscalYear = this.updateFiscalYear;
+        this.cnss.country = this.updateCountry;
 
         if (null !== this.cnss) {
           this.subscriptions.add(this.cnssService.set(this.cnss).subscribe(
@@ -324,6 +352,7 @@ export class CnssComponent implements OnInit, OnDestroy {
               this.updateCeiling = null;
               this.updateCeilingAmount = null;
               this.updateFiscalYear = null;
+              this.updateCountry = null;
               this.selectedCnsss = null;
               this.dialogDisplayEdit = false;
               this.loadData();
@@ -338,6 +367,7 @@ export class CnssComponent implements OnInit, OnDestroy {
               this.updateCeiling = null;
               this.updateCeilingAmount = null;
               this.updateFiscalYear = null;
+              this.updateCountry = null;
               this.selectedCnsss = null;
               this.dialogDisplayEdit = false;
               this.loadData();
@@ -367,6 +397,30 @@ export class CnssComponent implements OnInit, OnDestroy {
         ));
       }
     });
+  }
+
+  filterCountry(event) {
+    const filtered: any[] = [];
+    const code = event.query;
+
+    if (code) {
+      for (let i = 0; i < this.countryList.length; i++) {
+        const country = this.countryList[i];
+        if (country.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(country);
+        }
+      }
+      this.countryList = filtered;
+    } else {
+      this.subscriptions.add(this.countryService.findAll().subscribe(
+        (data) => {
+          this.countryList = data;
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        },
+      ));
+    }
   }
 
   ngOnDestroy() {

@@ -1,3 +1,5 @@
+import {Country} from './country';
+
 export class Organization {
   id: number;
   code: String;
@@ -9,4 +11,5 @@ export class Organization {
   responsabiliteCivile: String;
   identifiantFiscal: String;
   identifiantCommunEntreprise: String;
+  country: Country;
 }

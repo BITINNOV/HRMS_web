@@ -4,44 +4,57 @@
 
   <div class="row">
     <!-- Code -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> {{ 'Code' | translate }} </label>
       <input [(ngModel)]="searchCode" pInputText type="text"/>
     </div>
     <!-- Description -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> {{ 'Description' | translate }} </label>
       <input [(ngModel)]="searchDescription" pInputText type="text"/>
     </div>
     <!-- Adress -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> {{ 'Adress' | translate }} </label>
       <input [(ngModel)]="searchAdress" pInputText type="text"/>
     </div>
     <!-- Phone Number -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Phone Number' | translate }} </label>
       <input [(ngModel)]="searchPhoneNumber" pInputText type="text"/>
     </div>
     <!-- Fax Number -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Fax Number' | translate }} </label>
       <input [(ngModel)]="searchFaxNumber" pInputText type="text"/>
     </div>
     <!-- Responsabilite Civile -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Responsabilite Civile' | translate }} </label>
       <input [(ngModel)]="searchResponsabiliteCivile" pInputText type="text"/>
     </div>
     <!-- Identifiant Fiscal -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Identifiant Fiscal' | translate }} </label>
       <input [(ngModel)]="searchIdentifiantFiscal" pInputText type="text"/>
     </div>
     <!-- Identifiant Commun Entreprise -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Identifiant Commun Entreprise' | translate }} </label>
       <input [(ngModel)]="searchIdentifiantCommunEntreprise" pInputText type="text"/>
+    </div>
+    <!-- Country -->
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Country </label>
+      <p-autoComplete [(ngModel)]="searchCountry" [suggestions]="countryList"
+                      (completeMethod)="filterCountry($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a country' | translate}}">
+        <ng-template let-country pTemplate="item">
+          <div class="country-item">
+            <div>{{country.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
 
@@ -96,44 +109,57 @@
   <br/>
   <div class="row">
     <!-- Code -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> {{ 'Code' | translate }} </label>
       <input [(ngModel)]="addCode" pInputText type="text"/>
     </div>
     <!-- Description -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> {{ 'Description' | translate }} </label>
       <input [(ngModel)]="addDescription" pInputText type="text"/>
     </div>
     <!-- Adress -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> {{ 'Adress' | translate }} </label>
       <input [(ngModel)]="addAdress" pInputText type="text"/>
     </div>
     <!-- Phone Number -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Phone Number' | translate }} </label>
       <input [(ngModel)]="addPhoneNumber" pInputText type="text"/>
     </div>
     <!-- Fax Number -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Fax Number' | translate }} </label>
       <input [(ngModel)]="addFaxNumber" pInputText type="text"/>
     </div>
     <!-- Responsabilite Civile -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Responsabilite Civile' | translate }} </label>
       <input [(ngModel)]="addResponsabiliteCivile" pInputText type="text"/>
     </div>
     <!-- Identifiant Fiscal -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Identifiant Fiscal' | translate }} </label>
       <input [(ngModel)]="addIdentifiantFiscal" pInputText type="text"/>
     </div>
     <!-- Identifiant Commun Entreprise -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Identifiant Commun Entreprise' | translate }} </label>
       <input [(ngModel)]="addIdentifiantCommunEntreprise" pInputText type="text"/>
+    </div>
+    <!-- Country -->
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Country </label>
+      <p-autoComplete [(ngModel)]="addCountry" [suggestions]="countryList"
+                      (completeMethod)="filterCountry($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a country' | translate}}">
+        <ng-template let-country pTemplate="item">
+          <div class="country-item">
+            <div>{{country.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
   <ng-template pTemplate="footer">
@@ -149,44 +175,57 @@
   <br/>
   <div class="row">
     <!-- Code -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> {{ 'Code' | translate }} </label>
       <input [(ngModel)]="updateCode" pInputText type="text"/>
     </div>
     <!-- Description -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> {{ 'Description' | translate }} </label>
       <input [(ngModel)]="updateDescription" pInputText type="text"/>
     </div>
     <!-- Adress -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> {{ 'Adress' | translate }} </label>
       <input [(ngModel)]="updateAdress" pInputText type="text"/>
     </div>
     <!-- Phone Number -->
-    <div class="col-md-3" style="margin-top: 10px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Phone Number' | translate }} </label>
       <input [(ngModel)]="updatePhoneNumber" pInputText type="text"/>
     </div>
     <!-- Fax Number -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Fax Number' | translate }} </label>
       <input [(ngModel)]="updateFaxNumber" pInputText type="text"/>
     </div>
     <!-- Responsabilite Civile -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Responsabilite Civile' | translate }} </label>
       <input [(ngModel)]="updateResponsabiliteCivile" pInputText type="text"/>
     </div>
     <!-- Identifiant Fiscal -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Identifiant Fiscal' | translate }} </label>
       <input [(ngModel)]="updateIdentifiantFiscal" pInputText type="text"/>
     </div>
     <!-- Identifiant Commun Entreprise -->
-    <div class="col-md-3" style="margin-top: 20px;">
+    <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> {{ 'Identifiant Commun Entreprise' | translate }} </label>
       <input [(ngModel)]="updateIdentifiantCommunEntreprise" pInputText type="text"/>
+    </div>
+    <!-- Country -->
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Country </label>
+      <p-autoComplete [(ngModel)]="updateCountry" [suggestions]="countryList"
+                      (completeMethod)="filterCountry($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a country' | translate}}">
+        <ng-template let-country pTemplate="item">
+          <div class="country-item">
+            <div>{{country.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
   <ng-template pTemplate="footer">

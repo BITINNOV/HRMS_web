@@ -3,31 +3,50 @@
 <p-panel header="{{ 'Filter' | translate }}">
 
   <div class="row">
+    <!-- Code -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Code </label>
       <input [(ngModel)]="searchCode" pInputText type="text"/>
     </div>
+    <!-- Salary Rate -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Salary Rate </label>
       <input [(ngModel)]="searchSalaryRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Employer Rate -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Employer Rate </label>
       <input [(ngModel)]="searchEmployerRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Ceiling -->
+    <div class="col-md-1" style="margin-top: 20px;">
       <label class="font-weight-bold"> Ceiling </label> <br/>
       <p-triStateCheckbox [(ngModel)]="searchCeiling"></p-triStateCheckbox>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Ceiling Amount -->
+    <div class="col-md-3" style="margin-top: 20px;" *ngIf="searchCeiling">
       <label class="font-weight-bold"> Ceiling Amount </label>
       <input [(ngModel)]="searchCeilingAmount" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Fiscal Year -->
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Fiscal Year </label>
       <p-dropdown [(ngModel)]="searchFiscalYear" [options]="fiscalYearList"
                   [showClear]="true" optionLabel="code"
-                  placeholder="{{'Select a country' | translate}}"></p-dropdown>
+                  placeholder="{{'Select a fiscal year' | translate}}"></p-dropdown>
+    </div>
+    <!-- Country -->
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Country </label>
+      <p-autoComplete [(ngModel)]="searchCountry" [suggestions]="countryList"
+                      (completeMethod)="filterCountry($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a country' | translate}}">
+        <ng-template let-country pTemplate="item">
+          <div class="country-item">
+            <div>{{country.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
 
@@ -81,31 +100,50 @@
           [style]="{width: '70vw'}" header="Header">
   <br/>
   <div class="row">
+    <!-- Code -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Code </label>
       <input [(ngModel)]="addCode" pInputText type="text"/>
     </div>
+    <!-- Salary Rate -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Salary Rate </label>
       <input [(ngModel)]="addSalaryRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Employer Rate -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Employer Rate </label>
       <input [(ngModel)]="addEmployerRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Ceiling -->
+    <div class="col-md-1" style="margin-top: 20px;">
       <label class="font-weight-bold"> Ceiling </label> <br/>
       <p-triStateCheckbox [(ngModel)]="addCeiling"></p-triStateCheckbox>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;" *ngIf="addCeiling">
+    <!-- Ceiling Amount -->
+    <div class="col-md-3" style="margin-top: 20px;" *ngIf="addCeiling">
       <label class="font-weight-bold"> Ceiling Amount </label>
       <input [(ngModel)]="addCeilingAmount" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Fiscal Year -->
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Fiscal Year </label>
       <p-dropdown [(ngModel)]="addFiscalYear" [options]="fiscalYearList"
                   [showClear]="true" optionLabel="code"
-                  placeholder="{{'Select a country' | translate}}"></p-dropdown>
+                  placeholder="{{'Select a fiscal year' | translate}}"></p-dropdown>
+    </div>
+    <!-- Country -->
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Country </label>
+      <p-autoComplete [(ngModel)]="addCountry" [suggestions]="countryList"
+                      (completeMethod)="filterCountry($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a country' | translate}}">
+        <ng-template let-country pTemplate="item">
+          <div class="country-item">
+            <div>{{country.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
   <ng-template pTemplate="footer">
@@ -120,31 +158,50 @@
           [style]="{width: '70vw'}" header="Header">
   <br/>
   <div class="row">
+    <!-- Code -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Code </label>
       <input [(ngModel)]="updateCode" pInputText type="text"/>
     </div>
+    <!-- Salary Rate -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Salary Rate </label>
       <input [(ngModel)]="updateSalaryRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Employer Rate -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Employer Rate </label>
       <input [(ngModel)]="updateEmployerRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Ceiling -->
+    <div class="col-md-1" style="margin-top: 20px;">
       <label class="font-weight-bold"> Ceiling </label> <br/>
       <p-triStateCheckbox [(ngModel)]="updateCeiling"></p-triStateCheckbox>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Ceiling Amount -->
+    <div class="col-md-3" style="margin-top: 20px;" *ngIf="updateCeiling">
       <label class="font-weight-bold"> Ceiling Amount </label>
       <input [(ngModel)]="updateCeilingAmount" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Fiscal Year -->
     <div class="col-md-4" style="margin-top: 20px;">
       <label class="font-weight-bold"> Fiscal Year </label>
       <p-dropdown [(ngModel)]="updateFiscalYear" [options]="fiscalYearList"
                   [showClear]="true" optionLabel="code"
-                  placeholder="{{'Select a country' | translate}}"></p-dropdown>
+                  placeholder="{{'Select a fiscal year' | translate}}"></p-dropdown>
+    </div>
+    <!-- Country -->
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Country </label>
+      <p-autoComplete [(ngModel)]="updateCountry" [suggestions]="countryList"
+                      (completeMethod)="filterCountry($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a country' | translate}}">
+        <ng-template let-country pTemplate="item">
+          <div class="country-item">
+            <div>{{country.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
   <ng-template pTemplate="footer">

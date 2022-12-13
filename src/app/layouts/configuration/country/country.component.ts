@@ -43,7 +43,6 @@ export class CountryComponent implements OnInit, OnDestroy {
   dialogDisplayEdit = false;
 
   // Component Attributes
-  currentOrganization: Organization;
   country: Country;
   ids: Array<number>;
   // Component Attributes // Add
@@ -73,7 +72,6 @@ export class CountryComponent implements OnInit, OnDestroy {
     this.className = Country.name;
     this.cols = [
       {field: 'code', header: 'Code', type: 'string'},
-      {field: 'organization', child: 'code', header: 'Organization', type: 'object'},
     ];
     this.selectedColumns = this.cols;
     /*this.selectedColumns = this.Columns;
@@ -87,10 +85,7 @@ export class CountryComponent implements OnInit, OnDestroy {
 
   loadData() {
     this.spinner.show();
-    this.searchSentence = '';
-    this.currentOrganization = this.authenticationService.getCurrentOrganization();
-    this.searchSentence = 'organization.code:' + this.currentOrganization.code;
-    this.subscriptions.add(this.countryService.sizeSearch(this.searchSentence).subscribe(
+    this.subscriptions.add(this.countryService.size().subscribe(
       data => {
         this.collectionSize = data;
       },
@@ -98,7 +93,7 @@ export class CountryComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    this.subscriptions.add(this.countryService.findPagination(this.page, this.size, this.searchSentence).subscribe(
+    this.subscriptions.add(this.countryService.findAllPagination(this.page, this.size).subscribe(
       data => {
         this.countryList = data;
         this.spinner.hide();
@@ -154,7 +149,6 @@ export class CountryComponent implements OnInit, OnDestroy {
   search() {
     this.searchSentence = '.';
     this.searchSentence += 'code:' + this.searchCode + ',';
-    this.searchSentence += 'organization.code:' + this.currentOrganization.code;
 
     this.subscriptions.add(this.countryService.find(this.searchSentence).subscribe(
       (data) => {
@@ -190,7 +184,6 @@ export class CountryComponent implements OnInit, OnDestroy {
   onSave() {
     this.country = new Country();
     this.country.code = this.addCode;
-    this.country.organization = this.currentOrganization;
     this.subscriptions.add(this.countryService.set(this.country).subscribe(
       (data) => {
         this.toastr.success('Elément est Enregistré Avec Succès', 'Création');

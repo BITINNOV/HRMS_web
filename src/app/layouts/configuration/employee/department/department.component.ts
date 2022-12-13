@@ -315,10 +315,8 @@ export class DepartmentComponent implements OnInit, OnDestroy {
           this.directorateList = data;
         },
         (error) => {
-          this.spinner.hide();
           this.toastr.error(error.message);
         },
-        () => this.spinner.hide()
       ));
     }
   }

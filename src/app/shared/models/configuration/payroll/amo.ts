@@ -1,4 +1,5 @@
 import {FiscalYear} from './fiscal-year';
+import {Country} from '../country';
 
 export class Amo {
   id: number;
@@ -8,4 +9,5 @@ export class Amo {
   ceiling: boolean;
   ceilingAmount: number;
   fiscalYear: FiscalYear;
+  country: Country;
 }

@@ -3,27 +3,55 @@
 <p-panel header="{{ 'Filter' | translate }}">
 
   <div class="row">
-    <div class="col-md-4" style="margin-top: 10px;">
+    <!-- Start Trache -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> Start Trache </label>
       <input [(ngModel)]="searchStartTrache" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 10px;">
+    <!-- End Tranche -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> End Tranche </label>
       <input [(ngModel)]="searchEndTranche" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 10px;">
+    <!-- Rate -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> Rate </label>
       <input [(ngModel)]="searchRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Amount Deduct -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> Amount Deduct </label>
       <input [(ngModel)]="searchAmountDeduct" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Ceiling -->
+    <div class="col-md-1" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Ceiling </label> <br/>
+      <p-triStateCheckbox [(ngModel)]="searchCeiling"></p-triStateCheckbox>
+    </div>
+    <!-- Ceiling Amount -->
+    <div class="col-md-2" style="margin-top: 20px;" *ngIf="searchCeiling">
+      <label class="font-weight-bold"> Ceiling Amount </label>
+      <input [(ngModel)]="searchCeilingAmount" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <!-- Fiscal Year -->
+    <div class="col-md-3" style="margin-top: 20px;">
       <label class="font-weight-bold"> Fiscal Year </label>
       <p-dropdown [(ngModel)]="searchFiscalYear" [options]="fiscalYearList"
                   [showClear]="true" optionLabel="code"
-                  placeholder="{{'Select a country' | translate}}"></p-dropdown>
+                  placeholder="{{'Select a fiscal year' | translate}}"></p-dropdown>
+    </div>
+    <!-- Country -->
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Country </label>
+      <p-autoComplete [(ngModel)]="searchCountry" [suggestions]="countryList"
+                      (completeMethod)="filterCountry($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a country' | translate}}">
+        <ng-template let-country pTemplate="item">
+          <div class="country-item">
+            <div>{{country.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
 
@@ -77,27 +105,55 @@
           [style]="{width: '70vw'}" header="Header">
   <br/>
   <div class="row">
-    <div class="col-md-4" style="margin-top: 10px;">
+    <!-- Start Trache -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> Start Trache </label>
       <input [(ngModel)]="addStartTrache" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 10px;">
+    <!-- End Tranche -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> End Tranche </label>
       <input [(ngModel)]="addEndTranche" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 10px;">
+    <!-- Rate -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> Rate </label>
       <input [(ngModel)]="addRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Amount Deduct -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> Amount Deduct </label>
       <input [(ngModel)]="addAmountDeduct" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Ceiling -->
+    <div class="col-md-1" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Ceiling </label> <br/>
+      <p-triStateCheckbox [(ngModel)]="addCeiling"></p-triStateCheckbox>
+    </div>
+    <!-- Ceiling Amount -->
+    <div class="col-md-2" style="margin-top: 20px;" *ngIf="addCeiling">
+      <label class="font-weight-bold"> Ceiling Amount </label>
+      <input [(ngModel)]="addCeilingAmount" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <!-- Fiscal Year -->
+    <div class="col-md-3" style="margin-top: 20px;">
       <label class="font-weight-bold"> Fiscal Year </label>
       <p-dropdown [(ngModel)]="addFiscalYear" [options]="fiscalYearList"
                   [showClear]="true" optionLabel="code"
-                  placeholder="{{'Select a country' | translate}}"></p-dropdown>
+                  placeholder="{{'Select a fiscal year' | translate}}"></p-dropdown>
+    </div>
+    <!-- Country -->
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Country </label>
+      <p-autoComplete [(ngModel)]="addCountry" [suggestions]="countryList"
+                      (completeMethod)="filterCountry($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a country' | translate}}">
+        <ng-template let-country pTemplate="item">
+          <div class="country-item">
+            <div>{{country.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
   <ng-template pTemplate="footer">
@@ -112,27 +168,55 @@
           [style]="{width: '70vw'}" header="Header">
   <br/>
   <div class="row">
-    <div class="col-md-4" style="margin-top: 10px;">
+    <!-- Start Trache -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> Start Trache </label>
       <input [(ngModel)]="updateStartTrache" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 10px;">
+    <!-- End Tranche -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> End Tranche </label>
       <input [(ngModel)]="updateEndTranche" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 10px;">
+    <!-- Rate -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> Rate </label>
       <input [(ngModel)]="updateRate" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Amount Deduct -->
+    <div class="col-md-3" style="margin-top: 10px;">
       <label class="font-weight-bold"> Amount Deduct </label>
       <input [(ngModel)]="updateAmountDeduct" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
-    <div class="col-md-4" style="margin-top: 20px;">
+    <!-- Ceiling -->
+    <div class="col-md-1" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Ceiling </label> <br/>
+      <p-triStateCheckbox [(ngModel)]="updateCeiling"></p-triStateCheckbox>
+    </div>
+    <!-- Ceiling Amount -->
+    <div class="col-md-2" style="margin-top: 20px;" *ngIf="updateCeiling">
+      <label class="font-weight-bold"> Ceiling Amount </label>
+      <input [(ngModel)]="updateCeilingAmount" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+    </div>
+    <!-- Fiscal Year -->
+    <div class="col-md-3" style="margin-top: 20px;">
       <label class="font-weight-bold"> Fiscal Year </label>
       <p-dropdown [(ngModel)]="updateFiscalYear" [options]="fiscalYearList"
                   [showClear]="true" optionLabel="code"
-                  placeholder="{{'Select a country' | translate}}"></p-dropdown>
+                  placeholder="{{'Select a fiscal year' | translate}}"></p-dropdown>
+    </div>
+    <!-- Country -->
+    <div class="col-md-3" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Country </label>
+      <p-autoComplete [(ngModel)]="updateCountry" [suggestions]="countryList"
+                      (completeMethod)="filterCountry($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a country' | translate}}">
+        <ng-template let-country pTemplate="item">
+          <div class="country-item">
+            <div>{{country.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
   <ng-template pTemplate="footer">

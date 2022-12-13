@@ -1,4 +1,5 @@
 import {FiscalYear} from './fiscal-year';
+import {Country} from '../country';
 
 export class Ir {
   id: number;
@@ -6,5 +7,8 @@ export class Ir {
   endTranche: number;
   rate: number;
   amountDeduct: number;
+  ceiling: boolean;
+  ceilingAmount: number;
   fiscalYear: FiscalYear;
+  country: Country;
 }

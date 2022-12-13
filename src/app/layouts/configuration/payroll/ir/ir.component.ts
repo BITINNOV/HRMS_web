@@ -10,6 +10,8 @@ import {Ir} from '../../../../shared/models/configuration/payroll/ir';
 import {IrService} from '../../../../shared/services/api/configuration/payroll/ir.service';
 import {FiscalYear} from '../../../../shared/models/configuration/payroll/fiscal-year';
 import {FiscalYearService} from '../../../../shared/services/api/configuration/payroll/fiscal-year.service';
+import {Country} from '../../../../shared/models/configuration/country';
+import {CountryService} from '../../../../shared/services/api/configuration/country.service';
 
 @Component({
   selector: 'app-ir',
@@ -39,6 +41,7 @@ export class IrComponent implements OnInit, OnDestroy {
 
   // Drop Down
   fiscalYearList: Array<FiscalYear> = [];
+  countryList: Array<Country> = [];
 
   // Dialog
   dialogDisplayAdd = false;
@@ -52,25 +55,35 @@ export class IrComponent implements OnInit, OnDestroy {
   addEndTranche: number;
   addRate: number;
   addAmountDeduct: number;
+  addCeiling: boolean;
+  addCeilingAmount: number;
   addFiscalYear: FiscalYear;
+  addCountry: Country;
   // Component Attributes // Update
   updateStartTrache: number;
   updateEndTranche: number;
   updateRate: number;
   updateAmountDeduct: number;
+  updateCeiling: boolean;
+  updateCeilingAmount: number;
   updateFiscalYear: FiscalYear;
+  updateCountry: Country;
   // Component Attributes // Search
   searchSentence: string;
   searchStartTrache: number;
   searchEndTranche: number;
   searchRate: number;
   searchAmountDeduct: number;
+  searchCeiling: boolean;
+  searchCeilingAmount: number;
   searchFiscalYear: FiscalYear;
+  searchCountry: Country;
 
   constructor(private router: Router,
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
               private fiscalYearService: FiscalYearService,
+              private countryService: CountryService,
               private globalService: GlobalService,
               private irService: IrService,
               private confirmationService: ConfirmationService,
@@ -89,7 +102,10 @@ export class IrComponent implements OnInit, OnDestroy {
       {field: 'endTranche', header: 'End Tranche', type: 'number'},
       {field: 'rate', header: 'Rate', type: 'number'},
       {field: 'amountDeduct', header: ' Amount Deduct', type: 'number'},
+      {field: 'ceiling', header: 'Ceiling', type: 'boolean'},
+      {field: 'ceilingAmount', header: 'Ceiling Amount', type: 'number'},
       {field: 'fiscalYear', child: 'code', header: 'FiscalYear', type: 'object'},
+      {field: 'country', child: 'code', header: 'Country', type: 'object'},
     ];
     this.selectedColumns = this.cols;
     /*this.selectedColumns = this.Columns;
@@ -127,10 +143,16 @@ export class IrComponent implements OnInit, OnDestroy {
         this.fiscalYearList = data;
       },
       (error) => {
-        this.spinner.hide();
         this.toastr.error(error.message);
       },
-      () => this.spinner.hide()
+    ));
+    this.subscriptions.add(this.countryService.findAll().subscribe(
+      data => {
+        this.countryList = data;
+      },
+      error => {
+        this.toastr.error(error.message);
+      },
     ));
   }
 
@@ -198,11 +220,27 @@ export class IrComponent implements OnInit, OnDestroy {
       this.searchSentence += 'amountDeduct:' + this.searchAmountDeduct + ',';
       index = index + 1;
     }
+    // Check the Ceiling
+    if (this.searchCeiling) {
+      this.searchSentence += 'ceiling:' + this.searchCeiling + ',';
+      index = index + 1;
+    }
+    // Check the Ceiling Amount
+    if (this.searchCeilingAmount) {
+      this.searchSentence += 'ceilingAmount:' + this.searchCeilingAmount + ',';
+      index = index + 1;
+    }
     // Check the Fiscal Year
     if (this.searchFiscalYear) {
       this.searchSentence += 'fiscalYear.code:' + this.searchFiscalYear.code + ',';
       index = index + 1;
     }
+    // Check the Country
+    if (this.searchCountry) {
+      this.searchSentence += 'country.code:' + this.searchCountry.code + ',';
+      index = index + 1;
+    }
+
     if (index > 0 && index === 1) {
       this.searchSentence = this.searchSentence.slice(0, -1);
     } else {
@@ -226,7 +264,10 @@ export class IrComponent implements OnInit, OnDestroy {
     this.searchEndTranche = null;
     this.searchRate = null;
     this.searchAmountDeduct = null;
+    this.searchCeiling = null;
+    this.searchCeilingAmount = null;
     this.searchFiscalYear = null;
+    this.searchCountry = null;
 
     this.loadData();
   }
@@ -242,7 +283,10 @@ export class IrComponent implements OnInit, OnDestroy {
       this.updateEndTranche = this.selectedIrs[0].endTranche;
       this.updateRate = this.selectedIrs[0].rate;
       this.updateAmountDeduct = this.selectedIrs[0].amountDeduct;
+      this.updateCeiling = this.selectedIrs[0].ceiling;
+      this.updateCeilingAmount = this.selectedIrs[0].ceilingAmount;
       this.updateFiscalYear = this.selectedIrs[0].fiscalYear;
+      this.updateCountry = this.selectedIrs[0].country;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
@@ -255,7 +299,10 @@ export class IrComponent implements OnInit, OnDestroy {
     this.ir.endTranche = this.addEndTranche;
     this.ir.rate = this.addRate;
     this.ir.amountDeduct = this.addAmountDeduct;
+    this.ir.ceiling = this.addCeiling;
+    this.ir.ceilingAmount = this.addCeilingAmount;
     this.ir.fiscalYear = this.addFiscalYear;
+    this.ir.country = this.addCountry;
 
     this.subscriptions.add(this.irService.set(this.ir).subscribe(
       (data) => {
@@ -265,7 +312,10 @@ export class IrComponent implements OnInit, OnDestroy {
         this.addEndTranche = null;
         this.addRate = null;
         this.addAmountDeduct = null;
+        this.addCeiling = null;
+        this.addCeilingAmount = null;
         this.addFiscalYear = null;
+        this.addCountry = null;
         this.editMode = null;
         this.selectedIrs = null;
         this.loadData();
@@ -277,7 +327,10 @@ export class IrComponent implements OnInit, OnDestroy {
         this.addEndTranche = null;
         this.addRate = null;
         this.addAmountDeduct = null;
+        this.addCeiling = null;
+        this.addCeilingAmount = null;
         this.addFiscalYear = null;
+        this.addCountry = null;
         this.editMode = null;
         this.selectedIrs = null;
         this.loadData();
@@ -295,7 +348,10 @@ export class IrComponent implements OnInit, OnDestroy {
         this.ir.endTranche = this.updateEndTranche;
         this.ir.rate = this.updateRate;
         this.ir.amountDeduct = this.updateAmountDeduct;
+        this.ir.ceiling = this.updateCeiling;
+        this.ir.ceilingAmount = this.updateCeilingAmount;
         this.ir.fiscalYear = this.updateFiscalYear;
+        this.ir.country = this.updateCountry;
 
         if (null !== this.ir) {
           this.subscriptions.add(this.irService.set(this.ir).subscribe(
@@ -307,7 +363,10 @@ export class IrComponent implements OnInit, OnDestroy {
               this.updateEndTranche = null;
               this.updateRate = null;
               this.updateAmountDeduct = null;
+              this.updateCeiling = null;
+              this.updateCeilingAmount = null;
               this.updateFiscalYear = null;
+              this.updateCountry = null;
               this.selectedIrs = null;
               this.dialogDisplayEdit = false;
               this.loadData();
@@ -320,7 +379,10 @@ export class IrComponent implements OnInit, OnDestroy {
               this.updateEndTranche = null;
               this.updateRate = null;
               this.updateAmountDeduct = null;
+              this.updateCeiling = null;
+              this.updateCeilingAmount = null;
               this.updateFiscalYear = null;
+              this.updateCountry = null;
               this.selectedIrs = null;
               this.dialogDisplayEdit = false;
               this.loadData();
@@ -350,6 +412,30 @@ export class IrComponent implements OnInit, OnDestroy {
         ));
       }
     });
+  }
+
+  filterCountry(event) {
+    const filtered: any[] = [];
+    const code = event.query;
+
+    if (code) {
+      for (let i = 0; i < this.countryList.length; i++) {
+        const country = this.countryList[i];
+        if (country.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(country);
+        }
+      }
+      this.countryList = filtered;
+    } else {
+      this.subscriptions.add(this.countryService.findAll().subscribe(
+        (data) => {
+          this.countryList = data;
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        },
+      ));
+    }
   }
 
   ngOnDestroy() {
