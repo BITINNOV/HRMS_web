@@ -3,23 +3,39 @@
 <p-panel header="{{ 'Filter' | translate }}">
 
   <div class="row">
+    <!-- Code -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Code </label>
       <input [(ngModel)]="searchCode" pInputText type="text"/>
     </div>
+    <!-- Value -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Value </label>
       <input [(ngModel)]="searchValue" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Tax Rates -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Tax Rates </label>
       <input [(ngModel)]="searchTaxRates" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Fixed Bonus Date -->
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Loan Date </label>
+      <label class="font-weight-bold"> Fixed Bonus Date </label>
       <p-calendar inputId="basic" [(ngModel)]="searchFixedBonusDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
-
+    <!-- Position -->
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Position </label>
+      <p-autoComplete [(ngModel)]="searchPosition" [suggestions]="positionList"
+                      (completeMethod)="filterPosition($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a position' | translate}}">
+        <ng-template let-position pTemplate="item">
+          <div class="country-item">
+            <div>{{position.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
+    </div>
   </div>
 
 
@@ -72,21 +88,38 @@
           [style]="{width: '70vw'}" header="{{ 'ADD' | translate }}">
   <br/>
   <div class="row">
+    <!-- Code -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Code </label>
       <input [(ngModel)]="addCode" pInputText type="text"/>
     </div>
+    <!-- Value -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Value </label>
       <input [(ngModel)]="addValue" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Tax Rates -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Tax Rates </label>
       <input [(ngModel)]="addTaxRates" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Fixed Bonus Date -->
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Loan Date </label>
+      <label class="font-weight-bold"> Fixed Bonus Date </label>
       <p-calendar inputId="basic" [(ngModel)]="addFixedBonusDate" [showIcon]="true" inputId="icon"></p-calendar>
+    </div>
+    <!-- Position -->
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Position </label>
+      <p-autoComplete [(ngModel)]="addPosition" [suggestions]="positionList"
+                      (completeMethod)="filterPosition($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a position' | translate}}">
+        <ng-template let-position pTemplate="item">
+          <div class="country-item">
+            <div>{{position.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
   <ng-template pTemplate="footer">
@@ -101,21 +134,38 @@
           [style]="{width: '70vw'}" header="{{ 'UPDATE' | translate }}">
   <br/>
   <div class="row">
+    <!-- Code -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Code </label>
       <input [(ngModel)]="updateCode" pInputText type="text"/>
     </div>
+    <!-- Value -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Value </label>
       <input [(ngModel)]="updateValue" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Tax Rates -->
     <div class="col-md-4" style="margin-top: 10px;">
       <label class="font-weight-bold"> Tax Rates </label>
       <input [(ngModel)]="updateTaxRates" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
     </div>
+    <!-- Fixed Bonus Date -->
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Loan Date </label>
+      <label class="font-weight-bold"> Fixed Bonus Date </label>
       <p-calendar inputId="basic" [(ngModel)]="updateFixedBonusDate" [showIcon]="true" inputId="icon"></p-calendar>
+    </div>
+    <!-- Position -->
+    <div class="col-md-4" style="margin-top: 20px;">
+      <label class="font-weight-bold"> Position </label>
+      <p-autoComplete [(ngModel)]="updatePosition" [suggestions]="positionList"
+                      (completeMethod)="filterPosition($event)" field="code" [dropdown]="true"
+                      placeholder="{{'Select a position' | translate}}">
+        <ng-template let-position pTemplate="item">
+          <div class="country-item">
+            <div>{{position.code}}</div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
     </div>
   </div>
   <ng-template pTemplate="footer">

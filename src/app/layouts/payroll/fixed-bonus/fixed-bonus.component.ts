@@ -12,6 +12,8 @@ import {AuthenticationService} from '../../../shared/services/api/authentication
 import {FiscalYearService} from '../../../shared/services/api/configuration/payroll/fiscal-year.service';
 import {GlobalService} from '../../../shared/services/api/global.service';
 import {FixedBonusService} from '../../../shared/services/api/payroll/fixed-bonus.service';
+import {Position} from '../../../shared/models/configuration/employee/position';
+import {PositionService} from '../../../shared/services/api/configuration/employee/position.service';
 
 @Component({
   selector: 'app-fixed-bonus',
@@ -41,6 +43,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
 
   // Drop Down
   fiscalYearList: Array<FiscalYear> = [];
+  positionList: Array<Position> = [];
 
   // Dialog
   dialogDisplayAdd = false;
@@ -55,23 +58,26 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
   addValue: number;
   addTaxRates: number;
   addFixedBonusDate: Date;
+  addPosition: Position;
   // Component Attributes // Update
   updateCode: String;
   updateValue: number;
   updateTaxRates: number;
   updateFixedBonusDate: Date;
+  updatePosition: Position;
   // Component Attributes // Search
   searchSentence: string;
   searchCode: String;
   searchValue: number;
   searchTaxRates: number;
   searchFixedBonusDate: Date;
+  searchPosition: Position;
 
   constructor(private router: Router,
               private toastr: ToastrService,
               private spinner: NgxSpinnerService,
               private authenticationService: AuthenticationService,
-              private fiscalYearService: FiscalYearService,
+              private positionService: PositionService,
               private globalService: GlobalService,
               private fixedBonusService: FixedBonusService,
               private confirmationService: ConfirmationService,
@@ -90,6 +96,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
       {field: 'value', header: 'Value', type: 'number'},
       {field: 'taxRates', header: 'Taxe Rates', type: 'number'},
       {field: 'bonusDate', header: 'Fixed Bonus Date', type: 'date'},
+      {field: 'position', child: 'code', header: 'Position', type: 'object'},
     ];
     this.selectedColumns = this.cols;
     /*this.selectedColumns = this.Columns;
@@ -128,15 +135,13 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
       },
       () => this.spinner.hide()
     ));
-    this.subscriptions.add(this.fiscalYearService.find(this.searchSentence).subscribe(
+    this.subscriptions.add(this.positionService.find(this.searchSentence).subscribe(
       (data) => {
-        this.fiscalYearList = data;
+        this.positionList = data;
       },
       (error) => {
-        this.spinner.hide();
         this.toastr.error(error.message);
       },
-      () => this.spinner.hide()
     ));
   }
 
@@ -213,9 +218,14 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
       this.searchSentence += 'taxRates:' + this.searchTaxRates + ',';
       index = index + 1;
     }
-    // Check the FixedBonus Date
+    // Check the Fixed Bonus Date
     if (this.searchFixedBonusDate) {
       this.searchSentence += 'fixedBonusDate:' + this.searchFixedBonusDate + ',';
+      index = index + 1;
+    }
+    // Check the Position
+    if (this.searchPosition) {
+      this.searchSentence += 'position.code:' + this.searchPosition.code + ',';
       index = index + 1;
     }
     // Check the Organization
@@ -244,6 +254,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
     this.searchValue = null;
     this.searchTaxRates = null;
     this.searchFixedBonusDate = null;
+    this.searchPosition = null;
 
     this.loadData();
   }
@@ -259,6 +270,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
       this.updateValue = this.selectedFixedBonuses[0].value;
       this.updateTaxRates = this.selectedFixedBonuses[0].taxRates;
       this.updateFixedBonusDate = this.selectedFixedBonuses[0].bonusDate;
+      this.updatePosition = this.selectedFixedBonuses[0].position;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE
       this.onDelete();
@@ -271,6 +283,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
     this.fixedBonus.value = this.addValue;
     this.fixedBonus.taxRates = this.addTaxRates;
     this.fixedBonus.bonusDate = this.addFixedBonusDate;
+    this.fixedBonus.position = this.addPosition;
     this.fixedBonus.organization = this.currentOrganization;
 
     this.subscriptions.add(this.fixedBonusService.set(this.fixedBonus).subscribe(
@@ -281,6 +294,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
         this.addValue = null;
         this.addTaxRates = null;
         this.addFixedBonusDate = null;
+        this.addPosition = null;
         this.editMode = null;
         this.selectedFixedBonuses = null;
         this.loadData();
@@ -292,6 +306,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
         this.addValue = null;
         this.addTaxRates = null;
         this.addFixedBonusDate = null;
+        this.addPosition = null;
         this.editMode = null;
         this.selectedFixedBonuses = null;
         this.loadData();
@@ -309,6 +324,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
         this.fixedBonus.value = this.updateValue;
         this.fixedBonus.taxRates = this.updateTaxRates;
         this.fixedBonus.bonusDate = this.updateFixedBonusDate;
+        this.fixedBonus.position = this.updatePosition;
 
         if (null !== this.fixedBonus) {
           this.subscriptions.add(this.fixedBonusService.set(this.fixedBonus).subscribe(
@@ -320,6 +336,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
               this.updateValue = null;
               this.updateTaxRates = null;
               this.updateFixedBonusDate = null;
+              this.updatePosition = null;
               this.selectedFixedBonuses = null;
               this.dialogDisplayEdit = false;
               this.loadData();
@@ -332,6 +349,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
               this.updateValue = null;
               this.updateTaxRates = null;
               this.updateFixedBonusDate = null;
+              this.updatePosition = null;
               this.selectedFixedBonuses = null;
               this.dialogDisplayEdit = false;
               this.loadData();
@@ -363,19 +381,30 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterEmployee(event) {
-    // in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
+  filterPosition(event) {
     const filtered: any[] = [];
-    const query = event.query;
+    const code = event.query;
 
-    for (let i = 0; i < this.fiscalYearList.length; i++) {
-      const employee = this.fiscalYearList[i];
-      if (employee.code.toLowerCase().indexOf(query.toLowerCase()) === 0) {
-        filtered.push(employee);
+    if (code) {
+      for (let i = 0; i < this.positionList.length; i++) {
+        const position = this.positionList[i];
+        if (position.code.toLowerCase().indexOf(code.toLowerCase()) === 0) {
+          filtered.push(position);
+        }
       }
+      this.positionList = filtered;
+    } else {
+      this.searchSentence = '';
+      this.searchSentence = 'organization.code:' + this.currentOrganization.code;
+      this.subscriptions.add(this.positionService.find(this.searchSentence).subscribe(
+        (data) => {
+          this.positionList = data;
+        },
+        (error) => {
+          this.toastr.error(error.message);
+        },
+      ));
     }
-
-    this.fiscalYearList = filtered;
   }
 
   ngOnDestroy() {

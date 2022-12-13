@@ -125,8 +125,6 @@ export class SeniorityComponent implements OnInit, OnDestroy {
         this.toastr.error(error.message);
       }
     ));
-    alert('this.page : ' + this.page);
-    alert('this.size : ' + this.size);
     this.subscriptions.add(this.seniorityService.findAllPagination(this.page, this.size).subscribe(
       data => {
         this.seniorityList = data;
