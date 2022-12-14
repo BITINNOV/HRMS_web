@@ -439,12 +439,12 @@ export class EmployeeComponent implements OnInit, OnDestroy {
       this.updateEmail = this.selectedEmployees[0].email;
       this.updatePhoneNumber = this.selectedEmployees[0].phoneNumber;
       this.updateAddress = this.selectedEmployees[0].address;
-      this.updateBirthDate = this.selectedEmployees[0].birthDate;
+      this.updateBirthDate = new Date(this.pipe.transform(this.selectedEmployees[0].birthDate, 'dd/MM/yyyy'));
       this.updateRib = this.selectedEmployees[0].rib;
       this.updateCnssNumber = this.selectedEmployees[0].cnssNumber;
       this.updateKidsNumber = this.selectedEmployees[0].kidsNumber;
       this.updateFamilySituation = this.selectedEmployees[0].familySituation;
-      this.updateHiringDate = this.selectedEmployees[0].hiringDate;
+      this.updateHiringDate = new Date(this.pipe.transform(this.selectedEmployees[0].hiringDate, 'dd/MM/yyyy'));
       this.updateIsActive = this.selectedEmployees[0].isActive;
       this.updateOldSalaryAmount = this.selectedEmployees[0].salaryAmount;
       this.updateNewSalaryAmount = this.selectedEmployees[0].salaryAmount;
