@@ -271,7 +271,7 @@ export class VariableBonusComponent implements OnInit, OnDestroy {
       this.updateCode = this.selectedVariableBonuses[0].code;
       this.updateValue = this.selectedVariableBonuses[0].value;
       this.updateTaxRates = this.selectedVariableBonuses[0].taxRates;
-      this.updateVariableBonusDate = this.selectedVariableBonuses[0].variableBonusDate;
+      this.updateVariableBonusDate = new Date(this.pipe.transform(this.selectedVariableBonuses[0].variableBonusDate, 'dd/MM/yyyy'));
       this.updateEmployee = this.selectedVariableBonuses[0].employee;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE

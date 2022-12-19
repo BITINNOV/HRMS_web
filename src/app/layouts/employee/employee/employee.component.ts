@@ -1,6 +1,6 @@
 import {Component, Inject, LOCALE_ID, OnDestroy, OnInit} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {ConfirmationService, MenuItem} from 'primeng/api';
 import {Organization} from '../../../shared/models/configuration/organization';
 import {Employee} from '../../../shared/models/employee/employee';
@@ -49,6 +49,14 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   employeePositionList: Array<Position> = [];
   dropDownSearchSentence: string;
 
+  // Picture Upload
+  selectedFiles?: FileList;
+  currentFile?: File;
+  progress = 0;
+  message = '';
+  preview = '';
+  imageInfos?: Observable<any>;
+
   // Dialog
   dialogDisplayAdd = false;
   dialogDisplayEdit = false;
@@ -61,6 +69,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   ids: Array<number>;
   // Component Attributes // Add
   // addResume: Resume;
+  addPicture: String;
   addEmployeeStatus: EmployeeStatus;
   addRegistrationNumber: number;
   addPosition: Position;
@@ -82,6 +91,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   addManager: Employee;
   // Component Attributes // Update
   // updateResume: Resume;
+  updatePicture: String;
   updateEmployeeStatus: EmployeeStatus;
   updateRegistrationNumber: number;
   updatePosition: Position;
@@ -430,6 +440,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     if (this.editMode === 1) { // ADD
       this.dialogDisplayAdd = true;
     } else if (this.editMode === 2) { // UPDATE
+      this.updatePicture = '../../../../assets/img/employees/' + this.selectedEmployees[0].id + '.png';
       this.updateEmployeeStatus = this.selectedEmployees[0].employeeStatus;
       this.updateRegistrationNumber = this.selectedEmployees[0].registrationNumber;
       this.updatePosition = this.selectedEmployees[0].position;
@@ -457,6 +468,12 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
+    // Check Email
+    const emailPattern = new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\\\.[a-z]{2,4}$');
+    if (!emailPattern.test(this.addEmail.toString())) {
+      this.toastr.error('Veuillez Saisir un email correct', 'Error');
+      return;
+    }
     // Creating the new Employee
     this.employee = new Employee();
     this.employee.employeeStatus = this.addEmployeeStatus;
@@ -817,6 +834,31 @@ export class EmployeeComponent implements OnInit, OnDestroy {
         ));
       }
     });
+  }
+
+  selectFile(event: any): void {
+    this.message = '';
+    this.preview = '';
+    this.progress = 0;
+    this.selectedFiles = event.target.files;
+
+    if (this.selectedFiles) {
+      const file: File | null = this.selectedFiles.item(0);
+
+      if (file) {
+        this.preview = '';
+        this.currentFile = file;
+
+        const reader = new FileReader();
+
+        reader.onload = (e: any) => {
+          console.log(e.target.result);
+          this.preview = e.target.result;
+        };
+
+        reader.readAsDataURL(this.currentFile);
+      }
+    }
   }
 
   filterEmployeeStatus(event) {

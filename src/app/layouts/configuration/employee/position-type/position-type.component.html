@@ -10,7 +10,7 @@
     </div>
     <div class="col-md-4">
       <label class="font-weight-bold"> Validate </label> <br/>
-      <p-checkbox [(ngModel)]="searchValidate" [binary]="true" inputId="binary"></p-checkbox>
+      <p-toggleButton [(ngModel)]="searchValidate" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
     </div>
     <div class="col-md-2"></div>
   </div>
@@ -72,7 +72,7 @@
     </div>
     <div class="col-md-4">
       <label class="font-weight-bold"> Validate </label> <br/>
-      <p-checkbox [(ngModel)]="addValidate" [binary]="true" inputId="binary"></p-checkbox>
+      <p-toggleButton [(ngModel)]="addValidate" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
     </div>
     <div class="col-md-2"></div>
   </div>
@@ -95,7 +95,7 @@
     </div>
     <div class="col-md-4">
       <label class="font-weight-bold"> Validate </label> <br/>
-      <p-checkbox [(ngModel)]="updateValidate" [binary]="true" inputId="binary"></p-checkbox>
+      <p-toggleButton [(ngModel)]="updateValidate" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
     </div>
     <div class="col-md-2"></div>
   </div>

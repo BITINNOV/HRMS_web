@@ -269,7 +269,7 @@ export class FixedBonusComponent implements OnInit, OnDestroy {
       this.updateCode = this.selectedFixedBonuses[0].code;
       this.updateValue = this.selectedFixedBonuses[0].value;
       this.updateTaxRates = this.selectedFixedBonuses[0].taxRates;
-      this.updateFixedBonusDate = this.selectedFixedBonuses[0].bonusDate;
+      this.updateFixedBonusDate = new Date(this.pipe.transform(this.selectedFixedBonuses[0].bonusDate, 'dd/MM/yyyy'));
       this.updatePosition = this.selectedFixedBonuses[0].position;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE

@@ -6,6 +6,9 @@ import {EmployeeComponent} from './employee/employee.component';
 import {SharedModule} from '../../shared/shared.module';
 import {SalaryComponent} from './salary/salary.component';
 import {FieldsetModule} from 'primeng/fieldset';
+import {ToggleButtonModule} from 'primeng/togglebutton';
+import {InputMaskModule} from 'primeng/inputmask';
+import {FileUploadModule} from 'primeng/fileupload';
 
 
 @NgModule({
@@ -14,11 +17,14 @@ import {FieldsetModule} from 'primeng/fieldset';
     SalaryComponent
   ],
 
-  imports: [
-    CommonModule,
-    EmployeeRoutingModule,
-    SharedModule,
-  ]
+    imports: [
+        CommonModule,
+        EmployeeRoutingModule,
+        SharedModule,
+        ToggleButtonModule,
+        InputMaskModule,
+        FileUploadModule,
+    ]
 })
 export class EmployeeModule {
 }

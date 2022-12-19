@@ -259,7 +259,7 @@ export class AdvanceComponent implements OnInit, OnDestroy {
     } else if (this.editMode === 2) { // UPDATE
       this.updateCode = this.selectedAdvances[0].code;
       this.updateValue = this.selectedAdvances[0].value;
-      this.updateAdvanceDate = this.selectedAdvances[0].advanceDate;
+      this.updateAdvanceDate = new Date(this.pipe.transform(this.selectedAdvances[0].advanceDate, 'dd/MM/yyyy'));
       this.updateEmployee = this.selectedAdvances[0].employee;
       this.dialogDisplayEdit = true;
     } else if (this.editMode === 3) { // DELETE

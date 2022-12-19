@@ -16,6 +16,7 @@ import {ActionComponent} from './action/action.component';
 import {ActionTypeComponent} from './action-type/action-type.component';
 import {RegionComponent} from './region/region.component';
 import {PayrollComponent} from './payroll/payroll.component';
+import {InputMaskModule} from 'primeng/inputmask';
 
 
 @NgModule({
@@ -33,12 +34,13 @@ import {PayrollComponent} from './payroll/payroll.component';
     RegionComponent,
     PayrollComponent,
   ],
-  imports: [
-    ConfigurationRoutingModule,
-    CommonModule,
-    SharedModule,
-    FormsModule
-  ]
+    imports: [
+        ConfigurationRoutingModule,
+        CommonModule,
+        SharedModule,
+        FormsModule,
+        InputMaskModule
+    ]
 })
 export class ConfigurationModule {
 }

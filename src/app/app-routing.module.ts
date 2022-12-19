@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 
 const routes: Routes = [
-
   { path: '', loadChildren: () => import('./layouts/layout.module').then(m => m.LayoutModule) },
   { path: 'core', loadChildren: () => import('./layouts/layout.module').then(m => m.LayoutModule) },
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },

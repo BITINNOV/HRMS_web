@@ -46,11 +46,11 @@
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
         <label class="font-weight-bold"> Email </label>
-        <input [(ngModel)]="searchEmail" pInputText type="text"/>
+        <input [(ngModel)]="searchEmail" pInputText type="text" email="true" #prmEmail="ngModel"/>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
         <label class="font-weight-bold"> Phone Number </label>
-        <input [(ngModel)]="searchPhoneNumber" pInputText type="text"/>
+        <p-inputMask mask="(+999) 9 99 99 99 99" [(ngModel)]="searchPhoneNumber"></p-inputMask>
       </div>
 
       <div class="col-md-3" style="margin-top: 20px;">
@@ -105,7 +105,7 @@
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
         <label class="font-weight-bold"> Is Active </label> <br/>
-        <p-checkbox [(ngModel)]="searchIsActive" [binary]="true" inputId="binary"></p-checkbox>
+        <p-toggleButton [(ngModel)]="searchIsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
       </div>
     </div>
 
@@ -155,7 +155,7 @@
 
 <!-- BEGIN Add Dialog -->
 <p-dialog [(visible)]="dialogDisplayAdd" [draggable]="true" [modal]="true" [resizable]="true"
-          [style]="{width: '70vw'}" header="{{ 'ADD' | translate }}">
+          [style]="{width: '40vw'}" header="{{ 'ADD' | translate }}">
   <br/>
   <div class="row">
     <div class="col-md-3" style="margin-top: 10px;">
@@ -201,11 +201,11 @@
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
       <label class="font-weight-bold"> Email </label>
-      <input [(ngModel)]="addEmail" pInputText type="text"/>
+      <input [(ngModel)]="addEmail" pInputText type="text" email="true" #prmEmail="ngModel"/>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
       <label class="font-weight-bold"> Phone Number </label>
-      <input [(ngModel)]="addPhoneNumber" pInputText type="text"/>
+      <p-inputMask mask="(+999) 9 99 99 99 99" [(ngModel)]="addPhoneNumber"></p-inputMask>
     </div>
 
     <div class="col-md-3" style="margin-top: 20px;">
@@ -260,7 +260,7 @@
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
       <label class="font-weight-bold"> Is Active </label> <br/>
-      <p-checkbox [(ngModel)]="addIsActive" [binary]="true" inputId="binary"></p-checkbox>
+      <p-toggleButton [(ngModel)]="addIsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
     </div>
   </div>
   <ng-template pTemplate="footer">
@@ -271,14 +271,16 @@
 <!-- END Add Dialog -->
 
 <!-- BEGIN Edit Dialog -->
-<p-dialog [(visible)]="dialogDisplayEdit" [draggable]="true" [modal]="true" [resizable]="true"
-          [style]="{width: '50vw'}" header="{{ 'UPDATE' | translate }}">
+<p-dialog [(visible)]="dialogDisplayEdit" [draggable]="true" [modal]="true" [resizable]="true" [style]="{width: '50vw'}" header="{{ 'UPDATE' | translate }}">
   <br/>
   <div class="row">
-    <div class="col-md-3" style="margin-top: 10px;">
-      <p-image src="assets/img/flags/Afghanistan.png" alt="Image" width="250"></p-image>
+    <div class="col-md-2" style="margin-top: 10px;">
+      <input [(ngModel)]="updateFirstName" type="file" accept="image/png" (change)="selectFile($event)"/>
     </div>
-    <div class="col-md-9" style="margin-top: 10px;">
+    <div class="col-md-2" style="margin-top: 10px;">
+      <img src="{{updatePicture}}" style="display: block; margin-left: auto; margin-right: auto; height: 11rem;"/>
+    </div>
+    <div class="col-md-8" style="margin-top: 10px;">
       <div class="row">
         <div class="col-md-6">
           <label class="font-weight-bold"> First Name </label>
@@ -292,7 +294,7 @@
       <div class="row" style="margin-top: 20px;">
         <div class="col-md-12">
           <label class="font-weight-bold"> Email </label>
-          <input [(ngModel)]="updateEmail" pInputText type="text"/>
+          <input [(ngModel)]="updateEmail" pInputText type="text" email="true" #prmEmail="ngModel"/>
         </div>
       </div>
     </div>
@@ -331,7 +333,7 @@
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
       <label class="font-weight-bold"> Phone Number </label>
-      <input [(ngModel)]="updatePhoneNumber" pInputText type="text"/>
+      <p-inputMask mask="(+999) 9 99 99 99 99" [(ngModel)]="updatePhoneNumber"></p-inputMask>
     </div>
 
     <div class="col-md-6" style="margin-top: 20px;">
@@ -386,7 +388,7 @@
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
       <label class="font-weight-bold"> Is Active </label> <br/>
-      <p-checkbox [(ngModel)]="updateIsActive" [binary]="true" inputId="binary"></p-checkbox>
+      <p-toggleButton [(ngModel)]="updateIsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
     </div>
   </div>
   <ng-template pTemplate="footer">
