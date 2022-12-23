@@ -225,6 +225,13 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
+    // Check Email
+    const emailPattern = new RegExp('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$');
+    if (!emailPattern.test(this.addEmail.toString())) {
+      this.toastr.error('Veuillez Saisir un email correct', 'Error');
+      return;
+    }
+    // Creating the new User
     this.user = new User();
     this.user.code = this.addCode;
     this.user.name = this.addName;
@@ -285,6 +292,13 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   onEdit() {
+    // Check Email
+    const emailPattern = new RegExp('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$');
+    if (!emailPattern.test(this.updateEmail.toString())) {
+      this.toastr.error('Veuillez Saisir un email correct', 'Error');
+      return;
+    }
+    // Updating the User
     this.user = null;
     this.subscriptions.add(this.userService.find('code:' + this.selectedUsers[0].code).subscribe(
       (data) => {

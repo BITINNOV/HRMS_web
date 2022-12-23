@@ -40,6 +40,22 @@
           <p style="font-size: 1rem; float: left; margin-left: 10px; margin-top: 5px;" *ngIf="organization"> {{organization.code}} </p>
         </a>
       </li>
+      <li>
+        <p-dropdown [options]="viewLanguages" [(ngModel)]="selectedViewLanguage" (onChange)="onChange($event)" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Languege">
+          <ng-template pTemplate="selectedItem">
+            <div class="country-item country-item-value" *ngIf="selectedViewLanguage">
+              <img src="./assets/img/languages/{{selectedViewLanguage.code}}.png" [class]="'flag flag-' + selectedViewLanguage.code.toLowerCase()" />
+              <div>{{selectedViewLanguage.name}}</div>
+            </div>
+          </ng-template>
+          <ng-template let-viewLanguage pTemplate="item">
+            <div class="country-item">
+              <img src="./assets/img/languages/{{selectedViewLanguage.code}}.png" [class]="'flag flag-' + viewLanguage.code.toLowerCase()" />
+              <div>{{viewLanguage.name}}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </li>
       <li style="display: table; height: 50px; overflow: hidden; text-align: center;">
         <a (click)="logout()" class="nav-link text-white"
            style="display: table-cell; vertical-align: middle; horiz-align: center;">

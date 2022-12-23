@@ -4,7 +4,7 @@
 
   <div class="row">
     <div class="col-md-3">
-      <label class="font-weight-bold"> Code </label>
+      <label class="font-weight-bold"> {{ 'Code' | translate }} </label>
       <input [(ngModel)]="code" pInputText type="text"/>
     </div>
     <div class="col-md-3">
@@ -24,8 +24,8 @@
   <br/>
 
   <div class=" text-center">
-    <button (click)="reset()" class="btn btn-primary m-1" type="button">Réinitialiser</button>
-    <button (click)="search()" class="btn btn-success m-1" type="button">Rechercher</button>
+    <button (click)="reset()" class="btn btn-primary m-1" type="button"> {{ 'Reset' | translate }} </button>
+    <button (click)="search()" class="btn btn-success m-1" type="button"> {{ 'Search ' | translate }} </button>
   </div>
 
 
@@ -67,35 +67,35 @@
   <br/>
   <div class="row">
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Code </label>
+      <label class="font-weight-bold"> {{ 'Code' | translate }} </label>
       <input [(ngModel)]="addCode" pInputText type="text"/>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Name </label>
+      <label class="font-weight-bold"> {{ 'Name' | translate }} </label>
       <input [(ngModel)]="addName" pInputText type="text"/>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Comment </label>
+      <label class="font-weight-bold"> {{ 'Comment' | translate }} </label>
       <input [(ngModel)]="addComment" pInputText type="text"/>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Surname </label>
+      <label class="font-weight-bold"> {{ 'Surname' | translate }} </label>
       <input [(ngModel)]="addSurname" pInputText type="text"/>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Email </label>
+      <label class="font-weight-bold"> {{ 'Email' | translate }} </label>
       <input [(ngModel)]="addEmail" pInputText type="text"/>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Password </label>
+      <label class="font-weight-bold"> {{ 'Password' | translate }} </label>
       <input [(ngModel)]="addPassword" pInputText type="text"/>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Passport </label>
+      <label class="font-weight-bold"> {{ 'Passport' | translate }} </label>
       <input [(ngModel)]="addPassport" pInputText type="text"/>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Tel </label>
+      <label class="font-weight-bold"> {{ 'Tel' | translate }} </label>
       <input [(ngModel)]="addTel" pInputText type="text"/>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
@@ -104,8 +104,8 @@
     </div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onSave()" class="btn btn-success m-1" type="button"> Ajouter</button>
+    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onSave()" class="btn btn-success m-1" type="button"> {{ 'Add' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Add Dialog -->
@@ -117,14 +117,14 @@
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-      <label class="font-weight-bold"> Code </label>
+      <label class="font-weight-bold"> {{ 'Code' | translate }} </label>
       <input [(ngModel)]="updateCode" pInputText type="text"/>
     </div>
     <div class="col-md-2"></div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> Modifier</button>
+    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> {{ 'Update' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Edit Dialog -->

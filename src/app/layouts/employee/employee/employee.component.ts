@@ -469,7 +469,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   onSave() {
     // Check Email
-    const emailPattern = new RegExp('^[a-z0-9._%+-]+@[a-z0-9.-]+\\\\.[a-z]{2,4}$');
+    const emailPattern = new RegExp('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$');
     if (!emailPattern.test(this.addEmail.toString())) {
       this.toastr.error('Veuillez Saisir un email correct', 'Error');
       return;
@@ -596,6 +596,13 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   onEdit() {
     this.employee = null;
+    // Check Email
+    const emailPattern = new RegExp('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$');
+    if (!emailPattern.test(this.updateEmail.toString())) {
+      this.toastr.error('Veuillez Saisir un email correct', 'Error');
+      return;
+    }
+    // Updating the Employee
     this.subscriptions.add(this.employeeService.findById(this.selectedEmployees[0].id).subscribe(
       (getEmployeeData) => {
         this.employee = getEmployeeData;

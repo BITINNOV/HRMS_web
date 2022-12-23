@@ -1,13 +1,16 @@
 <div class="content">
-    <h1 class="m-t-20">500</h1>
-    <p class="error-title">Internal Server Error</p>
-    <p class="m-b-20">We're sorry, but the server was unable to complete your request. You can
-        <a class="color-green" routerLink="/index">Go homepage</a> or try the search bar below.</p>
+    <h1 class="m-t-20"> {{'500' | translate}} </h1>
+    <p class="error-title"> {{'XXXXX' | translate}}Internal Server Error</p>
+    <p class="m-b-20">
+      {{'We\'re sorry, but the server was unable to complete your request. You can' | translate}}
+      <a class="color-green" routerLink="/index"> {{'Go homepage' | translate}} </a>
+      {{'or try the search bar below' | translate}}
+    </p>
     <form>
         <div class="input-group">
             <input class="form-control" type="text" placeholder="Search for page">
             <div class="input-group-btn">
-                <button class="btn btn-success" type="button">Search</button>
+                <button class="btn btn-success" type="button"> {{'Search' | translate}} </button>
             </div>
         </div>
     </form>
@@ -22,7 +25,7 @@
         font-size: 160px
     }
     .error-title {
-        font-size:22px; 
+        font-size:22px;
         font-weight:500;
         margin-top: 30px
     }

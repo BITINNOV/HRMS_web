@@ -4,19 +4,19 @@
 
   <div class="row">
     <div class="col-md-4" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Retained </label>
-      <input [(ngModel)]="searchAmount" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+      <label class="font-weight-bold"> {{ 'Retained' | translate }} </label>
+      <input [(ngModel)]="searchAmount" pInputText type="text" pKeyFilter="num" placeholder="{{ 'Numbers' | translate }}"/>
     </div>
     <div class="col-md-4" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Begin Date </label>
+      <label class="font-weight-bold"> {{ 'Begin Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="searchBeginDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-4" style="margin-top: 10px;">
-      <label class="font-weight-bold"> End Date </label>
+      <label class="font-weight-bold"> {{ 'End Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="searchEndDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Employee </label>
+      <label class="font-weight-bold"> {{ 'Employee' | translate }} </label>
       <p-autoComplete [(ngModel)]="searchEmployee" [suggestions]="employeeList"
                       (completeMethod)="filterEmployee($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
@@ -28,7 +28,7 @@
       </p-autoComplete>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Is Active </label> <br/>
+      <label class="font-weight-bold"> {{ 'Active' | translate }} </label> <br/>
       <p-toggleButton [(ngModel)]="searchIsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
     </div>
   </div>
@@ -37,8 +37,8 @@
   <br/>
 
   <div class=" text-center">
-    <button (click)="reset()" class="btn btn-primary m-1" type="button">Réinitialiser</button>
-    <button (click)="search()" class="btn btn-success m-1" type="button">Rechercher</button>
+    <button (click)="reset()" class="btn btn-primary m-1" type="button"> {{ 'Reset' | translate }} </button>
+    <button (click)="search()" class="btn btn-success m-1" type="button"> {{ 'Search ' | translate }} </button>
   </div>
 
 
@@ -84,19 +84,19 @@
   <br/>
   <div class="row">
     <div class="col-md-4" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Retained </label>
-      <input [(ngModel)]="addAmount" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+      <label class="font-weight-bold"> {{ 'Retained' | translate }} </label>
+      <input [(ngModel)]="addAmount" pInputText type="text" pKeyFilter="num" placeholder="{{ 'Numbers' | translate }}"/>
     </div>
     <div class="col-md-4" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Begin Date </label>
+      <label class="font-weight-bold"> {{ 'Begin Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="addBeginDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-4" style="margin-top: 10px;">
-      <label class="font-weight-bold"> End Date </label>
+      <label class="font-weight-bold"> {{ 'End Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="addEndDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Employee </label>
+      <label class="font-weight-bold"> {{ 'Employee' | translate }} </label>
       <p-autoComplete [(ngModel)]="addEmployee" [suggestions]="employeeList"
                       (completeMethod)="filterEmployee($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
@@ -108,13 +108,13 @@
       </p-autoComplete>
     </div>
     <div class="col-md-4" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Is Active </label> <br/>
+      <label class="font-weight-bold"> {{ 'Active' | translate }} </label> <br/>
       <p-toggleButton [(ngModel)]="addIsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
     </div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onSave()" class="btn btn-success m-1" type="button"> Ajouter</button>
+    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onSave()" class="btn btn-success m-1" type="button"> {{ 'Add' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Add Dialog -->
@@ -126,19 +126,19 @@
   <div class="row">
     <div class="row">
       <div class="col-md-4" style="margin-top: 10px;">
-        <label class="font-weight-bold"> Retained </label>
-        <input [(ngModel)]="updateAmount" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+        <label class="font-weight-bold"> {{ 'Retained' | translate }} </label>
+        <input [(ngModel)]="updateAmount" pInputText type="text" pKeyFilter="num" placeholder="{{ 'Numbers' | translate }}"/>
       </div>
       <div class="col-md-4" style="margin-top: 10px;">
-        <label class="font-weight-bold"> Begin Date </label>
+        <label class="font-weight-bold"> {{ 'Begin Date' | translate }} </label>
         <p-calendar inputId="basic" [(ngModel)]="updateBeginDate" [showIcon]="true" inputId="icon"></p-calendar>
       </div>
       <div class="col-md-4" style="margin-top: 10px;">
-        <label class="font-weight-bold"> End Date </label>
+        <label class="font-weight-bold"> {{ 'End Date' | translate }} </label>
         <p-calendar inputId="basic" [(ngModel)]="updateEndDate" [showIcon]="true" inputId="icon"></p-calendar>
       </div>
       <div class="col-md-4" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Employee </label>
+        <label class="font-weight-bold"> {{ 'Employee' | translate }} </label>
         <p-autoComplete [(ngModel)]="updateEmployee" [suggestions]="employeeList"
                         (completeMethod)="filterEmployee($event)" field="registrationNumber" [dropdown]="true"
                         placeholder="{{'Select an employee' | translate}}">
@@ -150,14 +150,14 @@
         </p-autoComplete>
       </div>
       <div class="col-md-4" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Is Active </label> <br/>
+        <label class="font-weight-bold"> {{ 'Active' | translate }} </label> <br/>
         <p-toggleButton [(ngModel)]="updateIsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
       </div>
     </div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> Modifier</button>
+    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> {{ 'Update' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Edit Dialog -->

@@ -5,7 +5,7 @@
   <div class="row">
     <div class="col-md-4" style="margin-top: 10px;"></div>
     <div class="col-md-4" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Input Date </label>
+      <label class="font-weight-bold"> {{ 'Input Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="searchInputDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-4" style="margin-top: 10px;"></div>
@@ -15,8 +15,8 @@
   <br/>
 
   <div class=" text-center">
-    <button (click)="reset()" class="btn btn-primary m-1" type="button">Réinitialiser</button>
-    <button (click)="search()" class="btn btn-success m-1" type="button">Rechercher</button>
+    <button (click)="reset()" class="btn btn-primary m-1" type="button"> {{ 'Reset' | translate }} </button>
+    <button (click)="search()" class="btn btn-success m-1" type="button"> {{ 'Search ' | translate }} </button>
   </div>
 
 
@@ -63,14 +63,14 @@
   <div class="row">
     <div class="col-md-4" style="margin-top: 10px;"></div>
     <div class="col-md-4" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Input Date </label>
+      <label class="font-weight-bold"> {{ 'Input Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="addInputDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-4" style="margin-top: 10px;"></div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onSave()" class="btn btn-success m-1" type="button"> Ajouter</button>
+    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onSave()" class="btn btn-success m-1" type="button"> {{ 'Add' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Add Dialog -->
@@ -82,14 +82,14 @@
   <div class="row">
     <div class="col-md-4" style="margin-top: 10px;"></div>
     <div class="col-md-4" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Input Date </label>
+      <label class="font-weight-bold"> {{ 'Input Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="updateInputDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-4" style="margin-top: 10px;"></div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> Modifier</button>
+    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> {{ 'Update' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Edit Dialog -->

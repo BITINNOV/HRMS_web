@@ -5,11 +5,11 @@
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-4">
-      <label class="font-weight-bold"> Code </label>
+      <label class="font-weight-bold"> {{ 'Code' | translate }} </label>
       <input [(ngModel)]="searchCode" pInputText type="text"/>
     </div>
     <div class="col-md-4">
-      <label class="font-weight-bold"> Country </label>
+      <label class="font-weight-bold"> {{ 'Country' | translate }} </label>
       <p-dropdown [(ngModel)]="searchCountry" [options]="countryList"
                   [showClear]="true" optionLabel="code"
                   placeholder="{{'Select a country' | translate}}"></p-dropdown>
@@ -20,8 +20,8 @@
   <br/>
 
   <div class=" text-center">
-    <button (click)="reset()" class="btn btn-primary m-1" type="button">Réinitialiser</button>
-    <button (click)="search()" class="btn btn-success m-1" type="button">Rechercher</button>
+    <button (click)="reset()" class="btn btn-primary m-1" type="button"> {{ 'Reset' | translate }} </button>
+    <button (click)="search()" class="btn btn-success m-1" type="button"> {{ 'Search ' | translate }} </button>
   </div>
 
 
@@ -69,7 +69,7 @@
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-4">
-      <label class="font-weight-bold"> Code </label>
+      <label class="font-weight-bold"> {{ 'Code' | translate }} </label>
       <input [(ngModel)]="addCode" pInputText type="text"/>
     </div>
     <div class="col-md-4">
@@ -81,8 +81,8 @@
     <div class="col-md-2"></div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onSave()" class="btn btn-success m-1" type="button"> Ajouter</button>
+    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onSave()" class="btn btn-success m-1" type="button"> {{ 'Add' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Add Dialog -->
@@ -94,7 +94,7 @@
   <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-4">
-      <label class="font-weight-bold"> Code </label>
+      <label class="font-weight-bold"> {{ 'Code' | translate }} </label>
       <input [(ngModel)]="updateCode" pInputText type="text"/>
     </div>
     <div class="col-md-4">
@@ -106,8 +106,8 @@
     <div class="col-md-2"></div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> Modifier</button>
+    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> {{ 'Update' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Edit Dialog -->

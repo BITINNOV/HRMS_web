@@ -3,20 +3,20 @@
 
     <div class="row">
       <div class="col-md-3" style="margin-top: 10px;">
-        <label class="font-weight-bold"> First Name </label>
+        <label class="font-weight-bold"> {{ 'First Name' | translate }} </label>
         <input [(ngModel)]="searchFirstName" pInputText type="text"/>
       </div>
       <div class="col-md-3" style="margin-top: 10px;">
-        <label class="font-weight-bold"> Last Name </label>
+        <label class="font-weight-bold"> {{ 'Last Name' | translate }} </label>
         <input [(ngModel)]="searchLastName" pInputText type="text"/>
       </div>
       <div class="col-md-3" style="margin-top: 10px;">
-        <label class="font-weight-bold"> Registration Number </label>
+        <label class="font-weight-bold"> {{ 'Registration Number' | translate }} </label>
         <input [(ngModel)]="searchRegistrationNumber" pInputText type="text" pInputText type="text" pKeyFilter="num"
-               placeholder="Numbers"/>
+               placeholder="{{ 'Numbers' | translate }}"/>
       </div>
       <div class="col-md-3" style="margin-top: 10px;">
-        <label class="font-weight-bold"> Position </label>
+        <label class="font-weight-bold"> {{ 'Position' | translate }} </label>
         <p-autoComplete [(ngModel)]="searchPosition" [suggestions]="employeePositionList"
                         (completeMethod)="filterPosition($event)" field="code" [dropdown]="true"
                         placeholder="{{'Select an employee position' | translate}}">
@@ -29,7 +29,7 @@
       </div>
 
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Status </label>
+        <label class="font-weight-bold"> {{ 'Status' | translate }} </label>
         <p-autoComplete [(ngModel)]="searchEmployeeStatus" [suggestions]="employeeStatusList"
                         (completeMethod)="filterEmployeeStatus($event)" field="code" [dropdown]="true"
                         placeholder="{{'Select an employee' | translate}}">
@@ -41,49 +41,49 @@
         </p-autoComplete>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> CIN </label>
+        <label class="font-weight-bold"> {{ 'CIN' | translate }} </label>
         <input [(ngModel)]="searchCin" pInputText type="text"/>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Email </label>
+        <label class="font-weight-bold"> {{ 'Email' | translate }} </label>
         <input [(ngModel)]="searchEmail" pInputText type="text" email="true" #prmEmail="ngModel"/>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Phone Number </label>
+        <label class="font-weight-bold"> {{ 'Phone Number' | translate }} </label>
         <p-inputMask mask="(+999) 9 99 99 99 99" [(ngModel)]="searchPhoneNumber"></p-inputMask>
       </div>
 
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Address </label>
+        <label class="font-weight-bold"> {{ 'Address' | translate }} </label>
         <input [(ngModel)]="searchAddress" pInputText type="text"/>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Birth Date </label>
+        <label class="font-weight-bold"> {{ 'Birth Date' | translate }} </label>
         <p-calendar inputId="basic" [(ngModel)]="searchBirthDate" [showIcon]="true" inputId="icon"></p-calendar>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> RIB </label>
+        <label class="font-weight-bold"> {{ 'RIB' | translate }} </label>
         <input [(ngModel)]="searchRib" pInputText type="text"/>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> CNSS Number </label>
+        <label class="font-weight-bold"> {{ 'CNSS Number' | translate }} </label>
         <input [(ngModel)]="searchCnssNumber" pInputText type="text"/>
       </div>
 
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Gender </label>
+        <label class="font-weight-bold"> {{ 'Gender' | translate }} </label>
         <input [(ngModel)]="searchGender" pInputText type="text"/>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Family Situation </label>
+        <label class="font-weight-bold"> {{ 'Family Situation' | translate }} </label>
         <input [(ngModel)]="searchFamilySituation" pInputText type="text"/>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Kids Number </label>
-        <input [(ngModel)]="searchKidsNumber" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+        <label class="font-weight-bold"> {{ 'Kids Number' | translate }} </label>
+        <input [(ngModel)]="searchKidsNumber" pInputText type="text" pKeyFilter="num" placeholder="{{ 'Numbers' | translate }}"/>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Manager </label>
+        <label class="font-weight-bold"> {{ 'Manager' | translate }} </label>
         <p-autoComplete [(ngModel)]="searchManager" [suggestions]="employeeManagerList"
                         (completeMethod)="filterManager($event)" field="registrationNumber" [dropdown]="true"
                         placeholder="{{'Select an employee' | translate}}">
@@ -95,16 +95,16 @@
         </p-autoComplete>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Hiring Date </label>
+        <label class="font-weight-bold"> {{ 'Hiring Date' | translate }} </label>
         <p-calendar inputId="basic" [(ngModel)]="searchHiringDate" [showIcon]="true" inputId="icon"></p-calendar>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Salary </label>
+        <label class="font-weight-bold"> {{ 'Salary' | translate }} </label>
         <input [(ngModel)]="searchSalaryAmount" pInputText type="text" pInputText type="text" pKeyFilter="num"
-               placeholder="Numbers"/>
+               placeholder="{{ 'Numbers' | translate }}"/>
       </div>
       <div class="col-md-3" style="margin-top: 20px;">
-        <label class="font-weight-bold"> Is Active </label> <br/>
+        <label class="font-weight-bold"> {{ 'Active' | translate }} </label> <br/>
         <p-toggleButton [(ngModel)]="searchIsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
       </div>
     </div>
@@ -112,8 +112,8 @@
     <br/>
 
     <div class=" text-center">
-      <button (click)="reset()" class="btn btn-primary m-1" type="button">Réinitialiser</button>
-      <button (click)="search()" class="btn btn-success m-1" type="button">Rechercher</button>
+      <button (click)="reset()" class="btn btn-primary m-1" type="button"> {{ 'Reset' | translate }} </button>
+      <button (click)="search()" class="btn btn-success m-1" type="button"> {{ 'Search ' | translate }} </button>
     </div>
 
   <app-data-table
@@ -159,19 +159,19 @@
   <br/>
   <div class="row">
     <div class="col-md-3" style="margin-top: 10px;">
-      <label class="font-weight-bold"> First Name </label>
+      <label class="font-weight-bold"> {{ 'First Name' | translate }} </label>
       <input [(ngModel)]="addFirstName" pInputText type="text"/>
     </div>
     <div class="col-md-3" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Last Name </label>
+      <label class="font-weight-bold"> {{ 'Last Name' | translate }} </label>
       <input [(ngModel)]="addLastName" pInputText type="text"/>
     </div>
     <div class="col-md-3" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Registration Number </label>
-      <input [(ngModel)]="addRegistrationNumber" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+      <label class="font-weight-bold"> {{ 'Registration Number' | translate }} </label>
+      <input [(ngModel)]="addRegistrationNumber" pInputText type="text" pKeyFilter="num" placeholder="{{ 'Numbers' | translate }}"/>
     </div>
     <div class="col-md-3" style="margin-top: 10px;">
-      <label class="font-weight-bold"> Position </label>
+      <label class="font-weight-bold"> {{ 'Position' | translate }} </label>
       <p-autoComplete [(ngModel)]="addPosition" [suggestions]="employeePositionList"
                       (completeMethod)="filterPosition($event)" field="code" [dropdown]="true"
                       placeholder="{{'Select an employee position' | translate}}">
@@ -184,7 +184,7 @@
     </div>
 
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Status </label>
+      <label class="font-weight-bold"> {{ 'Status' | translate }} </label>
       <p-autoComplete [(ngModel)]="addEmployeeStatus" [suggestions]="employeeStatusList"
                       (completeMethod)="filterEmployeeStatus($event)" field="code" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
@@ -196,49 +196,49 @@
       </p-autoComplete>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> CIN </label>
+      <label class="font-weight-bold"> {{ 'CIN' | translate }} </label>
       <input [(ngModel)]="addCin" pInputText type="text"/>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Email </label>
+      <label class="font-weight-bold"> {{ 'Email' | translate }} </label>
       <input [(ngModel)]="addEmail" pInputText type="text" email="true" #prmEmail="ngModel"/>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Phone Number </label>
+      <label class="font-weight-bold"> {{ 'Phone Number' | translate }} </label>
       <p-inputMask mask="(+999) 9 99 99 99 99" [(ngModel)]="addPhoneNumber"></p-inputMask>
     </div>
 
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Address </label>
+      <label class="font-weight-bold"> {{ 'Address' | translate }} </label>
       <input [(ngModel)]="addAddress" pInputText type="text"/>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Birth Date </label>
+      <label class="font-weight-bold"> {{ 'Birth Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="addBirthDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> RIB </label>
+      <label class="font-weight-bold"> {{ 'RIB' | translate }} </label>
       <input [(ngModel)]="addRib" pInputText type="text"/>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> CNSS Number </label>
+      <label class="font-weight-bold"> {{ 'CNSS Number' | translate }} </label>
       <input [(ngModel)]="addCnssNumber" pInputText type="text"/>
     </div>
 
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Gender </label>
+      <label class="font-weight-bold"> {{ 'Gender' | translate }} </label>
       <input [(ngModel)]="addGender" pInputText type="text"/>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Family Situation </label>
+      <label class="font-weight-bold"> {{ 'Family Situation' | translate }} </label>
       <input [(ngModel)]="addFamilySituation" pInputText type="text"/>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Kids Number </label>
-      <input [(ngModel)]="addKidsNumber" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+      <label class="font-weight-bold"> {{ 'Kids Number' | translate }} </label>
+      <input [(ngModel)]="addKidsNumber" pInputText type="text" pKeyFilter="num" placeholder="{{ 'Numbers' | translate }}"/>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Manager </label>
+      <label class="font-weight-bold"> {{ 'Manager' | translate }} </label>
       <p-autoComplete [(ngModel)]="addManager" [suggestions]="employeeManagerList"
                       (completeMethod)="filterManager($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
@@ -250,22 +250,22 @@
       </p-autoComplete>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Hiring Date </label>
+      <label class="font-weight-bold"> {{ 'Hiring Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="addHiringDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Salary </label>
+      <label class="font-weight-bold"> {{ 'Salary' | translate }} </label>
       <input [(ngModel)]="addSalaryAmount" pInputText type="text" pInputText type="text" pKeyFilter="num"
-             placeholder="Numbers"/>
+             placeholder="{{ 'Numbers' | translate }}"/>
     </div>
     <div class="col-md-3" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Is Active </label> <br/>
+      <label class="font-weight-bold"> {{ 'Active' | translate }} </label> <br/>
       <p-toggleButton [(ngModel)]="addIsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
     </div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onSave()" class="btn btn-success m-1" type="button"> Ajouter</button>
+    <button (click)="dialogDisplayAdd=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onSave()" class="btn btn-success m-1" type="button"> {{ 'Add' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Add Dialog -->
@@ -283,27 +283,27 @@
     <div class="col-md-8" style="margin-top: 10px;">
       <div class="row">
         <div class="col-md-6">
-          <label class="font-weight-bold"> First Name </label>
+          <label class="font-weight-bold"> {{ 'First Name' | translate }} </label>
           <input [(ngModel)]="updateFirstName" pInputText type="text"/>
         </div>
         <div class="col-md-6">
-          <label class="font-weight-bold"> Last Name </label>
+          <label class="font-weight-bold"> {{ 'Last Name' | translate }} </label>
           <input [(ngModel)]="updateLastName" pInputText type="text"/>
         </div>
       </div>
       <div class="row" style="margin-top: 20px;">
         <div class="col-md-12">
-          <label class="font-weight-bold"> Email </label>
+          <label class="font-weight-bold"> {{ 'Email' | translate }} </label>
           <input [(ngModel)]="updateEmail" pInputText type="text" email="true" #prmEmail="ngModel"/>
         </div>
       </div>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Registration Number </label>
-      <input [(ngModel)]="updateRegistrationNumber" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+      <label class="font-weight-bold"> {{ 'Registration Number' | translate }} </label>
+      <input [(ngModel)]="updateRegistrationNumber" pInputText type="text" pKeyFilter="num" placeholder="{{ 'Numbers' | translate }}"/>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Position </label>
+      <label class="font-weight-bold"> {{ 'Position' | translate }} </label>
       <p-autoComplete [(ngModel)]="updatePosition" [suggestions]="employeePositionList"
                       (completeMethod)="filterPosition($event)" field="code" [dropdown]="true"
                       placeholder="{{'Select an employee position' | translate}}">
@@ -316,7 +316,7 @@
     </div>
 
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Status </label>
+      <label class="font-weight-bold"> {{ 'Status' | translate }} </label>
       <p-autoComplete [(ngModel)]="updateEmployeeStatus" [suggestions]="employeeStatusList"
                       (completeMethod)="filterEmployeeStatus($event)" field="code" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
@@ -328,45 +328,45 @@
       </p-autoComplete>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> CIN </label>
+      <label class="font-weight-bold"> {{ 'CIN' | translate }} </label>
       <input [(ngModel)]="updateCin" pInputText type="text"/>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Phone Number </label>
+      <label class="font-weight-bold"> {{ 'Phone Number' | translate }} </label>
       <p-inputMask mask="(+999) 9 99 99 99 99" [(ngModel)]="updatePhoneNumber"></p-inputMask>
     </div>
 
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Address </label>
+      <label class="font-weight-bold"> {{ 'Address' | translate }} </label>
       <input [(ngModel)]="updateAddress" pInputText type="text"/>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Birth Date </label>
+      <label class="font-weight-bold"> {{ 'Birth Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="updateBirthDate" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> RIB </label>
+      <label class="font-weight-bold"> {{ 'RIB' | translate }} </label>
       <input [(ngModel)]="updateRib" pInputText type="text"/>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> CNSS Number </label>
+      <label class="font-weight-bold"> {{ 'CNSS Number' | translate }} </label>
       <input [(ngModel)]="updateCnssNumber" pInputText type="text"/>
     </div>
 
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Gender </label>
+      <label class="font-weight-bold"> {{ 'Gender' | translate }} </label>
       <input [(ngModel)]="updateGender" pInputText type="text"/>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Family Situation </label>
+      <label class="font-weight-bold"> {{ 'Family Situation' | translate }} </label>
       <input [(ngModel)]="updateFamilySituation" pInputText type="text"/>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Kids Number </label>
-      <input [(ngModel)]="updateKidsNumber" pInputText type="text" pKeyFilter="num" placeholder="Numbers"/>
+      <label class="font-weight-bold"> {{ 'Kids Number' | translate }} </label>
+      <input [(ngModel)]="updateKidsNumber" pInputText type="text" pKeyFilter="num" placeholder="{{ 'Numbers' | translate }}"/>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Manager </label>
+      <label class="font-weight-bold"> {{ 'Manager' | translate }} </label>
       <p-autoComplete [(ngModel)]="updateManager" [suggestions]="employeeManagerList"
                       (completeMethod)="filterManager($event)" field="registrationNumber" [dropdown]="true"
                       placeholder="{{'Select an employee' | translate}}">
@@ -378,22 +378,22 @@
       </p-autoComplete>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Hiring Date </label>
+      <label class="font-weight-bold"> {{ 'Hiring Date' | translate }} </label>
       <p-calendar inputId="basic" [(ngModel)]="updateHiringDate" dateFormat="dd/MM/yyyy" [showIcon]="true" inputId="icon"></p-calendar>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Salary </label>
+      <label class="font-weight-bold"> {{ 'Salary' | translate }} </label>
       <input [(ngModel)]="updateNewSalaryAmount" pInputText type="text" pInputText type="text" pKeyFilter="num"
-             placeholder="Numbers"/>
+             placeholder="{{ 'Numbers' | translate }}"/>
     </div>
     <div class="col-md-6" style="margin-top: 20px;">
-      <label class="font-weight-bold"> Is Active </label> <br/>
+      <label class="font-weight-bold"> {{ 'Active' | translate }} </label> <br/>
       <p-toggleButton [(ngModel)]="updateIsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton>
     </div>
   </div>
   <ng-template pTemplate="footer">
-    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> Fermer</button>
-    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> Modifier</button>
+    <button (click)="dialogDisplayEdit=false" class="btn btn-primary m-1" type="button"> {{ 'Close' | translate }} </button>
+    <button (click)="onEdit()" class="btn btn-success m-1" type="button"> {{ 'Update' | translate }} </button>
   </ng-template>
 </p-dialog>
 <!-- END Edit Dialog -->

@@ -4,6 +4,7 @@ import {MessageService} from 'primeng/api';
 import {AuthenticationService} from '../../../shared/services/api/authentication.service';
 import {Organization} from '../../../shared/models/configuration/organization';
 import {User} from '../../../shared/models/configuration/user';
+import {ViewLanguage} from '../../../shared/models/configuration/front-end/view-language';
 
 @Component({
   selector: 'app-header',
@@ -11,17 +12,20 @@ import {User} from '../../../shared/models/configuration/user';
 
 })
 export class AppHeaderComponent implements OnInit {
-
   user: User;
   organization: Organization;
-  notificationSize: number;
-  notificationReceptionSize: number;
-  notificationExpeditionSize: number;
-  notificationProductionSize: number;
+  viewLanguages: Array<ViewLanguage> = [];
+  selectedViewLanguage: ViewLanguage;
 
   constructor(private authentification: AuthenticationService,
               private messageService: MessageService,
               private translate: TranslateService) {
+    this.viewLanguages = [
+      {name: 'Arabe', code: 'MA'},
+      {name: 'Français', code: 'FR'},
+      {name: 'Espagnole', code: 'ES'},
+      {name: 'Anglais', code: 'US'}
+    ];
   }
 
   ngOnInit() {
@@ -29,13 +33,15 @@ export class AppHeaderComponent implements OnInit {
     this.organization = this.authentification.getCurrentOrganization();
 
     this.translate.addLangs([
+      'ar',
+      'es',
       'en',
       'fr'
     ]);
     this.translate.setDefaultLang('fr');
     const browserLang = this.translate.getBrowserLang();
     this.translate.use(
-      browserLang.match(/en|fr/)
+      browserLang.match(/ar|es|en|fr/)
         ? browserLang
         : 'fr'
     );
@@ -44,9 +50,9 @@ export class AppHeaderComponent implements OnInit {
   loadData() {
   }
 
-
-  changeLang(language: string) {
-    // console.log(language);
+  onChange(event) {
+    this.selectedViewLanguage = event.selectedViewLanguage;
+    const language = this.selectedViewLanguage.code.toString();
     this.translate.use(language);
   }
 

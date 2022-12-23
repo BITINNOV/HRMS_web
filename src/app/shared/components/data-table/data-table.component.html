@@ -5,28 +5,28 @@
         <!--Add-->
         <span>
           <button (click)="onEdit(1)" [hidden]="addBtnVisible" class="btn btn-sm btn-primary mx-1"
-                  title="{{'ajouter' | translate}}" type="button">
+                  title="{{'Add' | translate}}" type="button">
             <i class="fa fa-plus"></i>
           </button>
         </span>
         <!--UPDATE-->
         <span>
           <button (click)="onEdit(2)" [disabled]="updateBtnDisable == false" [hidden]="updateBtnVisible" class="btn btn-sm btn-success mx-1"
-                  title="{{'editer' | translate}}" type="button">
+                  title="{{'Update' | translate}}" type="button">
             <i class="fa fa-pencil"></i>
           </button>
         </span>
         <!--DELETE-->
         <span>
           <button (click)="onEdit(3)" [disabled]="deleteBtnDisable == false" [hidden]="deleteBtnVisible" class="btn btn-sm btn-danger mx-1"
-                  title="{{'delete' | translate}}" type="button">
+                  title="{{'Delete' | translate}}" type="button">
             <i class="fa fa-trash-o"></i>
           </button>
         </span>
-        <!-- -->
+        <!-- GENERATE -->
         <span>
           <button (click)="onEdit(4)" [disabled]="generateBtnDisable == false" [hidden]="generateBtnVisible" class="btn btn-sm btn-secondary mx-1"
-                  title="{{'generate' | translate}}" type="button">
+                  title="{{'Generate' | translate}}" type="button">
             <i class="fa fa-file"></i>
           </button>
         </span>
@@ -39,73 +39,23 @@
       </div>
       <div class="d-flex col-md-5 justify-content-end">
         <div>
-          <p-splitButton
-            [model]="items"
-            id="button-icon-only"
-            label="{{'Exportation' | translate }}"
-            styleClass="p-button-secondary "
-          ></p-splitButton>
+          <p-splitButton [model]="items" id="button-icon-only" label="{{'Exportation' | translate }}" styleClass="p-button-secondary "></p-splitButton>
         </div>
 
-        <button
-          (click)="onSaveView()"
-          class="btn btn-sm"
-          title="{{ 'Enregistrer la vue' | translate }}"
-          type="button"
-        >
-          <i class="sidebar-item-icon"
-          ><img
-            height="25px"
-            src="./assets/img/logos/saveview.png"
-            width="25px"
-          /></i>
+        <button (click)="onSaveView()" class="btn btn-sm" title="{{ 'Save the view' | translate }}" type="button">
+          <i class="sidebar-item-icon"><img height="25px" src="./assets/img/logos/saveview.png" width="25px" /></i>
         </button>
-        <!--   <button
-          type="button"
-          title="{{ 'Télécharger en PDF' | translate }}"
-          class="btn btn-sm "
-          (click)="exportPdf()"
-        > <i class="sidebar-item-icon"><img src="./assets/img/logos/pdf.png"
-          width="25px" height="25px"
-          ></i>
-      </button>
-      <button
-      type="button"
-      title="{{ 'Export EXCEL de vue' | translate }}"
-            class="btn btn-sm "
-      (click)="exportExcelVue()"
-    ><i class="sidebar-item-icon "><img src="./assets/img/logos/excel.png"
-      width="25px" height="25px"
-   ></i>
-  </button>
-  <button
-      type="button"
-      title="{{ 'Export EXCEL  Globale' | translate }}"
-            class="btn btn-sm "
-      (click)="exportExcelGlobal()"
-    ><i class="sidebar-item-icon "><img src="./assets/img/logos/excel.png"
-      width="25px" height="25px"
-   ></i>
-  </button> -->
-
-        <!-- <p-splitButton
-              label="{{'Export' | translate}}"
-              icon="pi pi-file"
-              class="mr-3"
-              [model]="exportBtnItems3
-              styleClass="ui-button-warning"
-            ></p-splitButton> -->
 
         <p-multiSelect
           [(ngModel)]="selectedColumns"
           [options]="cols"
           [style]="{ minWidth: '190px' }"
           class="mx-1"
-          defaultLabel="{{ 'Choisir' | translate }}"
+          defaultLabel="{{ 'Select' | translate }}"
           dropdownIcon="pi pi-table"
           maxSelectedLabels="0"
           optionLabel="header"
-          selectedItemsLabel="{{ 'colonnes sélectionnées' | translate }}"
+          selectedItemsLabel="{{ 'Selected columns' | translate }}"
         ></p-multiSelect>
       </div>
     </div>
@@ -138,21 +88,12 @@
         <th style="width: 40px">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
-        <th
-          *ngFor="let col of columns"
-          pReorderableColumn
-          style="width: 160px; font-size: 13px"
-        >
+        <th *ngFor="let col of columns" pReorderableColumn style="width: 160px; font-size: 13px">
           {{ col.header | translate }}
         </th>
       </tr>
     </ng-template>
-    <ng-template
-      let-columns="columns"
-      let-rowData
-      let-rowIndex="rowIndex"
-      pTemplate="body"
-    >
+    <ng-template let-columns="columns" let-rowData let-rowIndex="rowIndex" pTemplate="body">
       <tr [pSelectableRowIndex]="rowIndex" [pSelectableRow]="rowData">
         <td style="width: 40px">
           <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
@@ -161,35 +102,19 @@
         <td *ngFor="let col of columns; let i = index" style="width: 160px">
           <span *ngIf="typeOf(col.type) === 1">
             {{ rowData[col?.field] ? rowData[col?.field][col?.child] : "" }}
-            <!-- <span *ngIf="(rowData[col.field]!= null) else vide" >
-             {{ rowData[col?.field][col?.child]}}
-             {{''}}
-            </span>
-               <ng-template #vide>
-                {{rowData[col?.field][col?.child]}}
-              </ng-template> -->
           </span>
           <span *ngIf="typeOf(col.type) === 2">
             {{ rowData[col?.field] ? rowData[col?.field] : "" }}
           </span>
-
           <span *ngIf="typeOf(col.type) === 3">
             {{ rowData[col?.field] | date: "dd-MM-yyyy HH:mm" }}
           </span>
           <span *ngIf="typeOf(col.type) === 4">
-            <p-checkbox
-              [(ngModel)]="rowData[col.field]"
-              [disabled]="true"
-              binary="true"
-            ></p-checkbox>
+            <p-checkbox [(ngModel)]="rowData[col.field]" [disabled]="true" binary="true"></p-checkbox>
           </span>
 
           <span *ngIf="typeOf(col.type) === 5">
-            {{
-            rowData[col?.field]
-              ? rowData[col?.field][col?.child][col?.child2]
-              : ""
-            }}
+            {{ rowData[col?.field] ? rowData[col?.field][col?.child][col?.child2] : "" }}
           </span>
         </td>
 
