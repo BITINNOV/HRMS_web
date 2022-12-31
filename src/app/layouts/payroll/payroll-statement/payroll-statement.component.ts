@@ -101,7 +101,7 @@ export class PayrollStatementComponent implements OnInit, OnDestroy {
       {field: 'numberBankHolidays', header: 'Number Bank Holidays', type: 'number'},
       {field: 'numberPaidLeave', header: 'Number Paid Leave', type: 'number'},
     ];
-    this.selectedColumns = this.cols;
+    // this.selectedColumns = this.cols;
     /*this.selectedColumns = this.Columns;
     this.items = [
       {label: 'En PDF', icon: 'pi pi-file-pdf', command: () => { this.exportPdf(); }},

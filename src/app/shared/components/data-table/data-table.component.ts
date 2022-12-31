@@ -40,7 +40,6 @@ export class DataTableComponent implements OnInit {
   @Output() exportBtnExcelVue = new EventEmitter<any[]>();
   @Output() exportBtnPdf = new EventEmitter<any[]>();
   exportColumns: Array<any> = [];
-  columnsToAdd: Array<any> = [];
   columnsAdded: Array<any> = [];
   columnsMapped: Array<any> = [];
   exportBtnItems: MenuItem[] = [];
@@ -96,7 +95,9 @@ export class DataTableComponent implements OnInit {
   loadColumns() {
     this.currentUser = this.authenticationService.getCurrentUser();
     this.currentOrganization = this.authenticationService.getCurrentOrganization();
+
     let searchSentense_Columns = '.';
+    searchSentense_Columns += 'classe:' + this.className + ',';
     searchSentense_Columns += 'user.id:' + this.currentUser.id + ',';
     searchSentense_Columns += 'organization.id:' + this.currentOrganization.id;
 
@@ -108,12 +109,17 @@ export class DataTableComponent implements OnInit {
           this.columnsMapped = this.columnsAdded.filter(
             (tab) => tab.classe === this.className
           );
-
           if (this.columnsMapped.length >= 1) {
             for (let i = 0; i < this.cols.length; i++) {
               for (let j = 0; j < this.columnsMapped.length; j++) {
                 if (this.cols[i].field === this.columnsMapped[j].field) {
-                  this.selectedColumns.push(this.cols[i]);
+                  if (this.cols[i].child) {
+                    if (this.cols[i].child === this.columnsMapped[j].child) {
+                      this.selectedColumns.push(this.cols[i]);
+                    }
+                  } else {
+                    this.selectedColumns.push(this.cols[i]);
+                  }
                 }
               }
             }
@@ -124,7 +130,6 @@ export class DataTableComponent implements OnInit {
           this.selectedColumns = this.cols;
         }
 
-        // this.selectedColumns = this.cols;
         this.exportColumns = this.selectedColumns.map((col) => ({
           title: col.header,
           dataKey: col.field,
@@ -206,70 +211,119 @@ export class DataTableComponent implements OnInit {
   }
 
   onSaveView() {
-    // this.spinner.show();
-
-    /*if (this.columnsAdded.length > 0) {
-      this.columnsAdded = this.columnsAdded.filter(
-        (col) => col.classe !== this.className
-      );
-    }*/
-    this.columnsToAdd = [];
-    for (let i = 0; i < this.selectedColumns.length; i++) {
-      const column = new Columns();
-
-      column.position = i;
-      column.field = this.selectedColumns[i].field;
-      column.header = this.selectedColumns[i].header;
-      column.classe = this.className;
-      column.type = this.selectedColumns[i].type;
-      column.child = this.selectedColumns[i].child;
-      column.user = this.currentUser;
-      column.organization = this.currentOrganization;
-
-      this.existColumn(column);
-
-      this.columnsToAdd.push(column);
-    }
-
-    this.columnsService.setAll(this.columnsToAdd).subscribe(
-      (data) => {
-        this.toastr.success('La vue a été enregistrée avec Succés', 'Edition');
-      },
-      (error) => {
-        this.toastr.error(error.error.message, 'Erreur');
-        this.spinner.hide();
-      },
-      () => this.spinner.hide()
-    );
-
-    /*this.user = this.authenticationService.getCurrentUser();
-    this.user.columns = JSON.stringify(this.columnsAdded);
-    this.authenticationService.setUser(this.user);
-    this.userservice.set(this.user).subscribe(
-      (data) => {
-        this.toastr.success('La vue a été enregistrée avec Succés', 'Edition');
-      },
-      (error) => {
-        this.toastr.error(error.error.message, 'Erreur');
-        this.spinner.hide();
-      },
-      () => this.spinner.hide()
-    );*/
-  }
-
-  existColumn(column: Columns) {
-    for (let i = 0; i < this.columnsAdded.length; i++) {
-      const currentColumn = this.columnsAdded[i];
-
-      if (currentColumn.field === column.field) {
-        if (currentColumn.child && column.child) {
-          if (currentColumn.child === column.child) {
-            column.id = currentColumn.id;
+    this.spinner.show();
+    for (let ca = 0; ca < this.columnsAdded.length; ca++) {
+      let found = false;
+      for (let sc = 0; sc < this.selectedColumns.length; sc++) {
+        if (this.columnsAdded[ca].field === this.selectedColumns[sc].field) {
+          if (this.columnsAdded[ca].child && this.selectedColumns[sc].child) {
+            if (this.columnsAdded[ca].child === this.selectedColumns[sc].child) {
+              found = true;
+            }
+          } else {
+            found = true;
           }
-        } else {
-          column.id = currentColumn.id;
         }
       }
+      if (!found) {
+        alert('found : field = ' + this.columnsAdded[ca].field + ' && child = ' + this.columnsAdded[ca].child);
+        // Get Columns in order to UPSERT them
+        this.subscriptions.add(this.columnsService.delete(this.columnsAdded[ca].id).subscribe(
+          (id) => {
+            this.toastr.success('La colonne a été supprimer avec succès', 'Edition');
+          },
+          (error) => {
+            this.toastr.error(error.message);
+          },
+        ));
+      }
+    }
+    // Prepare the search sentence
+    for (let i = 0; i < this.selectedColumns.length; i++) {
+      // Prepare Search Sentence
+      let searchSentence = '';
+      let index = 0;
+
+      // Check the Field
+      if (this.selectedColumns[i].field) {
+        searchSentence += 'field:' + this.selectedColumns[i].field + ',';
+        index = index + 1;
+      }
+      // Check the Header
+      if (this.selectedColumns[i].header) {
+        searchSentence += 'header:' + this.selectedColumns[i].header + ',';
+        index = index + 1;
+      }
+      // Check the class Name
+      if (this.className) {
+        searchSentence += 'classe:' + this.className + ',';
+        index = index + 1;
+      }
+      // Check the Child
+      if (this.selectedColumns[i].child) {
+        searchSentence += 'child:' + this.selectedColumns[i].child + ',';
+        index = index + 1;
+      }
+      // Check the User
+      if (this.currentUser) {
+        searchSentence += 'user.id:' + this.currentUser.id + ',';
+        index = index + 1;
+      }
+      // Check the Organization
+      if (this.currentOrganization) {
+        searchSentence += 'organization.id:' + this.currentOrganization.id + ',';
+        index = index + 1;
+      }
+
+      if (index === 1) {
+        searchSentence = searchSentence.slice(0, -1);
+      } else if (index > 1) {
+        searchSentence = '.' + searchSentence.slice(0, -1);
+      }
+
+      // Get Columns in order to UPSERT them
+      this.subscriptions.add(this.columnsService.find(searchSentence).subscribe(
+        (columns) => {
+          let column = new Columns();
+          if (columns.length > 0) {
+            column = columns[0];
+            column.position = i;
+            column.field = this.selectedColumns[i].field;
+            column.header = this.selectedColumns[i].header;
+            column.classe = this.className;
+            column.type = this.selectedColumns[i].type;
+            column.child = this.selectedColumns[i].child;
+            column.user = this.currentUser;
+            column.organization = this.currentOrganization;
+          } else {
+            column.position = i;
+            column.field = this.selectedColumns[i].field;
+            column.header = this.selectedColumns[i].header;
+            column.classe = this.className;
+            column.type = this.selectedColumns[i].type;
+            column.child = this.selectedColumns[i].child;
+            column.user = this.currentUser;
+            column.organization = this.currentOrganization;
+          }
+
+          this.columnsService.set(column).subscribe(
+            (data) => {
+              this.spinner.hide();
+              this.toastr.success('La vue a été enregistrée avec Succés', 'Edition');
+            },
+            (error) => {
+              this.spinner.hide();
+              this.toastr.error(error.error.message, 'Erreur');
+            },
+            () => this.spinner.hide()
+          );
+        },
+        (error) => {
+          this.spinner.hide();
+          this.toastr.error(error.message);
+        },
+        () => this.spinner.hide()
+      ));
     }
   }
 }
